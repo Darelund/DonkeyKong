@@ -38,6 +38,7 @@ namespace DonkeyKong
             switch (GameManager.CurrentGameState)
             {
                 case GameManager.GameState.MainMenu:
+                    spriteBatch.Draw(ResourceManager.GetTexture("MainMenu"), Vector2.Zero, null, Color.White);
                     _buttons[0].Draw(spriteBatch);
                     break;
                 case GameManager.GameState.Playing:

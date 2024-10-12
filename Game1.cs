@@ -20,7 +20,7 @@ namespace DonkeyKong
         protected override void Initialize()
         {
             int heightOffset = 200;
-            int widthOffset = 3;
+            int widthOffset = 2;
             int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - heightOffset;
             int fixedWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / widthOffset; // Define a fixed width like Space Invaders
 
@@ -36,7 +36,7 @@ namespace DonkeyKong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder", "", "", "GameText", "FlashEffect");
+            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2", "", "", "GameText", "FlashEffect");
             var textureTuples = new List<(char TileName, Texture2D tileTexture, bool notWalkable)>
             {
                 ('B', ResourceManager.GetTexture("bridge"), true),
