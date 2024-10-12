@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    public class Button
+    public class Button : StaticUIElement
     {
         //enum States
         //{
@@ -19,44 +19,37 @@ namespace DonkeyKong
         //}
         private SpriteFont _font;
         (Color defaultColor, Color hoverColor, Color pressedColor) _colors;
-        private Color _currentColor;
-        private Vector2 _position;
         private string _text;
-        private float _size;
-        private float _rotation;
 
         private bool _hasBeenPressed = false;
         private float _pressedTimer;
         private float _pressedDuration = 0.2f;
-        private Vector2 _origin;
-        private float _layerDepth = 0;
+       
         int centerOffset = 2;
 
         public Rectangle Collision
         {
             get
             {
-                int centerCollisionOffset = (int)(_font.MeasureString(_text).X * _size) / centerOffset;
-                return new Rectangle((int)_position.X - centerCollisionOffset, (int)_position.Y - centerCollisionOffset, (int)(_font.MeasureString(_text).X * _size), (int)(_font.MeasureString(_text).Y * _size));
+                int centerCollisionOffset = (int)(_font.MeasureString(_text).X * Size) / centerOffset;
+                return new Rectangle((int)Position.X - centerCollisionOffset, (int)Position.Y - centerCollisionOffset, (int)(_font.MeasureString(_text).X * Size), (int)(_font.MeasureString(_text).Y * Size));
             }
         }
 
 
-        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, string text = "PlaceHolder", float size = 1f, float rotation = 0)
+        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, string text = "PlaceHolder", float size = 1f, float rotation = 0) : base(pos, colors.defaultColor, size, rotation)
         {
             _font = font;
             _colors = colors;
-            _position = pos;
+            Position = pos;
             _text = text;
-            _size = size;
-            _rotation = 0;
-            _currentColor = colors.defaultColor;
-            _origin = new Vector2((int)(_font.MeasureString(_text).X * _size) / centerOffset, (int)(_font.MeasureString(_text).Y * _size) / centerOffset);
+            Size = size;
+            Origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
         }
 
 
 
-        public void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime)
         {
             if (_pressedTimer > 0)
             {
@@ -69,10 +62,10 @@ namespace DonkeyKong
             }
             if (Collision.Intersects(InputManager.MouseOver()))
             {
-                _currentColor = _colors.hoverColor;
+                CurrentColor = _colors.hoverColor;
                 if (InputManager.LeftClick() && !_hasBeenPressed)
                 {
-                    _currentColor = _colors.pressedColor;
+                    CurrentColor = _colors.pressedColor;
                     _pressedTimer = _pressedDuration;
                     _hasBeenPressed = true;
 
@@ -80,12 +73,12 @@ namespace DonkeyKong
             }
             else
             {
-                _currentColor = _colors.defaultColor;
+                CurrentColor = _colors.defaultColor;
             }
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _text, _position, _currentColor, _rotation, _origin, _size, SpriteEffects.None, _layerDepth);
+            spriteBatch.DrawString(_font, _text, Position, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
         }
     }
 }

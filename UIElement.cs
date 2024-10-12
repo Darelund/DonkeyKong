@@ -8,28 +8,25 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    public class UIElement
+    public abstract class UIElement
     {
-        public Vector2 Position { get; set; }
-        public Color Color { get; set; }
-        public float Size { get; set; }
-        public float LayerDepth { get; set; }
+        protected Vector2 Position;
+        protected Vector2 Origin;
+        protected Color CurrentColor;
+        protected float Size;
+        protected float LayerDepth;
+        protected float Rotation;
 
-        public UIElement(Vector2 position, Color color, float size, float layerDepth = 0f)
+        public UIElement(Vector2 position, Color color, float size, float layerDepth = 0f, float rotation = 0)
         {
             Position = position;
-            Color = color;
+            CurrentColor = color;
             Size = size;
             LayerDepth = layerDepth;
+            Rotation = rotation;
         }
 
-        public virtual void Update(GameTime gameTime)
-        {
-        }
-
-        // Basic Draw method
-        public virtual void Draw(SpriteBatch spriteBatch)
-        {
-        }
+        public abstract void Update(GameTime gameTime);
+        public abstract void Draw(SpriteBatch spriteBatch);
     }
 }
