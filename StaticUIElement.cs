@@ -13,14 +13,13 @@ namespace DonkeyKong
         public StaticUIElement(Vector2 position, Color color, float size, float layerDepth = 0, float rotation = 0) : base(position, color, size, layerDepth, rotation)
         {
         }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-        }
-
         public override void Update(GameTime gameTime)
         {
            
+        }
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+
         }
     }
 }

@@ -8,30 +8,53 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    public class AnimatedUIElement : UIElement
+    public abstract class AnimatedUIElement : UIElement
     {
         private Texture2D _texture;
-        private float _animationTimer;
-        private float _animationSpeed;
         private Rectangle _sourceRectangle;
 
-        public AnimatedUIElement(Texture2D texture, Vector2 position, Color color, float size, float animationSpeed, float layerDepth = 0, float rotation = 0)
+        private Point _currentFrame;
+        private Point _frameSize;
+        private Point _sheetSize;
+
+        private int _millisecondsPerFrame;
+        private float _timeSinceLastFrame = 0;
+
+        public AnimatedUIElement(Texture2D texture, Vector2 position, Point currentFrame, Point frameSize, Point sheetSize, Color color, float size, int millisecondsPerFrame = 16, float layerDepth = 0, float rotation = 0)
             : base(position, color, size, layerDepth, rotation)
         {
             _texture = texture;
-            _animationSpeed = animationSpeed;
+            _millisecondsPerFrame = millisecondsPerFrame;
             _sourceRectangle = new Rectangle(0, 0, _texture.Width, _texture.Height);
+
+            _currentFrame = currentFrame;
+            _frameSize = frameSize;
+            _sheetSize = sheetSize;
         }
 
         public override void Update(GameTime gameTime)
         {
-            _animationTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            // Update animation logic (e.g., change source rectangle for sprite sheet animations)
+            _timeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (_timeSinceLastFrame >= _millisecondsPerFrame)
+            {
+                _timeSinceLastFrame -= _millisecondsPerFrame;
+
+                _currentFrame.X++;
+                if (_currentFrame.X >= _sheetSize.X)
+                {
+                    _currentFrame.X = 0;
+                    _currentFrame.Y++;
+                    if (_currentFrame.Y >= _sheetSize.Y)
+                    {
+                        _currentFrame.Y = 0;
+                    }
+                }
+            }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, _sourceRectangle, CurrentColor, 0f, Vector2.Zero, Size, SpriteEffects.None, LayerDepth);
+            spriteBatch.Draw(_texture, Position, new Rectangle(_currentFrame.X * _frameSize.X, _currentFrame.Y * _frameSize.Y, _frameSize.X, _frameSize.Y), CurrentColor, 0f, Vector2.Zero, Size, SpriteEffects.None, LayerDepth);
         }
     }
 }

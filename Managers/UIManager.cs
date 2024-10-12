@@ -10,18 +10,22 @@ namespace DonkeyKong
 {
     public class UIManager
     {
-        private static List<Button> _buttons = new List<Button>();
+        private static List<UIElement> _UIElements = new List<UIElement>();
 
         public static void LoadContent()
         {
-            _buttons.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2), "Play"));
+            _UIElements.Add(new StaticBackground(ResourceManager.GetTexture("MainMenu"), Vector2.Zero, Color.White, 1f));
+            _UIElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2), "Play"));
+            _UIElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture("DonkeyKongMainMenu1"), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 - 200), new Point(0, 0), new Point(92, 110), new Point(4, 0), Color.White, 1f, 100));
         }
         public static void Update(GameTime gameTime)
         {
             switch (GameManager.CurrentGameState)
             {
                 case GameManager.GameState.MainMenu:
-                    _buttons[0].Update(gameTime);
+                    _UIElements[0].Update(gameTime);
+                    _UIElements[1].Update(gameTime);
+                    _UIElements[2].Update(gameTime);
                     break;
                 case GameManager.GameState.Playing:
                     break;
@@ -38,8 +42,9 @@ namespace DonkeyKong
             switch (GameManager.CurrentGameState)
             {
                 case GameManager.GameState.MainMenu:
-                    spriteBatch.Draw(ResourceManager.GetTexture("MainMenu"), Vector2.Zero, null, Color.White);
-                    _buttons[0].Draw(spriteBatch);
+                    _UIElements[0].Draw(spriteBatch);
+                    _UIElements[1].Draw(spriteBatch);
+                    _UIElements[2].Draw(spriteBatch);
                     break;
                 case GameManager.GameState.Playing:
                     break;

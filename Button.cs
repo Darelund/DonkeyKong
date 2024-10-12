@@ -24,7 +24,7 @@ namespace DonkeyKong
         private bool _hasBeenPressed = false;
         private float _pressedTimer;
         private float _pressedDuration = 0.2f;
-       
+        private Vector2 _origin;
         int centerOffset = 2;
 
         public Rectangle Collision
@@ -44,7 +44,7 @@ namespace DonkeyKong
             Position = pos;
             _text = text;
             Size = size;
-            Origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
+            _origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
         }
 
 
@@ -78,7 +78,7 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _text, Position, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
+            spriteBatch.DrawString(_font, _text, Position, CurrentColor, Rotation, _origin, Size, SpriteEffects.None, LayerDepth);
         }
     }
 }
