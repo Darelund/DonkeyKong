@@ -37,6 +37,13 @@ namespace DonkeyKong
             return inputDirection;
         }
         public static bool LeftClick() => mouseState.LeftButton == ButtonState.Pressed && previousMouseState.LeftButton == ButtonState.Released;
-      
+        public static bool RightClick() => mouseState.RightButton == ButtonState.Pressed && previousMouseState.RightButton == ButtonState.Released;
+        public static Rectangle MouseOver()
+        {
+            return new Rectangle(mouseState.X, mouseState.Y, 1, 1);
+        }
+
+            
+
     }
 }

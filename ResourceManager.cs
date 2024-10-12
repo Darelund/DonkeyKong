@@ -46,14 +46,14 @@ namespace DonkeyKong
             foreach (string spriteFont in spriteFonts.Split(','))
             {
                 if (spriteFont == "") continue;
-                SpriteFont sF = content.Load<SpriteFont>(spriteFont.Trim());
+                SpriteFont sF = content.Load<SpriteFont>($"Fonts/{spriteFont.Trim()}");
                 sF.Texture.Name = spriteFont.Trim();
                 SpriteFont.Add(sF);
             }
             foreach (string effect in effects.Split(','))
             {
                 if (effect == "") continue;
-                Effect e = content.Load<Effect>(effect.Trim());
+                Effect e = content.Load<Effect>($"Effect/{effect.Trim()}");
                 e.Name = effect.Trim();
                 Effects.Add(e);
             }

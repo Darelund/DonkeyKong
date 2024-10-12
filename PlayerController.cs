@@ -16,7 +16,7 @@ namespace DonkeyKong
         }
         public override void Update(GameTime gameTime)
         {
-            Position += InputManager.GetMovement();
+            Position += InputManager.GetMovement() * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
             base.Update(gameTime);
         }
         public override void Draw(SpriteBatch spriteBatch)

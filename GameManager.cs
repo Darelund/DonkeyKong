@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,20 +16,34 @@ namespace DonkeyKong
             MainMenu,
             Playing,
             Pause,
-            GameOver
+            GameOver,
+            Victory
         }
         private static List<GameObject> _gameObjects = new List<GameObject>();
         private static List<FlashEffect> _flashEffects = new List<FlashEffect>();
 
-        private static GameState _currentGameState = GameState.Playing;
+        public static GameState CurrentGameState { get; private set; } = GameState.MainMenu;
 
-       
+        public static GameWindow Window;
+        public static ContentManager Content;
+        public static void Initialize(GameWindow window, ContentManager content)
+        {
+            Window = window;
+            Content = content;
+        }
+        public static void ContentLoad()
+        {
+            UIManager.LoadContent();
+        }
+
 
         public static void Update(GameTime gameTime)
         {
-            switch (_currentGameState)
+            switch (CurrentGameState)
             {
                 case GameState.MainMenu:
+                    InputManager.Update();
+                    UIManager.Update(gameTime);
                     break;
                 case GameState.Playing:
                     InputManager.Update();
@@ -55,12 +70,14 @@ namespace DonkeyKong
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
-            switch (_currentGameState)
+            spriteBatch.Begin(SpriteSortMode.BackToFront);
+            switch (CurrentGameState)
             {
                 case GameState.MainMenu:
+                    UIManager.Draw(spriteBatch);
                     break;
                 case GameState.Playing:
-                    spriteBatch.Begin();
+                   
                     Level.Draw(spriteBatch);
 
                     foreach (var gameObject in _gameObjects)
@@ -81,16 +98,16 @@ namespace DonkeyKong
                         if (isFlashing)
                         {
                             spriteBatch.End();
-                            spriteBatch.Begin();
+                            spriteBatch.Begin(SpriteSortMode.BackToFront);
                         }
                     }
-                    spriteBatch.End();
                     break;
                 case GameState.Pause:
                     break;
                 case GameState.GameOver:
                     break;
             }
+            spriteBatch.End();
         }
         public static void AddGameObject(GameObject gameObject)
         {
@@ -103,8 +120,8 @@ namespace DonkeyKong
         }
         public static void ChangeGameState(GameState newGameState )
         {
-            if(newGameState == _currentGameState) return;
-            _currentGameState = newGameState;
+            if(newGameState == CurrentGameState) return;
+            CurrentGameState = newGameState;
         }
     }
 }

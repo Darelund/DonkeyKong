@@ -14,7 +14,8 @@ namespace DonkeyKong
         protected Vector2 Position;
         protected float Speed;
         protected Color Color;
-
+        //public float Rotation
+        //public Point Size
         public GameObject(Texture2D texture, Vector2 position, float speed, Color color) 
         {
             Texture = texture;

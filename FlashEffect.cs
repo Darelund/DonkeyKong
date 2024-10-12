@@ -59,7 +59,7 @@ namespace DonkeyKong
             {
                 _flashEffect.Parameters["overlayColor"].SetValue(_color.ToVector4());
                 spriteBatch.End();
-                spriteBatch.Begin(effect: _flashEffect, blendState: BlendState.AlphaBlend);
+                spriteBatch.Begin(SpriteSortMode.BackToFront, effect: _flashEffect, blendState: BlendState.AlphaBlend);
             }
         }
     }

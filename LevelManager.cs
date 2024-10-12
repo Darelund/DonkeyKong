@@ -8,6 +8,7 @@ namespace DonkeyKong
 {
     public class LevelManager
     {
-
+        //Probably will rework this to use the state design pattern if I have time.
+       // public enum GameLevels
     }
 }

@@ -19,8 +19,16 @@ namespace DonkeyKong
 
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-        
+            int heightOffset = 200;
+            int widthOffset = 3;
+            int screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - heightOffset;
+            int fixedWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width / widthOffset; // Define a fixed width like Space Invaders
+
+            _graphics.PreferredBackBufferHeight = screenHeight;
+            _graphics.PreferredBackBufferWidth = fixedWidth;
+            _graphics.ApplyChanges();
+
+            GameManager.Initialize(Window, Content);
             base.Initialize();
         }
 
@@ -28,7 +36,7 @@ namespace DonkeyKong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder", "", "", "", "Effect/FlashEffect");
+            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder", "", "", "GameText", "FlashEffect");
             var textureTuples = new List<(char TileName, Texture2D tileTexture, bool notWalkable)>
             {
                 ('B', ResourceManager.GetTexture("bridge"), true),
@@ -40,8 +48,7 @@ namespace DonkeyKong
             Level.CreateLevel("Content/GameFiles", textureTuples);
 
             GameManager.AddGameObject(new PlayerController(ResourceManager.GetTexture("SuperMarioFront"), new Vector2(200, 200), 10, new Point(0, 3), new Point(0, 3), new Point(0, 3), Color.White));
-
-            // TODO: use this.Content to load your game content here
+            GameManager.ContentLoad();
         }
 
         protected override void Update(GameTime gameTime)
