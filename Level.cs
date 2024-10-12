@@ -36,7 +36,13 @@ namespace DonkeyKong
             }
             return result;
         }
-        public static void CreateLevel(string file)
+        /// <summary>
+        /// Creates a 2D grid level based on the file you give it. In the file each character represents one tile. 
+        /// So you give it a list of tuples where each tuple is its character, texture and if you can walk on it.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="textureTuples"></param>
+        public static void CreateLevel(string file, List<(char TileName, Texture2D tileTexture, bool notWalkable)> textureTuples)
         {
             List<string> result = ReadFromFile(file);
 
@@ -46,24 +52,13 @@ namespace DonkeyKong
             {
                 for (int j = 0; j < result.Count; j++)
                 {
-                    //B stands for bridge
-                    //- stands for empty
-                    //L stands for ladder
-                    if (result[j][i] == 'B')
+                    foreach (var textureTuple in textureTuples)
                     {
-                        Tiles[j, i] = new Tile(new Vector2(ResourceManager.GetTexture("bridge").Width * i, ResourceManager.GetTexture("bridge").Height * j), ResourceManager.GetTexture("bridge"), true);
-                    }
-                    if (result[j][i] == 'L')
-                    {
-                        Tiles[j, i] = new Tile(new Vector2(ResourceManager.GetTexture("ladder").Width * i, ResourceManager.GetTexture("ladder").Height * j), ResourceManager.GetTexture("ladder"), false);
-                    }
-                    if (result[j][i] == 'b')
-                    {
-                        Tiles[j, i] = new Tile(new Vector2(ResourceManager.GetTexture("bridgeLadder").Width * i, ResourceManager.GetTexture("bridgeLadder").Height * j), ResourceManager.GetTexture("bridgeLadder"), false);
-                    }
-                    if (result[j][i] == '-')
-                    {
-                        Tiles[j, i] = new Tile(new Vector2(ResourceManager.GetTexture("empty").Width * i, ResourceManager.GetTexture("empty").Height * j), ResourceManager.GetTexture("empty"), false);
+                        if (result[j][i] == textureTuple.TileName)
+                        {
+                            Tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * i, textureTuple.tileTexture.Height * j), textureTuple.tileTexture, true);
+                            break;
+                        }
                     }
                 }
             }

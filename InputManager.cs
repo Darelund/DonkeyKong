@@ -24,7 +24,6 @@ namespace DonkeyKong
         {
             //Probably should have done float
             Vector2 inputDirection = Vector2.Zero;
-            keyboardState = Keyboard.GetState();
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left)) inputDirection.X -= 1;
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right)) inputDirection.X += 1;

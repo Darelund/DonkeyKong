@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -12,7 +13,6 @@ namespace DonkeyKong
     public class FlashEffect
     {
         private Effect _flashEffect;
-        private SpriteBatch _spriteBatch;
 
         private float _flashTimer;
         private float _flashTime;
@@ -20,63 +20,47 @@ namespace DonkeyKong
         private GameObject _flashGameObject;
         private Color _color;
 
-        private bool _isActive = true;
+        private float _blinkFrequency;
+        private bool _isFlashing;
+        public bool IsActive { get; private set; }
 
-        public FlashEffect(SpriteBatch spriteBatch, float flashTime, GameObject flashGameObject, Color color)
+        public FlashEffect(Effect flashEffect, float flashTime, GameObject flashGameObject, Color color, float blinkFrequency = 0.2f)
         {
-            _flashEffect = ResourceManager.GetEffect("Effect/FlashEffect");
-            _spriteBatch = spriteBatch;
+            _flashEffect = flashEffect;
             _flashTime = flashTime;
             _flashGameObject = flashGameObject;
             _color = color;
+            _blinkFrequency = blinkFrequency;
+
+            IsActive = true;
+            _isFlashing = true;
         }
 
         public void Update(GameTime gameTime)
         {
-            if (!_isActive) return;
+            if (!IsActive) return;
             _flashTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if(_flashTimer < _flashTime)
+
+            if(_flashTimer >= _flashTime)
             {
-                SwitchDrawEffect();
+                IsActive = false;
+                return;
             }
-            else if(_flashTimer >= _flashTime)
+            //TODO Can probably take away 2, maybe
+            _isFlashing = (_flashTimer % _blinkFrequency < _blinkFrequency / 2);
+        }
+        public bool IsActiveOnObject(GameObject gameObject)
+        {
+            return _flashGameObject == gameObject && IsActive;
+        }
+        public void ApplyDrawEffect(SpriteBatch spriteBatch)
+        {
+            if (_isFlashing)
             {
-                _isActive = false;
+                _flashEffect.Parameters["overlayColor"].SetValue(_color.ToVector4());
+                spriteBatch.End();
+                spriteBatch.Begin(effect: _flashEffect, blendState: BlendState.AlphaBlend);
             }
-        }
-
-        /// <summary>
-        /// Switches the current SpriteBatch.Draw method to one that draws the flash effect
-        /// </summary>
-        /// <param name="drawPos"></param>
-        /// <param name="colorOverlay"></param>
-        public void SwitchDrawEffect()
-        {
-            // switch spritebatch to overlayColor shader
-            _flashEffect.Parameters["overlayColor"].SetValue(_color.ToVector4());
-            RestartSpriteBatch(_flashEffect);
-
-            // _spriteBatch.Draw(ResourceManager.GetTexture("SuperMarioFront"), drawPos, Color.White);
-            _flashGameObject.Draw(_spriteBatch);
-
-            // switch spritebatch off shader
-            RestartSpriteBatch();
-        }
-
-        private void RestartSpriteBatch(Effect effect = null)
-        {
-            if (GameManager.SpriteBatchActive)
-                EndSpriteBatch();
-
-            _spriteBatch.Begin(effect: effect);
-            GameManager.SpriteBatchActive = true;
-        }
-
-
-        private void EndSpriteBatch()
-        {
-            _spriteBatch.End();
-            GameManager.SpriteBatchActive = false;
         }
     }
 }
