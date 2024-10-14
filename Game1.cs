@@ -9,7 +9,6 @@ namespace DonkeyKong
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         //PlayerController _playerController;
-
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -37,7 +36,7 @@ namespace DonkeyKong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2", "", "", "GameText", "FlashEffect");
-            var textureTuples = new List<(char TileName, Texture2D tileTexture, bool notWalkable)>
+            var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, bool notWalkable)>
             {
                 ('B', ResourceManager.GetTexture("bridge"), true),
                 ('b', ResourceManager.GetTexture("bridgeLadder"), false),
@@ -45,7 +44,7 @@ namespace DonkeyKong
                 ('-', ResourceManager.GetTexture("empty"), false)
             };
 
-            Level.CreateLevel("Content/GameFiles", textureTuples);
+            LevelManager.AddLevel("Content/GameFiles", new Vector2(100, 100), tilesLevel1);
 
             GameManager.AddGameObject(new PlayerController(ResourceManager.GetTexture("SuperMarioFront"), new Vector2(200, 200), 10, new Point(0, 3), new Point(0, 3), new Point(0, 3), Color.White));
             GameManager.ContentLoad();

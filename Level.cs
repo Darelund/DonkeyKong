@@ -12,7 +12,7 @@ namespace DonkeyKong
 {
     public class Level
     {
-        private static Tile[,] Tiles;
+        private Tile[,] _tiles;
 
         /// <summary>
         /// Reads the contents of a specified text file line by line and populates a list of strings,
@@ -21,7 +21,7 @@ namespace DonkeyKong
         /// </summary>
         /// <param name="fileName">The path to the text file to be read.</param>
         /// <returns>A list of strings, where each string is a line from the file.</returns>
-        private static List<string> ReadFromFile(string fileName)
+        private List<string> ReadFromFile(string fileName)
         {
             List<string> result = new List<string>();
 
@@ -41,34 +41,38 @@ namespace DonkeyKong
         /// So you give it a list of tuples where each tuple is its character, texture and if you can walk on it.
         /// </summary>
         /// <param name="file"></param>
-        /// <param name="textureTuples"></param>
-        public static void CreateLevel(string file, List<(char TileName, Texture2D tileTexture, bool notWalkable)> textureTuples)
+        /// <param name="tileTexture"></param>
+        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable)> tileTexture)
         {
             List<string> result = ReadFromFile(file);
 
-            Tiles = new Tile[result.Count, result[0].Length];
+            _tiles = new Tile[result.Count, result[0].Length];
 
             for (int i = 0; i < result[0].Length; i++)
             {
                 for (int j = 0; j < result.Count; j++)
                 {
-                    foreach (var textureTuple in textureTuples)
+                    foreach (var textureTuple in tileTexture)
                     {
                         if (result[j][i] == textureTuple.TileName)
                         {
-                            Tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * i, textureTuple.tileTexture.Height * j), textureTuple.tileTexture, true);
+                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * i + startPosition.X, textureTuple.tileTexture.Height * j + startPosition.Y), textureTuple.tileTexture, true);
                             break;
                         }
                     }
                 }
             }
         }
-        public static void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (Tile tile in Tiles)
+            foreach (Tile tile in _tiles)
             {
                 tile.Draw(spriteBatch);
             }
+        }
+        public bool GetTileAtPosition(Vector2 vec)
+        {
+            return _tiles[(int)vec.X / 40, (int)vec.Y / 40].NotWalkable;
         }
     }
 }

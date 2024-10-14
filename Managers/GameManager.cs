@@ -78,7 +78,7 @@ namespace DonkeyKong
                     break;
                 case GameState.Playing:
                    
-                    Level.Draw(spriteBatch);
+                    LevelManager.Draw(spriteBatch);
 
                     foreach (var gameObject in _gameObjects)
                     {
