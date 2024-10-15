@@ -10,13 +10,14 @@ namespace DonkeyKong
 {
     public class AnimatedGameObject : GameObject
     {
-        private Point _currentFrame;
-        private Point _frameSize;
-        private Point _sheetSize;
+        protected Point _currentFrame;
+        protected Point _frameSize;
+        protected Point _sheetSize;
 
-        private int _millisecondsPerFrame;
-        private float _timeSinceLastFrame = 0;
-        public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, int millisecondsPerFrame = 16) : base(texture, position, speed, color)
+        protected int _millisecondsPerFrame;
+        protected float _timeSinceLastFrame = 0;
+        protected bool UseColumns = true;
+        public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, color, rotation, size, layerDepth, origin)
         {
             _currentFrame = currentFrame;
             _frameSize = frameSize;

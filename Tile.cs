@@ -13,12 +13,14 @@ namespace DonkeyKong
         public Texture2D Texture;
         public Vector2 Pos;
         public bool NotWalkable;
+        public int Name;
 
         public Tile(Vector2 pos, Texture2D texture, bool notWalkable)
         {
             Pos = pos;
             Texture = texture;
             NotWalkable = notWalkable;
+            Name = LevelManager.NameIndex++;
         }
 
         public void Draw(SpriteBatch spriteBatch)

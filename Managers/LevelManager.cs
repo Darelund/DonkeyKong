@@ -15,7 +15,7 @@ namespace DonkeyKong
        private static List<Level> Levels = new List<Level>();
         public static Level GetCurrentLevel => Levels[_levelIndex];
         private static int _levelIndex = 0;
-
+        public static int NameIndex = 0;
         //public static void LoadContent()
         //{
 

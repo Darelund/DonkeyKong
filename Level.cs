@@ -5,13 +5,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DonkeyKong
 {
     public class Level
     {
+        private Vector2 _startPosition;
         private Tile[,] _tiles;
 
         /// <summary>
@@ -45,18 +48,17 @@ namespace DonkeyKong
         public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable)> tileTexture)
         {
             List<string> result = ReadFromFile(file);
-
-            _tiles = new Tile[result.Count, result[0].Length];
-
-            for (int i = 0; i < result[0].Length; i++)
+            _startPosition = startPosition;
+            _tiles = new Tile[result[0].Length, result.Count];
+            for (int i = 0; i < result.Count; i++)
             {
-                for (int j = 0; j < result.Count; j++)
+                for (int j = 0; j < result[0].Length; j++)
                 {
                     foreach (var textureTuple in tileTexture)
                     {
-                        if (result[j][i] == textureTuple.TileName)
+                        if (result[i][j] == textureTuple.TileName)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * i + startPosition.X, textureTuple.tileTexture.Height * j + startPosition.Y), textureTuple.tileTexture, true);
+                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * j + startPosition.X, textureTuple.tileTexture.Height * i + startPosition.Y), textureTuple.tileTexture, textureTuple.notWalkable);
                             break;
                         }
                     }
@@ -72,7 +74,15 @@ namespace DonkeyKong
         }
         public bool GetTileAtPosition(Vector2 vec)
         {
-            return _tiles[(int)vec.X / 40, (int)vec.Y / 40].NotWalkable;
+            //I want to get tilesize somehow, what if they are a dífferent size?
+            int tileSize = 40;
+            vec -= _startPosition;
+
+            Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+            if (tilePos.X < 0 || tilePos.X >= _tiles.GetLength(0)) return false;
+            if (tilePos.Y < 0 || tilePos.Y >= _tiles.GetLength(0)) return false;
+
+            return !(_tiles[tilePos.X, tilePos.Y].NotWalkable);
         }
     }
 }
