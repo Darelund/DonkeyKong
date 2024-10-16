@@ -94,6 +94,11 @@ namespace DonkeyKong
                                 break;
                             }
                         }
+                        if(gameObject is PlayerController)
+                        {
+                            var player = (PlayerController)gameObject;
+                            CollisionManager.CheckCollision(player);
+                        }
                         gameObject.Draw(spriteBatch);
 
                         if (isFlashing)

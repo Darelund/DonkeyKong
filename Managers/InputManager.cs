@@ -27,6 +27,8 @@ namespace DonkeyKong
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left)) inputDirection.X -= 1;
             if (keyboardState.IsKeyDown(Keys.D) || keyboardState.IsKeyDown(Keys.Right)) inputDirection.X += 1;
+            if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up)) inputDirection.Y -= 1;
+            if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down)) inputDirection.Y += 1;
 
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             if (gamePadState.ThumbSticks.Left.X != 0)

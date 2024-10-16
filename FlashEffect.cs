@@ -12,6 +12,7 @@ namespace DonkeyKong
 {
     public class FlashEffect
     {
+        public event Action<bool> OnFlashing;
         private Effect _flashEffect;
 
         private float _flashTimer;
@@ -34,6 +35,8 @@ namespace DonkeyKong
 
             IsActive = true;
             _isFlashing = true;
+
+            OnFlashing?.Invoke(true);
         }
 
         public void Update(GameTime gameTime)
@@ -44,6 +47,7 @@ namespace DonkeyKong
             if(_flashTimer >= _flashTime)
             {
                 IsActive = false;
+                OnFlashing?.Invoke(false);
                 return;
             }
             //TODO Can probably take away 2, maybe

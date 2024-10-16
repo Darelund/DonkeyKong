@@ -1,47 +1,49 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace DonkeyKong
 {
-    public class PlayerController : AnimatedGameObject
+    public class EnemyController : AnimatedGameObject
     {
         private Vector2 destination;
         private Vector2 direction;
         private float speed = 100.0f;
         private bool moving = false;
-        //TEST
-        public float Health { get; private set; } = 3;
-        public bool IsImmune { get; set; } = false;
-        public Rectangle Collision
+
+        private Rectangle Collision
         {
             get
             {
                 //Probably base on origin
-                //YOOO WHO IS FAT??? THE PLAYER OR ENEMY??? WHYYYYY
-                return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _frameSize.X * Size, _frameSize.Y * Size);
+                return new Rectangle((int)Position.X, (int)Position.Y, _frameSize.X * Size, _frameSize.Y * Size);
             }
         }
-        public PlayerController(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, millisecondsPerFrame)
+        public EnemyController(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, millisecondsPerFrame)
         {
+            Random ran = new Random();
+            int randomStartDirection = ran.Next(0, 2);
+            Debug.WriteLine(randomStartDirection);
+            direction.X = randomStartDirection == 1 ? -1 : 1;
             CollisionManager.AddCollisionObject(this);
         }
         public override void Update(GameTime gameTime)
         {
-            if(!moving)
+            if (!moving)
             {
-                ChangeDirection(InputManager.GetMovement());
+                //Need to fix this
+                ChangeDirection(direction);
             }
             else
             {
-               Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 HandleAnimation(direction, gameTime);
-                
+
 
                 //Check if we are near enough to the destination
                 if (Vector2.Distance(Position, destination) < 1)
@@ -83,15 +85,18 @@ namespace DonkeyKong
                 destination = newDestination;
                 moving = true;
             }
+            else
+            {
+                direction.X *= -1;
+            }
         }
-        public void TakeDamage(int amount)
+        //private int GetMovement()
+        //{
+
+        //}
+        public bool HasCollided(Rectangle rec)
         {
-            if(!IsImmune)
-            Health -= amount;
-        }
-        public void ImmuneHandler(bool immune)
-        {
-            IsImmune = immune;
+            return Collision.Intersects(rec);
         }
     }
 }

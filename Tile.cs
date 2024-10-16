@@ -26,7 +26,8 @@ namespace DonkeyKong
         public void Draw(SpriteBatch spriteBatch)
         {
             //To add more functionality
-            spriteBatch.Draw(Texture, Pos, Color.White);
+            spriteBatch.Draw(Texture, Pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+           // spriteBatch.Draw(Texture, Pos, Color.White);
         }
     }
 }
