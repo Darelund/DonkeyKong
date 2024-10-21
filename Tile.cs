@@ -8,21 +8,30 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
+    public enum TileType
+    {
+        Walkable,
+        NonWalkable,
+        Ladder,
+        Hazard, // for future extensibility like spikes, fire, etc.
+        Decoration  // For tiles that are purely cosmetic
+    }
     public class Tile
     {
+        
+        public TileType Type { get; }
         private Texture2D _texture;
         private Vector2 _pos;
-        public bool NotWalkable { get; }
-        private int _name;
+        public char Name { get; private set; }
         private Color _color;
 
-        public Tile(Vector2 pos, Texture2D texture, bool notWalkable, Color color)
+        public Tile(Vector2 pos, Texture2D texture, TileType type, Color color, char name)
         {
             _pos = pos;
             _texture = texture;
-            NotWalkable = notWalkable;
-            _name = LevelManager.NameIndex++;
+            Type = type;
             _color = color;
+            Name = name;
         }
 
         public void Draw(SpriteBatch spriteBatch)

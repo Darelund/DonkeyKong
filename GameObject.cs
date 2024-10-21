@@ -11,7 +11,7 @@ namespace DonkeyKong
     public abstract class GameObject
     {
         protected Texture2D Texture;
-        protected Vector2 Position;
+        public Vector2 Position { get; set; }
         protected float Speed;
         protected Color Color;
         protected float Rotation;

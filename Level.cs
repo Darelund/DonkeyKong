@@ -49,7 +49,7 @@ namespace DonkeyKong
         /// </summary>
         /// <param name="file"></param>
         /// <param name="tileTexture"></param>
-        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable, Color tileColor)> tileTexture)
+        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileTexture)
         {
             List<string> result = ReadFromFile(file);
             _startPosition = startPosition;
@@ -62,7 +62,7 @@ namespace DonkeyKong
                     {
                         if (result[i][j] == textureTuple.TileName)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * j + startPosition.X, textureTuple.tileTexture.Height * i + startPosition.Y), textureTuple.tileTexture, textureTuple.notWalkable, textureTuple.tileColor);
+                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * j + startPosition.X, textureTuple.tileTexture.Height * i + startPosition.Y), textureTuple.tileTexture, textureTuple.type, textureTuple.tileColor, textureTuple.TileName);
                             break;
                         }
                     }
@@ -223,17 +223,33 @@ namespace DonkeyKong
                 tile.Draw(spriteBatch);
             }
         }
-        public bool GetTileAtPosition(Vector2 vec)
+        public bool IsTileWalkable(Vector2 vec)
         {
-            //I want to get tilesize somehow, what if they are a dífferent size?
             int tileSize = 40;
             vec -= _startPosition;
-
             Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+
+            if (!TileExistsAtPosition(tilePos)) return false;
+
+            return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
+        }
+        public bool IsTileLadder(Vector2 vec)
+        {
+            int tileSize = 40;
+            vec -= _startPosition;
+            Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+
+            if (!TileExistsAtPosition(tilePos)) return false;
+
+            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder);
+        }
+
+        private bool TileExistsAtPosition(Point tilePos)
+        {
             if (tilePos.X < 0 || tilePos.X >= _tiles.GetLength(0)) return false;
             if (tilePos.Y < 0 || tilePos.Y >= _tiles.GetLength(0)) return false;
 
-            return !(_tiles[tilePos.X, tilePos.Y].NotWalkable);
+            return true;
         }
     }
 }

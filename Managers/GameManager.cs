@@ -53,6 +53,18 @@ namespace DonkeyKong
                     foreach (var gameObject in _gameObjects)
                     {
                         gameObject.Update(gameTime);
+                        if (gameObject is PlayerController)
+                        {
+                            var player = (PlayerController)gameObject;
+                            // Store the Position in a local variable
+                            Vector2 position = player.Position;
+
+                            // Pass the local variable as ref
+                            PhysicsManager.ApplyPhysics(gameTime, ref position);
+
+                            // Assign the modified value back to the property
+                            player.Position = position;
+                        }
                     }
 
                     for (int i = 0; i < _flashEffects.Count; i++)
@@ -97,6 +109,7 @@ namespace DonkeyKong
                                 break;
                             }
                         }
+                        //Should this really be here?
                         if(gameObject is PlayerController)
                         {
                             var player = (PlayerController)gameObject;

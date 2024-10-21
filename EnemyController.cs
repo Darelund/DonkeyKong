@@ -73,7 +73,7 @@ namespace DonkeyKong
             Vector2 newDestination = Position + direction * tileSize;
 
             //Check if we can move in the desired direction, if not, do nothing
-            if (LevelManager.GetCurrentLevel.GetTileAtPosition(newDestination))
+            if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
             {
                 destination = newDestination;
                 moving = true;

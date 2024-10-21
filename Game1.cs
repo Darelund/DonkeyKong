@@ -36,13 +36,13 @@ namespace DonkeyKong
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1,Background1,bridgeLeft,bridgeRight,largebridge", "", "", "GameText", "FlashEffect");
-            var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, bool notWalkable, Color tileColor)>
+            var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)>
             {
-                ('B', ResourceManager.GetTexture("bridge"), true, Color.Brown),
-                 ('L', ResourceManager.GetTexture("largebridge"), true, Color.Brown),
-                ('b', ResourceManager.GetTexture("bridgeLadder"), false, Color.DarkGreen),
-                ('l', ResourceManager.GetTexture("ladder"), false, Color.DarkGreen),
-                ('-', ResourceManager.GetTexture("empty"), false, Color.White)
+                ('B', ResourceManager.GetTexture("bridge"), TileType.NonWalkable, Color.Brown),
+                 ('L', ResourceManager.GetTexture("largebridge"), TileType.NonWalkable, Color.Brown),
+                ('b', ResourceManager.GetTexture("bridgeLadder"), TileType.Ladder, Color.DarkGreen),
+                ('l', ResourceManager.GetTexture("ladder"), TileType.Ladder, Color.DarkGreen),
+                ('-', ResourceManager.GetTexture("empty"), TileType.Walkable, Color.White)
             };
 
             LevelManager.AddLevel("Content/GameFiles", new Vector2(120, 120), tilesLevel1);

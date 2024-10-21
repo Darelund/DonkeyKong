@@ -70,12 +70,19 @@ namespace DonkeyKong
         public void ChangeDirection(Vector2 dir)
         {
             direction = dir;
-            //I want to get tilesize somehow, what if they are a dífferent size?
             float tileSize = 40.0f;
             Vector2 newDestination = Position + direction * tileSize;
+            if (direction.Y > 0)
+            {
+                if (LevelManager.GetCurrentLevel.IsTileLadder(newDestination))
+                {
+                    destination = newDestination;
+                    moving = true;
+                    return;
+                }
+            }
 
-            //Check if we can move in the desired direction, if not, do nothing
-            if (LevelManager.GetCurrentLevel.GetTileAtPosition(newDestination))
+            if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
             {
                 destination = newDestination;
                 moving = true;

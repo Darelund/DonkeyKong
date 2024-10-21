@@ -33,7 +33,7 @@ namespace DonkeyKong
         /// </summary>
         /// <param name="file">A 2D Grid Texture file which is how you want your map to look</param>
         /// <param name="tileTexture">A list where each element represents one tile in your map</param>
-        public static void AddLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable, Color tileColor)> tileTexture)
+        public static void AddLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileTexture)
         {
             Level newLevel = new Level();
             newLevel.CreateLevel(file, startPosition, tileTexture);
