@@ -10,23 +10,25 @@ namespace DonkeyKong
 {
     public class Tile
     {
-        public Texture2D Texture;
-        public Vector2 Pos;
-        public bool NotWalkable;
-        public int Name;
+        private Texture2D _texture;
+        private Vector2 _pos;
+        public bool NotWalkable { get; }
+        private int _name;
+        private Color _color;
 
-        public Tile(Vector2 pos, Texture2D texture, bool notWalkable)
+        public Tile(Vector2 pos, Texture2D texture, bool notWalkable, Color color)
         {
-            Pos = pos;
-            Texture = texture;
+            _pos = pos;
+            _texture = texture;
             NotWalkable = notWalkable;
-            Name = LevelManager.NameIndex++;
+            _name = LevelManager.NameIndex++;
+            _color = color;
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
             //To add more functionality
-            spriteBatch.Draw(Texture, Pos, null, Color.White, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(_texture, _pos, null, _color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 0.5f);
            // spriteBatch.Draw(Texture, Pos, Color.White);
         }
     }

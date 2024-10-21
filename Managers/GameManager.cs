@@ -49,6 +49,7 @@ namespace DonkeyKong
                     break;
                 case GameState.Playing:
                     InputManager.Update();
+                    UIManager.Update(gameTime);
                     foreach (var gameObject in _gameObjects)
                     {
                         gameObject.Update(gameTime);
@@ -72,7 +73,7 @@ namespace DonkeyKong
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend);
+            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
             switch (CurrentGameState)
             {
                 case GameState.MainMenu:
@@ -81,6 +82,7 @@ namespace DonkeyKong
                 case GameState.Playing:
                    
                     LevelManager.Draw(spriteBatch);
+                    UIManager.Draw(spriteBatch);
 
                     foreach (var gameObject in _gameObjects)
                     {

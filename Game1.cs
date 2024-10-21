@@ -35,19 +35,31 @@ namespace DonkeyKong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1", "", "", "GameText", "FlashEffect");
-            var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, bool notWalkable)>
+            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1,Background1,bridgeLeft,bridgeRight,largebridge", "", "", "GameText", "FlashEffect");
+            var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, bool notWalkable, Color tileColor)>
             {
-                ('B', ResourceManager.GetTexture("bridge"), true),
-                ('b', ResourceManager.GetTexture("bridgeLadder"), false),
-                ('L', ResourceManager.GetTexture("ladder"), false),
-                ('-', ResourceManager.GetTexture("empty"), false)
+                ('B', ResourceManager.GetTexture("bridge"), true, Color.Brown),
+                 ('L', ResourceManager.GetTexture("largebridge"), true, Color.Brown),
+                ('b', ResourceManager.GetTexture("bridgeLadder"), false, Color.DarkGreen),
+                ('l', ResourceManager.GetTexture("ladder"), false, Color.DarkGreen),
+                ('-', ResourceManager.GetTexture("empty"), false, Color.White)
             };
 
             LevelManager.AddLevel("Content/GameFiles", new Vector2(120, 120), tilesLevel1);
 
             float offsetBy17BecauseOfSprite = 17;
-            GameManager.AddGameObject(new PlayerController(ResourceManager.GetTexture("mario-pauline-transparent"), new Vector2(120 + offsetBy17BecauseOfSprite, 120 + offsetBy17BecauseOfSprite), 10, new Point(0, 0), new Point(17, 17), new Point(3, 1), Color.White, 0f, 3, 0f, new Vector2(8.5f, 8.5f), 100));
+
+            Rectangle[] walkRects = new Rectangle[]
+            {
+            new Rectangle(0*16 + 1, 1, 16, 16),
+            new Rectangle(1*16 + 2, 1, 16, 16),
+            new Rectangle(2*16 + 3, 1, 16, 16)
+            };
+            var playerClips = new Dictionary<string, AnimationClip>()
+            {
+                {"Walking", new AnimationClip(walkRects, 7f)}
+            };
+            GameManager.AddGameObject(new PlayerController(ResourceManager.GetTexture("mario-pauline-transparent"), new Vector2(280 + offsetBy17BecauseOfSprite, 120 + offsetBy17BecauseOfSprite), 10, Color.White, 0f, 3, 0f, new Vector2(8.5f, 8.5f), playerClips));
 
             //TODO Maybe an enemy manager? Need to handle this shit somehow
             //WHY DOES IT CREATE A BLACK BLOCK????
@@ -76,4 +88,19 @@ namespace DonkeyKong
             base.Draw(gameTime);
         }
     }
+
+    /*
+     * LBBBBBBBBBBbBBBBBBBR
+       L----------l-------R
+       LBbBBBBBBBBBBBBBbBBR
+       L-l-------------l--R
+       LBBBBBBBBBBBBbBBBBBR
+       L------------l-----R
+       LBBBBbBBBBBBBBBBBBBR
+       L----l-------------R
+       LBBBBBBBBBBbBBBBBBBR
+       L----------l-------R
+       LBBBBBBBBBBBBBBBBBBR
+     * 
+     */
 }

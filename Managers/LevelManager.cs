@@ -15,7 +15,7 @@ namespace DonkeyKong
        private static List<Level> Levels = new List<Level>();
         public static Level GetCurrentLevel => Levels[_levelIndex];
         private static int _levelIndex = 0;
-        public static int NameIndex = 0;
+        public static int NameIndex = 0; //What is this doing?
         //public static void LoadContent()
         //{
 
@@ -33,11 +33,11 @@ namespace DonkeyKong
         /// </summary>
         /// <param name="file">A 2D Grid Texture file which is how you want your map to look</param>
         /// <param name="tileTexture">A list where each element represents one tile in your map</param>
-        public static void AddLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable)> tileTexture)
+        public static void AddLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable, Color tileColor)> tileTexture)
         {
             Level newLevel = new Level();
             newLevel.CreateLevel(file, startPosition, tileTexture);
-            newLevel.CreateLevelGameObjects("Content/GameObjectsInLevel1.txt");
+           // newLevel.CreateLevelGameObjects("Content/GameObjectsInLevel1.txt");
             Levels.Add(newLevel);
         }
         public static void ChangeLevel(int newLevel)

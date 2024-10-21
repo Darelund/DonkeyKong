@@ -17,7 +17,7 @@ namespace DonkeyKong
         private bool moving = false;
 
       
-        public EnemyController(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, millisecondsPerFrame)
+        public EnemyController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
             Random ran = new Random();
             int randomStartDirection = ran.Next(0, 2);
@@ -48,7 +48,7 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, new Rectangle(_currentFrame.X * _frameSize.X, _currentFrame.Y * _frameSize.Y, _frameSize.X, _frameSize.Y), Color, 0f, Origin, Size, currentDirection, LayerDepth);
+            spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, currentDirection, LayerDepth);
 
         }
         private SpriteEffects currentDirection = SpriteEffects.None;

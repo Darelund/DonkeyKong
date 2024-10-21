@@ -10,50 +10,34 @@ namespace DonkeyKong
 {
     public class AnimatedGameObject : GameObject
     {
-        protected Point _currentFrame;
-        protected Point _frameSize;
-        protected Point _sheetSize;
-
-        protected int _millisecondsPerFrame;
-        protected float _timeSinceLastFrame = 0;
-        protected bool UseColumns = true;
+        protected Dictionary<string, AnimationClip> _animationClips;
+        protected AnimationClip _currentClip;
+        private float _deltaTime;
         public override Rectangle Collision
         {
-            get
-            {
-                return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _frameSize.X * Size, _frameSize.Y * Size);
-            }
+            //Out of work
+            //get
+            //{
+            //    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _frameSize.X * Size, _frameSize.Y * Size);
+            //}
+            get => new Rectangle(0, 0, 0, 0);
         }
-        public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, color, rotation, size, layerDepth, origin)
+        public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin)
         {
-            _currentFrame = currentFrame;
-            _frameSize = frameSize;
-            _sheetSize = sheetSize;
-            _millisecondsPerFrame = millisecondsPerFrame;
+            _animationClips = animationClips;
+            //Todo maybe make it possible to choose what animation to start at?
+            _currentClip = _animationClips[_animationClips.Keys.First()];
         }
 
         public override void Update(GameTime gameTime)
         {
-            _timeSinceLastFrame += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
-           if(_timeSinceLastFrame >= _millisecondsPerFrame)
-            {
-                _timeSinceLastFrame -= _millisecondsPerFrame;
-
-                _currentFrame.X++;
-                if(_currentFrame.X >= _sheetSize.X)
-                {
-                    _currentFrame.X = 0;
-                    _currentFrame.Y++;
-                    if(_currentFrame.Y >= _sheetSize.Y)
-                    {
-                        _currentFrame.Y = 0;
-                    }
-                }
-            }
+            _deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            _currentClip.Update(_deltaTime);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position + Origin * 2, new Rectangle(_currentFrame.X * _frameSize.X, _currentFrame.Y * _frameSize.Y, _frameSize.X, _frameSize.Y), Color, 0f, Origin, Size, SpriteEffects.None, LayerDepth);
+            //Why did I put a 2 here?
+            spriteBatch.Draw(Texture, Position + Origin * 2, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, SpriteEffects.None, LayerDepth);
         }
         public override bool CheckCollision(GameObject gameObject)
         {

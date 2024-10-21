@@ -49,7 +49,7 @@ namespace DonkeyKong
         /// </summary>
         /// <param name="file"></param>
         /// <param name="tileTexture"></param>
-        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable)> tileTexture)
+        public void CreateLevel(string file, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, bool notWalkable, Color tileColor)> tileTexture)
         {
             List<string> result = ReadFromFile(file);
             _startPosition = startPosition;
@@ -62,7 +62,7 @@ namespace DonkeyKong
                     {
                         if (result[i][j] == textureTuple.TileName)
                         {
-                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * j + startPosition.X, textureTuple.tileTexture.Height * i + startPosition.Y), textureTuple.tileTexture, textureTuple.notWalkable);
+                            _tiles[j, i] = new Tile(new Vector2(textureTuple.tileTexture.Width * j + startPosition.X, textureTuple.tileTexture.Height * i + startPosition.Y), textureTuple.tileTexture, textureTuple.notWalkable, textureTuple.tileColor);
                             break;
                         }
                     }
@@ -169,7 +169,8 @@ namespace DonkeyKong
 
             // Parse other properties from data...
 
-            return new EnemyController(ResourceManager.GetTexture(sprite), Position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, 100 /* other params */);
+            return null;
+            //return new EnemyController(ResourceManager.GetTexture(sprite), Position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, 100 /* other params */);
         }
 
         //private PlayerController CreatePlayerController(List<string> data)
