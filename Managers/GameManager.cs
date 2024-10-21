@@ -34,6 +34,7 @@ namespace DonkeyKong
         }
         public static void ContentLoad()
         {
+            CollisionManager._collisionObjects = _gameObjects;
             UIManager.LoadContent();
         }
 

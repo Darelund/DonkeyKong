@@ -16,21 +16,14 @@ namespace DonkeyKong
         private float speed = 100.0f;
         private bool moving = false;
 
-        private Rectangle Collision
-        {
-            get
-            {
-                //Probably base on origin
-                return new Rectangle((int)Position.X, (int)Position.Y, _frameSize.X * Size, _frameSize.Y * Size);
-            }
-        }
+      
         public EnemyController(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, millisecondsPerFrame)
         {
             Random ran = new Random();
             int randomStartDirection = ran.Next(0, 2);
             Debug.WriteLine(randomStartDirection);
             direction.X = randomStartDirection == 1 ? -1 : 1;
-            CollisionManager.AddCollisionObject(this);
+           // CollisionManager.AddCollisionObject(this);
         }
         public override void Update(GameTime gameTime)
         {

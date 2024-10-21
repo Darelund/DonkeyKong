@@ -17,6 +17,10 @@ namespace DonkeyKong
         private Vector2 _startPosition;
         private Tile[,] _tiles;
 
+
+
+        //public List<GameObject> GameObjects = new List<GameObject>();
+
         /// <summary>
         /// Reads the contents of a specified text file line by line and populates a list of strings,
         /// where each string represents a line from the file. This is useful for processing 
@@ -65,6 +69,152 @@ namespace DonkeyKong
                 }
             }
         }
+        public void CreateLevelGameObjects(string objectsFilePath)
+        {
+            List<string> fileLines = ReadFromFile(objectsFilePath);
+
+            int i = 0;
+            while (i < fileLines.Count)
+            {
+                // Get the object type from the first line
+                string objectType = fileLines[i].Trim();
+                i++;  // Move to the next line for object data
+
+                // Read the relevant properties for each object
+                List<string> objectData = new List<string>();
+
+                while (i < fileLines.Count && !string.IsNullOrWhiteSpace(fileLines[i]))
+                {
+                    objectData.Add(fileLines[i].Trim());
+                    i++;
+                }
+
+                // Create the appropriate game object based on the object type
+                GameObject newObject = CreateGameObjectFromType(objectType, objectData);
+
+                if (newObject != null)
+                {
+                    GameManager.AddGameObject(newObject);
+                }
+
+                i++;  // Skip the blank line between object definitions
+            }
+        }
+
+        private GameObject CreateGameObjectFromType(string objectType, List<string> objectData)
+        {
+            // Create objects based on their type
+            switch (objectType)
+            {
+                case "EnemyController":
+                    Debug.WriteLine("Returning?");
+                    return CreateEnemyController(objectData);
+                case "PlayerController":
+                  //  return CreatePlayerController(objectData);
+                //case "PickUp":
+                //    return CreatePickUp(objectData);
+                default:
+                    Debug.WriteLine("Unknown object type: " + objectType);
+                    return null;
+            }
+        }
+        private EnemyController CreateEnemyController(List<string> data)
+        {
+            // Parse the data and initialize the object
+            // Assume data contains all the needed parameters in the expected order
+            string sprite = data[0];
+            string[] positionParts = data[1].Split(',');
+            int xPos = int.Parse(positionParts[0].Trim());
+            int yPos = int.Parse(positionParts[1].Trim());
+            Vector2 Position = new Vector2(xPos, yPos);
+            int speed = int.Parse(data[2]);
+
+            string[] currentFrameParts = data[3].Split(',');
+            xPos = int.Parse(currentFrameParts[0].Trim());
+            yPos = int.Parse(currentFrameParts[1].Trim());
+            Point currentFrame = new Point(xPos, yPos);
+
+            string[] FrameSizeParts = data[4].Split(',');
+            xPos = int.Parse(FrameSizeParts[0].Trim());
+            yPos = int.Parse(FrameSizeParts[1].Trim());
+            Point frameSize = new Point(xPos, yPos);
+
+            string[] sheetSizeParts = data[5].Split(',');
+            xPos = int.Parse(sheetSizeParts[0].Trim());
+            yPos = int.Parse(sheetSizeParts[1].Trim());
+            Point sheetSize = new Point(xPos, yPos);
+
+            string colorName = data[6].Trim();
+            Color color = colorName switch
+            {
+                "white" => Color.White,
+                "red" => Color.Red,
+                "blue" => Color.Blue,
+                "green" => Color.Green,
+                // Add more colors as needed
+                _ => Color.White // Default color if not found
+            };
+
+            float rotation = float.Parse(data[7].Trim());
+            int size = int.Parse(data[8].Trim());
+            float layerDepth = float.Parse(data[9].Trim());
+
+
+            string[] originParts = data[10].Split(',');
+            xPos = int.Parse(originParts[0].Trim());
+            yPos = int.Parse(originParts[1].Trim());
+            Vector2 origin = new Vector2(xPos, yPos);
+
+
+
+            // Parse other properties from data...
+
+            return new EnemyController(ResourceManager.GetTexture(sprite), Position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, 100 /* other params */);
+        }
+
+        //private PlayerController CreatePlayerController(List<string> data)
+        //{
+        //    // Parse player-specific data
+        //    string sprite = data[0];
+        //    string[] positionParts = data[1].Split(',');
+        //    int xPos = int.Parse(positionParts[0].Trim());
+        //    int yPos = int.Parse(positionParts[1].Trim());
+
+        //    // Parse other properties from data...
+
+        //   // return new PlayerController(sprite, new Vector2(xPos, yPos), /* other params */);
+        //}
+
+        //private PickUp CreatePickUp(List<string> data)
+        //{
+        //    // Parse pick-up-specific data
+        //    string sprite = data[0];
+        //    string[] positionParts = data[1].Split(',');
+        //    int xPos = int.Parse(positionParts[0].Trim());
+        //    int yPos = int.Parse(positionParts[1].Trim());
+
+        //    // Parse other properties from data...
+
+        //    return new PickUp(sprite, new Vector2(xPos, yPos), /* other params */);
+        //}
+
+        //private void CreateLevelGameObjects(string objects, string types)
+        //{
+        //    //Hur läser man av många saker från samma fil?
+        //    List<string> result = ReadFromFile(objects);
+        //    List<string> GameObjectTypes = ReadFromFile(types);
+
+        //    for (int i = 0; i < result.Count; i++)
+        //    {
+        //        foreach (var type in GameObjectTypes)
+        //        {
+        //            if (result[i][0] == types[0])
+        //            {
+        //                GameObjects.Add()
+        //            }
+        //        }
+        //    }
+        //}
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tile tile in _tiles)

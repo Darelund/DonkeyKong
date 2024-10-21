@@ -18,22 +18,16 @@ namespace DonkeyKong
         //TEST
         public float Health { get; private set; } = 3;
         public bool IsImmune { get; set; } = false;
-        public Rectangle Collision
-        {
-            get
-            {
-                //Probably base on origin
-                //YOOO WHO IS FAT??? THE PLAYER OR ENEMY??? WHYYYYY
-                return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _frameSize.X * Size, _frameSize.Y * Size);
-            }
-        }
+        private Rectangle rec;
+
         public PlayerController(Texture2D texture, Vector2 position, float speed, Point currentFrame, Point frameSize, Point sheetSize, Color color, float rotation, int size, float layerDepth, Vector2 origin, int millisecondsPerFrame = 16) : base(texture, position, speed, currentFrame, frameSize, sheetSize, color, rotation, size, layerDepth, origin, millisecondsPerFrame)
         {
-            CollisionManager.AddCollisionObject(this);
+            //CollisionManager.AddCollisionObject(this);
         }
         public override void Update(GameTime gameTime)
         {
-            if(!moving)
+           // rec = new Rectangle((int)Position.X - 17, (int)Position.Y - 17, 17 * 3, 17 * 3);
+            if (!moving)
             {
                 ChangeDirection(InputManager.GetMovement());
             }
@@ -53,6 +47,8 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+           // spriteBatch.DrawRectangle(rec, Color.White);
+
             spriteBatch.Draw(Texture, Position, new Rectangle(_currentFrame.X * _frameSize.X, _currentFrame.Y * _frameSize.Y, _frameSize.X, _frameSize.Y), Color, 0f, Origin, Size, currentDirection, LayerDepth);
 
         }

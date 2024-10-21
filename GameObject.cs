@@ -19,6 +19,8 @@ namespace DonkeyKong
         protected float LayerDepth;
         protected Vector2 Origin;
 
+        public abstract Rectangle Collision { get; }
+       
         public GameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin) 
         {
             Texture = texture;
@@ -36,5 +38,6 @@ namespace DonkeyKong
         {
             spriteBatch.Draw(Texture, Position, Color);
         }
+        public abstract bool CheckCollision(GameObject gameObject);
     }
 }

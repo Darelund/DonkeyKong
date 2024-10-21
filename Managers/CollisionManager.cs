@@ -10,31 +10,49 @@ namespace DonkeyKong
 {
     public static class CollisionManager
     {
-        private static List<GameObject> _collisionObjects = new List<GameObject>();
-        public static void CheckCollision(GameObject obj)
+        public static List<GameObject> _collisionObjects;
+        public static void CheckCollision(PlayerController player)
         {
             foreach (GameObject collisionObj in _collisionObjects)
             {
-                if(collisionObj != obj)
+                if(collisionObj != player)
                 {
-                    //Really dirty code here, just testing
-                    var enemy = collisionObj as EnemyController;
-                    if(enemy != null)
+                    if (collisionObj.CheckCollision(player))
                     {
-                        var player = obj as PlayerController;
-                        if (enemy.HasCollided(player.Collision))
+                        //Should I make it so that enemies can damage each other?
+                        if (!player.IsImmune)
                         {
-                            if(!player.IsImmune)
-                            {
-                                var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 1f, player, Color.White);
-                                GameManager.AddFlashEffect(flash);
-                                //YEs memory leak, so what???
-                                flash.OnFlashing += player.ImmuneHandler;
-                                player.TakeDamage(1);
-                            }
-                            break;
+                            var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 1f, player, Color.White);
+                            GameManager.AddFlashEffect(flash);
+                            //YEs memory leak, so what??? Or is it?
+                            flash.OnFlashing += player.ImmuneHandler;
+                            player.TakeDamage(1);
                         }
+                        break;
                     }
+
+
+
+
+
+                    ////Really dirty code here, just testing
+                    //var enemy = collisionObj as EnemyController;
+                    //if(enemy != null)
+                    //{
+                    //    var player = obj as PlayerController;
+                    //    if (enemy.HasCollided(player.Collision))
+                    //    {
+                    //        if(!player.IsImmune)
+                    //        {
+                    //            var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 1f, player, Color.White);
+                    //            GameManager.AddFlashEffect(flash);
+                    //            //YEs memory leak, so what???
+                    //            flash.OnFlashing += player.ImmuneHandler;
+                    //            player.TakeDamage(1);
+                    //        }
+                    //        break;
+                    //    }
+                    //}
                 }
             }
         }

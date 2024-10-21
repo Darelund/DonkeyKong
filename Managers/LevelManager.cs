@@ -37,6 +37,7 @@ namespace DonkeyKong
         {
             Level newLevel = new Level();
             newLevel.CreateLevel(file, startPosition, tileTexture);
+            newLevel.CreateLevelGameObjects("Content/GameObjectsInLevel1.txt");
             Levels.Add(newLevel);
         }
         public static void ChangeLevel(int newLevel)
