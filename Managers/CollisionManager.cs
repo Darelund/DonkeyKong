@@ -17,15 +17,17 @@ namespace DonkeyKong
             {
                 if(collisionObj != player)
                 {
+
+                    //TODO ADD SO THAT THE COLLISION WORKS ON EVERYONE SAME WITH THE FLASHEFFECT
                     if (collisionObj.CheckCollision(player))
                     {
+                      //  Debug.WriteLine("Collision Occured");
                         //Should I make it so that enemies can damage each other?
                         if (!player.IsImmune)
                         {
                             var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 1f, player, Color.White);
                             GameManager.AddFlashEffect(flash);
                             //YEs memory leak, so what??? Or is it?
-                            flash.OnFlashing += player.ImmuneHandler;
                             player.TakeDamage(1);
                         }
                         break;

@@ -13,14 +13,15 @@ namespace DonkeyKong
         protected Dictionary<string, AnimationClip> _animationClips;
         protected AnimationClip _currentClip;
         private float _deltaTime;
+        protected SpriteEffects currentDirection;
         public override Rectangle Collision
         {
-            //Out of work
-            //get
-            //{
-            //    return new Rectangle((int)Position.X - (int)Origin.X, (int)Position.Y - (int)Origin.Y, _frameSize.X * Size, _frameSize.Y * Size);
-            //}
-            get => new Rectangle(0, 0, 0, 0);
+            //I might need to adjust the box to make the collision more fun for the player
+            get
+            {
+                Rectangle rec = _currentClip.GetCurrentSourceRectangle();
+                return new Rectangle((int)Position.X - (int)Origin.X * Size, (int)Position.Y - (int)Origin.Y * Size, rec.Width * Size, rec.Height * Size);
+            }
         }
         public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin)
         {
@@ -37,7 +38,10 @@ namespace DonkeyKong
         public override void Draw(SpriteBatch spriteBatch)
         {
             //Why did I put a 2 here?
-            spriteBatch.Draw(Texture, Position + Origin * 2, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, SpriteEffects.None, LayerDepth);
+            //I think it was to position the sprite right if it had a new origin
+            //Seems to be outdated, think I added the offset when creating the character
+            //Vector2 positionOffset = Origin * 2;
+            spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, Size, currentDirection, LayerDepth);
         }
         public override bool CheckCollision(GameObject gameObject)
         {

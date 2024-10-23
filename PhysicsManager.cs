@@ -26,36 +26,41 @@ namespace DonkeyKong
         //{
         //  ApplyPhysics(gameTime);
         //}
-        public static void ApplyPhysics(GameTime gameTime, ref Vector2 pos, Vector2 inputDirection, float speed)
+        public static Vector2 ApplyPhysics(GameTime gameTime, Vector2 pos, Vector2 direction, float speed)
         {
-            IsOnGround = LevelManager.GetCurrentLevel.IsTileWalkable(pos);
-            IsClimbing = LevelManager.GetCurrentLevel.IsTileLadder(pos);
-
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            // Handle climbing
+            // Check if the player is on the ground or climbing
+            IsOnGround = LevelManager.GetCurrentLevel.IsGrounded(pos);
+            if(direction.Y != 0)
+            IsClimbing = LevelManager.GetCurrentLevel.IsTileLadder(pos + direction * 40, (int)direction.Y);
+
+            // Apply gravity if not climbing and not grounded
             if (IsClimbing)
             {
-                Velocity = new Vector2(Velocity.X, 0); // No gravity while climbing
-                                                       // Allow climbing based on vertical input
-                Velocity = new Vector2(Velocity.X, inputDirection.Y * speed);
+                // Handle climbing logic
+                Velocity = direction * speed;
             }
             else if (!IsOnGround)
             {
-                // Apply gravity if not on the ground
-                Velocity = new Vector2(Velocity.X, Velocity.Y + GRAVITY * deltaTime);
+                // Apply gravity when in the air
+                Velocity = new Vector2(0, GRAVITY); // Accumulate gravity
+            }
+            else
+            {
+                // Reset vertical velocity when on the ground
+                Velocity = new Vector2(direction.X * speed, 0);
             }
 
-            // Apply horizontal movement based on input direction
-            if (!IsClimbing) // Do not apply horizontal movement while climbing
-            {
-                Velocity = new Vector2(inputDirection.X * speed, Velocity.Y);
-            }
+            // Ensure gravity is always pulling down when there's no vertical movement
+            //if (!IsOnGround && direction.Y == 0 && !IsClimbing)
+            //{
+            //    Velocity = new Vector2(Velocity.X, Velocity.Y + GRAVITY * deltaTime);
+            //}
 
             // Apply velocity to the position
             Vector2 newPosition = Velocity * deltaTime;
-
-            pos += newPosition;
+            return newPosition;
         }
     }
 }

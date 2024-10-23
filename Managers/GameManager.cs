@@ -53,18 +53,6 @@ namespace DonkeyKong
                     foreach (var gameObject in _gameObjects)
                     {
                         gameObject.Update(gameTime);
-                        if (gameObject is PlayerController)
-                        {
-                            var player = (PlayerController)gameObject;
-                            // Store the Position in a local variable
-                            Vector2 position = player.Position;
-
-                            // Pass the local variable as ref
-                            PhysicsManager.ApplyPhysics(gameTime, ref position);
-
-                            // Assign the modified value back to the property
-                            player.Position = position;
-                        }
                     }
 
                     for (int i = 0; i < _flashEffects.Count; i++)
@@ -112,6 +100,7 @@ namespace DonkeyKong
                         //Should this really be here?
                         if(gameObject is PlayerController)
                         {
+                            //Debug.WriteLine("Checking for collisions");
                             var player = (PlayerController)gameObject;
                             CollisionManager.CheckCollision(player);
                         }
@@ -134,6 +123,10 @@ namespace DonkeyKong
         public static void AddGameObject(GameObject gameObject)
         {
             _gameObjects.Add(gameObject);
+        }
+        public static void RemoveGameObject(GameObject gameObject)
+        {
+            _gameObjects.Remove(gameObject);
         }
 
         public static void AddFlashEffect(FlashEffect flashEffect)

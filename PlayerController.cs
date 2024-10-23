@@ -17,8 +17,8 @@ namespace DonkeyKong
         private bool moving = false;
         //TEST
         public float Health { get; private set; } = 3;
-        public bool IsImmune { get; set; } = false;
-        private Rectangle rec;
+        public bool IsImmune { get; private set; } = false;
+        //private Rectangle rec;
 
         public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
@@ -33,7 +33,7 @@ namespace DonkeyKong
             }
             else
             {
-               Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 HandleAnimation(direction, gameTime);
                 
 
@@ -44,15 +44,19 @@ namespace DonkeyKong
                     moving = false;
                 }
             }
+
+            //if(LevelManager.GetCurrentLevel.IsGrounded(Position))
+            //{
+            //    Position += new Vector2(0, 10 * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            //}
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
            // spriteBatch.DrawRectangle(rec, Color.White);
 
-            spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, currentDirection, LayerDepth);
-
+           // spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, currentDirection, LayerDepth);
+            base.Draw(spriteBatch);
         }
-        private SpriteEffects currentDirection = SpriteEffects.None;
         private void HandleAnimation(Vector2 dir, GameTime gameTime)
         {
             //If direction is 0, then we are not moving and should not animate(If I don't add idle)
@@ -69,29 +73,52 @@ namespace DonkeyKong
         }
         public void ChangeDirection(Vector2 dir)
         {
+
             direction = dir;
             float tileSize = 40.0f;
             Vector2 newDestination = Position + direction * tileSize;
-            if (direction.Y > 0)
+
+            if (!(LevelManager.GetCurrentLevel.IsGrounded(Position)) && !(LevelManager.GetCurrentLevel.IsTileLadder(newDestination, (int)direction.Y)))
             {
-                if (LevelManager.GetCurrentLevel.IsTileLadder(newDestination))
+                direction = new Vector2(0, 1);
+                newDestination = Position + direction * tileSize;
+                destination = newDestination;
+                moving = true;
+                return;
+            }
+            if (direction.Y != 0)
+            {
+                if(LevelManager.GetCurrentLevel.IsTileLadder(newDestination, (int)direction.Y))
                 {
                     destination = newDestination;
                     moving = true;
-                    return;
                 }
+                return;
             }
 
+            // Horizontal walkability check (optional, depends on your design)
             if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
             {
                 destination = newDestination;
                 moving = true;
             }
+
+            //if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
+            //{
+            //    destination = newDestination;
+            //    moving = true;
+            //}
         }
         public void TakeDamage(int amount)
         {
-            if(!IsImmune)
+            //Maybe add thís back later
+           // if(!IsImmune)
             Health -= amount;
+            if(Health <= 0)
+            {
+                GameManager.RemoveGameObject(this);
+            }
+            Debug.WriteLine(Health);
         }
         public void ImmuneHandler(bool immune)
         {

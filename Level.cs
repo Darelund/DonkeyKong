@@ -233,7 +233,7 @@ namespace DonkeyKong
 
             return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         }
-        public bool IsTileLadder(Vector2 vec)
+        public bool IsTileLadder(Vector2 vec, int dir)
         {
             int tileSize = 40;
             vec -= _startPosition;
@@ -241,13 +241,43 @@ namespace DonkeyKong
 
             if (!TileExistsAtPosition(tilePos)) return false;
 
-            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder);
+            return /*_tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder)*/  _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.Ladder || _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.NonWalkable || _tiles[tilePos.X, tilePos.Y + (dir * -1)].Type == TileType.Ladder && _tiles[tilePos.X, tilePos.Y].Type == TileType.Walkable;
         }
 
+       
+        //Maybe switch to this
+
+        //public bool DoesTileExistOfType(Vector2 vec, TileType type)
+        //{
+        //    int tileSize = 40;
+        //    vec -= _startPosition;
+        //    Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+
+        //    if (!TileExistsAtPosition(tilePos)) return false;
+
+        //    return (_tiles[tilePos.X, tilePos.Y].Type == type);
+        //}
+        public bool IsGrounded(Vector2 vec)
+        {
+            int tileSize = 40;
+            vec -= _startPosition;
+
+            // Calculate the current tile position of the player
+            Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+
+            // Move the tilePos down by 1 tile to check the block directly below the player
+            tilePos.Y += 1;
+
+            // Check if the new tile position is within bounds
+            TileExistsAtPosition(tilePos);
+
+            // Return true if the tile exists and is not empty (you can add custom logic for specific blocks here)
+            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable); // Assuming Empty is a walkable/ground type
+        }
         private bool TileExistsAtPosition(Point tilePos)
         {
             if (tilePos.X < 0 || tilePos.X >= _tiles.GetLength(0)) return false;
-            if (tilePos.Y < 0 || tilePos.Y >= _tiles.GetLength(0)) return false;
+            if (tilePos.Y < 0 || tilePos.Y >= _tiles.GetLength(1)) return false;
 
             return true;
         }

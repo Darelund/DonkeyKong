@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,7 +26,7 @@ namespace DonkeyKong
         private bool _isFlashing;
         public bool IsActive { get; private set; }
 
-        public FlashEffect(Effect flashEffect, float flashTime, GameObject flashGameObject, Color color, float blinkFrequency = 0.2f)
+        public FlashEffect(Effect flashEffect, float flashTime, PlayerController flashGameObject, Color color, float blinkFrequency = 0.2f)
         {
             _flashEffect = flashEffect;
             _flashTime = flashTime;
@@ -36,6 +37,7 @@ namespace DonkeyKong
             IsActive = true;
             _isFlashing = true;
 
+            OnFlashing += flashGameObject.ImmuneHandler;
             OnFlashing?.Invoke(true);
         }
 
@@ -47,10 +49,9 @@ namespace DonkeyKong
             if(_flashTimer >= _flashTime)
             {
                 IsActive = false;
-                OnFlashing?.Invoke(false);
+                OnFlashing?.Invoke(IsActive);
                 return;
             }
-            //TODO Can probably take away 2, maybe
             _isFlashing = (_flashTimer % _blinkFrequency < _blinkFrequency / 2);
         }
         public bool IsActiveOnObject(GameObject gameObject)

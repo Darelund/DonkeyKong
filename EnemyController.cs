@@ -48,10 +48,9 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, currentDirection, LayerDepth);
-
+           // spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, currentDirection, LayerDepth);
+           base.Draw(spriteBatch);
         }
-        private SpriteEffects currentDirection = SpriteEffects.None;
         private void HandleAnimation(Vector2 dir, GameTime gameTime)
         {
             if (dir.Length() <= 0) return;
@@ -73,7 +72,7 @@ namespace DonkeyKong
             Vector2 newDestination = Position + direction * tileSize;
 
             //Check if we can move in the desired direction, if not, do nothing
-            if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
+            if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination) && (LevelManager.GetCurrentLevel.IsGrounded(newDestination) || LevelManager.GetCurrentLevel.IsTileLadder(newDestination, (int)dir.Y)))
             {
                 destination = newDestination;
                 moving = true;
@@ -87,9 +86,9 @@ namespace DonkeyKong
         //{
 
         //}
-        public bool HasCollided(Rectangle rec)
-        {
-            return Collision.Intersects(rec);
-        }
+        //public bool HasCollided(Rectangle rec)
+        //{
+        //    return Collision.Intersects(rec);
+        //}
     }
 }
