@@ -21,6 +21,7 @@ namespace DonkeyKong
             Victory
         }
         private static List<GameObject> _gameObjects = new List<GameObject>();
+        public static List<GameObject> GetGameObjects => _gameObjects;
         private static List<FlashEffect> _flashEffects = new List<FlashEffect>();
 
         public static GameState CurrentGameState { get; private set; } = GameState.MainMenu;
@@ -34,7 +35,6 @@ namespace DonkeyKong
         }
         public static void ContentLoad()
         {
-            CollisionManager._collisionObjects = _gameObjects;
             UIManager.LoadContent();
         }
 
@@ -52,6 +52,7 @@ namespace DonkeyKong
                     UIManager.Update(gameTime);
                     foreach (var gameObject in _gameObjects)
                     {
+                        if(gameObject.IsActive())
                         gameObject.Update(gameTime);
                     }
 
@@ -62,6 +63,7 @@ namespace DonkeyKong
                         else
                             _flashEffects[i].Update(gameTime);
                     }
+                    CollisionManager.CheckCollision();
                     break;
                 case GameState.Pause:
                     break;
@@ -86,7 +88,9 @@ namespace DonkeyKong
 
                     foreach (var gameObject in _gameObjects)
                     {
-                        bool isFlashing = false;
+                        if (!gameObject.IsActive()) continue;
+
+                            bool isFlashing = false;
 
                         foreach (var effect in _flashEffects)
                         {
@@ -96,13 +100,6 @@ namespace DonkeyKong
                                 isFlashing = true;
                                 break;
                             }
-                        }
-                        //Should this really be here?
-                        if(gameObject is PlayerController)
-                        {
-                            //Debug.WriteLine("Checking for collisions");
-                            var player = (PlayerController)gameObject;
-                            CollisionManager.CheckCollision(player);
                         }
                         gameObject.Draw(spriteBatch);
 

@@ -35,7 +35,7 @@ namespace DonkeyKong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1,Background1,bridgeLeft,bridgeRight,largebridge", "", "", "GameText", "FlashEffect");
+            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1,Background1,bridgeLeft,bridgeRight,largebridge,SuperMarioIdle", "", "", "GameText", "FlashEffect");
             var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)>
             {
                 ('B', ResourceManager.GetTexture("bridge"), TileType.NonWalkable, Color.Brown),
@@ -49,15 +49,47 @@ namespace DonkeyKong
 
             float offsetBy17BecauseOfSprite = 17;
 
-            Rectangle[] walkRects = new Rectangle[]
+            Rectangle[] idleRectsPlayer = new Rectangle[]
+          {
+            new Rectangle(1*16, 0, 16, 16),
+          };
+            Rectangle[] walkRectsPlayer = new Rectangle[]
             {
             new Rectangle(0*16 + 1, 1, 16, 16),
             new Rectangle(1*16 + 2, 1, 16, 16),
             new Rectangle(2*16 + 3, 1, 16, 16)
             };
+            Rectangle[] sprintRectsPlayer = new Rectangle[]
+           {
+            new Rectangle(0*16 + 1, 1, 16, 16),
+            new Rectangle(1*16 + 2, 1, 16, 16),
+            new Rectangle(2*16 + 3, 1, 16, 16)
+           };
+            Rectangle[] attackRectsPlayer = new Rectangle[]
+          {
+             new Rectangle(3*16 + 4, 1, 16, 16),
+            new Rectangle(4*16 + 5, 1, 16, 16),
+            new Rectangle(5*16 + 6, 1, 16, 16),
+            new Rectangle(6*16 + 7, 1, 16, 16),
+            new Rectangle(7*16 + 8, 1, 16, 16),
+            new Rectangle(8*16 + 9, 1, 16, 16),
+          };
+
+            Rectangle[] deathRectsPlayer = new Rectangle[]
+           {
+            new Rectangle(15*16 + 16, 1, 16, 16),
+            new Rectangle(16*16 + 17, 1, 16, 16),
+            new Rectangle(17*16 + 18, 1, 16, 16),
+             new Rectangle(18*16 + 19, 1, 16, 16),
+            new Rectangle(19*16 + 20, 1, 16, 16),
+           };
             var playerClips = new Dictionary<string, AnimationClip>()
             {
-                {"Walking", new AnimationClip(walkRects, 7f)}
+                {"Idle", new AnimationClip(idleRectsPlayer, 7f)},
+                {"Walk", new AnimationClip(walkRectsPlayer, 7f)},
+                {"Sprint", new AnimationClip(walkRectsPlayer, 10f)},
+                {"Attack", new AnimationClip(attackRectsPlayer, 7f)},
+                {"Die", new AnimationClip(deathRectsPlayer, 4f)}
             };
 
             Rectangle[] walkRectsEnemy = new Rectangle[]

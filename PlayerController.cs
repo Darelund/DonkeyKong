@@ -13,11 +13,13 @@ namespace DonkeyKong
     {
         private Vector2 destination;
         private Vector2 direction;
-        private float speed = 100.0f;
+        private float _speed => InputManager.IsLeftShiftDown() ? 150.0f : 100.0f;
         private bool moving = false;
         //TEST
         public float Health { get; private set; } = 3;
+        public bool IsAlive { get; private set; } = true;
         public bool IsImmune { get; private set; } = false;
+        private bool _attacking = false;
         //private Rectangle rec;
 
         public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
@@ -27,23 +29,26 @@ namespace DonkeyKong
         public override void Update(GameTime gameTime)
         {
            // rec = new Rectangle((int)Position.X - 17, (int)Position.Y - 17, 17 * 3, 17 * 3);
-            if (!moving)
+           if(IsAlive)
             {
-                ChangeDirection(InputManager.GetMovement());
-            }
-            else
-            {
-                Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                HandleAnimation(direction, gameTime);
-                
-
-                //Check if we are near enough to the destination
-                if (Vector2.Distance(Position, destination) < 1)
+                if (!moving)
                 {
-                    Position = destination;
-                    moving = false;
+                    ChangeDirection(InputManager.GetMovement());
+                }
+                else
+                {
+                    Position += direction * _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+
+                    //Check if we are near enough to the destination
+                    if (Vector2.Distance(Position, destination) < 1)
+                    {
+                        Position = destination;
+                        moving = false;
+                    }
                 }
             }
+                HandleAnimation(gameTime);
 
             //if(LevelManager.GetCurrentLevel.IsGrounded(Position))
             //{
@@ -52,24 +57,53 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-           // spriteBatch.DrawRectangle(rec, Color.White);
-
-           // spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, 0f, Origin, Size, currentDirection, LayerDepth);
             base.Draw(spriteBatch);
         }
-        private void HandleAnimation(Vector2 dir, GameTime gameTime)
+        private void HandleAnimation(GameTime gameTime)
         {
             //If direction is 0, then we are not moving and should not animate(If I don't add idle)
-            if (dir.Length() <= 0) return;
+            if (!IsAlive)
+            {
+                SwitchAnimation("Die");
+            }
             else
             {
-                AnimationFlip(dir);
+                if(InputManager.LeftClick() && !_attacking)
+                {
+                    _attacking = true;
+                    SwitchAnimation("Attack");
+                }
+                if (_attacking)
+                {
+                    if (_currentClip.HasLoopedOnce())
+                    {
+                        _attacking = false;
+                        Debug.WriteLine("Attacking is done");
+                    }
+                   // AnimationFlip();
+                }
+                else if (direction.Length() == 0)
+                {
+                    SwitchAnimation("Idle");
+                    // AnimationFlip();
+                }
+                else if (InputManager.IsLeftShiftDown())
+                {
+                    Debug.WriteLine("Sprint");
+                    SwitchAnimation("Sprint");
+                    AnimationFlip();
+                }
+                else if (direction.Length() != 0)
+                {
+                    SwitchAnimation("Walk");
+                    AnimationFlip();
+                }
             }
             base.Update(gameTime);
         }
-        private void AnimationFlip(Vector2 dir)
+        private void AnimationFlip()
         {
-            currentDirection = dir.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            currentDirection = direction.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         }
         public void ChangeDirection(Vector2 dir)
         {
@@ -116,9 +150,29 @@ namespace DonkeyKong
             Health -= amount;
             if(Health <= 0)
             {
-                GameManager.RemoveGameObject(this);
+                IsAlive = false;
+                //  GameManager.RemoveGameObject(this);
+               // SwitchAnimation("Dying");
             }
             Debug.WriteLine(Health);
+        }
+        public override void OnCollision(GameObject gameObject)
+        {
+            if (!IsAlive) return;
+            if (gameObject is EnemyController)
+            {
+                // var enemsy = (EnemyController)gameObject;
+                if (!IsImmune)
+                {
+                    Debug.WriteLine("I get called");
+                    var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 2f, this, Color.White);
+                    GameManager.AddFlashEffect(flash);
+                    IsImmune = true;
+                    flash.OnFlashing += ImmuneHandler;
+                    //YEs memory leak, so what??? Or is it?
+                    TakeDamage(1);
+                }
+            }
         }
         public void ImmuneHandler(bool immune)
         {

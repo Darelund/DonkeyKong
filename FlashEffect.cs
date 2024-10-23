@@ -26,7 +26,7 @@ namespace DonkeyKong
         private bool _isFlashing;
         public bool IsActive { get; private set; }
 
-        public FlashEffect(Effect flashEffect, float flashTime, PlayerController flashGameObject, Color color, float blinkFrequency = 0.2f)
+        public FlashEffect(Effect flashEffect, float flashTime, GameObject flashGameObject, Color color, float blinkFrequency = 0.2f)
         {
             _flashEffect = flashEffect;
             _flashTime = flashTime;
@@ -37,8 +37,8 @@ namespace DonkeyKong
             IsActive = true;
             _isFlashing = true;
 
-            OnFlashing += flashGameObject.ImmuneHandler;
-            OnFlashing?.Invoke(true);
+           // OnFlashing += flashGameObject.ImmuneHandler;
+           // OnFlashing?.Invoke(true);
         }
 
         public void Update(GameTime gameTime)

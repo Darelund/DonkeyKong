@@ -18,6 +18,7 @@ namespace DonkeyKong
         protected int Size;
         protected float LayerDepth;
         protected Vector2 Origin;
+        protected bool _isActive = true;
 
         public abstract Rectangle Collision { get; }
        
@@ -38,6 +39,7 @@ namespace DonkeyKong
         {
             spriteBatch.Draw(Texture, Position, Color);
         }
-        public abstract bool CheckCollision(GameObject gameObject);
+        public abstract void OnCollision(GameObject gameObject);
+        public abstract bool IsActive();
     }
 }

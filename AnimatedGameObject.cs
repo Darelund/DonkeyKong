@@ -43,9 +43,18 @@ namespace DonkeyKong
             //Vector2 positionOffset = Origin * 2;
             spriteBatch.Draw(Texture, Position, _currentClip.GetCurrentSourceRectangle(), Color, Rotation, Origin, Size, currentDirection, LayerDepth);
         }
-        public override bool CheckCollision(GameObject gameObject)
+        public override void OnCollision(GameObject gameObject)
         {
-            return Collision.Intersects(gameObject.Collision);
+           // return Collision.Intersects(gameObject.Collision);
+        }
+        protected void SwitchAnimation(string name)
+        {
+            if(_currentClip != _animationClips[name])
+            _currentClip = _animationClips[name];
+        }
+        public override bool IsActive()
+        {
+            return _isActive;
         }
     }
 }

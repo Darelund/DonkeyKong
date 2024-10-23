@@ -11,9 +11,11 @@ namespace DonkeyKong
     {
         enum PlayMode { Play, Pause };
         Rectangle[] srcRects;
+        private int CurrentAnimationRect = 0;
         PlayMode playMode = PlayMode.Play;
         float animTime = 0.0f;
         float speed;
+        bool CanLoop = false;
         public AnimationClip(Rectangle[] srcRects, float speed)
         {
             this.srcRects = srcRects;
@@ -30,7 +32,22 @@ namespace DonkeyKong
         public Rectangle GetCurrentSourceRectangle()
         {
             int rect_index = (int)animTime % srcRects.Length;
+            CurrentAnimationRect = rect_index;
             return srcRects[rect_index];
+        }
+        public bool HasLoopedOnce()
+        {
+            if(CurrentAnimationRect >= srcRects.Length - 1)
+            {
+                CurrentAnimationRect = 0;
+                Rewind();
+                return true;
+            }
+            return false;
+        }
+        private void Rewind()
+        {
+            animTime = 0.0f;
         }
     }
 }
