@@ -27,7 +27,7 @@ namespace DonkeyKong
             _graphics.PreferredBackBufferWidth = fixedWidth;
             _graphics.ApplyChanges();
 
-            GameManager.Initialize(Window, Content);
+            GameManager.Initialize(Window, Content, GraphicsDevice);
             base.Initialize();
         }
 
@@ -35,7 +35,7 @@ namespace DonkeyKong
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1,Background1,bridgeLeft,bridgeRight,largebridge,SuperMarioIdle", "", "", "GameText", "FlashEffect");
+            ResourceManager.LoadResources(Content, "SuperMarioFront,bridgeLadder,bridge,empty,ladder,MainMenu,DonkeyKongMainMenu1,DonkeyKongMainMenu2,mario-pauline-transparent,enemy_spritesheet-1,Background1,bridgeLeft,bridgeRight,largebridge,SuperMarioIdle,loose", "", "", "GameText", "FlashEffect");
             var tilesLevel1 = new List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)>
             {
                 ('B', ResourceManager.GetTexture("bridge"), TileType.NonWalkable, Color.Brown),

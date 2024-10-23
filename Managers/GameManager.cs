@@ -28,10 +28,19 @@ namespace DonkeyKong
 
         public static GameWindow Window;
         public static ContentManager Content;
-        public static void Initialize(GameWindow window, ContentManager content)
+        public static GraphicsDevice Device;
+
+        private static SceneSwitcher _sceneSwitcher;
+
+
+        public static event Action<Color, GameState> OnPlaying, OnMainMenu, OnGameOver, OnWin, OnPause;
+
+        public static void Initialize(GameWindow window, ContentManager content, GraphicsDevice device)
         {
             Window = window;
             Content = content;
+            Device = device;
+            _sceneSwitcher = new SceneSwitcher(Window, Device);
         }
         public static void ContentLoad()
         {
@@ -52,10 +61,26 @@ namespace DonkeyKong
                     UIManager.Update(gameTime);
                     foreach (var gameObject in _gameObjects)
                     {
-                        if(gameObject.IsActive())
+                      //  if(gameObject.IsActive())
                         gameObject.Update(gameTime);
-                    }
 
+                        if (gameObject is PlayerController)
+                        {
+                            var player = gameObject as PlayerController;
+                            if (player.Health <= 0)
+                            {
+                                // Trigger the OnGameOver event with fade to black
+                                OnGameOver?.Invoke(Color.Black, GameState.GameOver);
+                            }
+
+                            // Check for Victory (Player reaches the end or wins the game)
+                            //if (player.HasWon)
+                            //{
+                            //    // Trigger the OnWin event with fade to a gold color
+                            //    OnWin?.Invoke(true, Color.Gold, GameState.Victory);
+                            //}
+                        }
+                    }
                     for (int i = 0; i < _flashEffects.Count; i++)
                     {
                         if (!_flashEffects[i].IsActive)
@@ -68,10 +93,13 @@ namespace DonkeyKong
                 case GameState.Pause:
                     break;
                 case GameState.GameOver:
+                    InputManager.Update();
+                    UIManager.Update(gameTime);
                     break;
-              
+                case GameState.Victory:
+                    break;
             }
-           
+            _sceneSwitcher.Update(gameTime);
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
@@ -79,6 +107,7 @@ namespace DonkeyKong
             switch (CurrentGameState)
             {
                 case GameState.MainMenu:
+                   // LevelManager.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
                     break;
                 case GameState.Playing:
@@ -88,8 +117,6 @@ namespace DonkeyKong
 
                     foreach (var gameObject in _gameObjects)
                     {
-                        if (!gameObject.IsActive()) continue;
-
                             bool isFlashing = false;
 
                         foreach (var effect in _flashEffects)
@@ -113,8 +140,12 @@ namespace DonkeyKong
                 case GameState.Pause:
                     break;
                 case GameState.GameOver:
+                    UIManager.Draw(spriteBatch);
+                    break;
+                case GameState.Victory:
                     break;
             }
+            _sceneSwitcher.Draw(spriteBatch);
             spriteBatch.End();
         }
         public static void AddGameObject(GameObject gameObject)

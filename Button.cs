@@ -31,13 +31,14 @@ namespace DonkeyKong
         {
             get
             {
-                int centerCollisionOffset = (int)(_font.MeasureString(_text).X * Size) / centerOffset;
-                return new Rectangle((int)Position.X - centerCollisionOffset, (int)Position.Y - centerCollisionOffset, (int)(_font.MeasureString(_text).X * Size), (int)(_font.MeasureString(_text).Y * Size));
+                int xCenterCollisionOffset = (int)(_font.MeasureString(_text).X * Size) / centerOffset;
+                int yCenterCollisionOffset = (int)(_font.MeasureString(_text).Y * Size) / centerOffset;
+                return new Rectangle((int)Position.X - xCenterCollisionOffset, (int)Position.Y - yCenterCollisionOffset, (int)(_font.MeasureString(_text).X * Size), (int)(_font.MeasureString(_text).Y * Size));
             }
         }
 
 
-        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, string text = "PlaceHolder", float size = 1f, float rotation = 0) : base(pos, colors.defaultColor, size, rotation)
+        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, layerDepth, rotation)
         {
             _font = font;
             _colors = colors;

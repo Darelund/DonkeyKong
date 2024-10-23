@@ -15,21 +15,16 @@ namespace DonkeyKong
         private Vector2 direction;
         private float _speed => InputManager.IsLeftShiftDown() ? 150.0f : 100.0f;
         private bool moving = false;
-        //TEST
         public float Health { get; private set; } = 3;
-        public bool IsAlive { get; private set; } = true;
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
-        //private Rectangle rec;
 
         public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
-            //CollisionManager.AddCollisionObject(this);
         }
         public override void Update(GameTime gameTime)
         {
-           // rec = new Rectangle((int)Position.X - 17, (int)Position.Y - 17, 17 * 3, 17 * 3);
-           if(IsAlive)
+           if(IsActive())
             {
                 if (!moving)
                 {
@@ -40,7 +35,6 @@ namespace DonkeyKong
                     Position += direction * _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
-                    //Check if we are near enough to the destination
                     if (Vector2.Distance(Position, destination) < 1)
                     {
                         Position = destination;
@@ -49,11 +43,6 @@ namespace DonkeyKong
                 }
             }
                 HandleAnimation(gameTime);
-
-            //if(LevelManager.GetCurrentLevel.IsGrounded(Position))
-            //{
-            //    Position += new Vector2(0, 10 * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            //}
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -61,8 +50,7 @@ namespace DonkeyKong
         }
         private void HandleAnimation(GameTime gameTime)
         {
-            //If direction is 0, then we are not moving and should not animate(If I don't add idle)
-            if (!IsAlive)
+            if (!IsActive())
             {
                 SwitchAnimation("Die");
             }
@@ -78,18 +66,14 @@ namespace DonkeyKong
                     if (_currentClip.HasLoopedOnce())
                     {
                         _attacking = false;
-                        Debug.WriteLine("Attacking is done");
                     }
-                   // AnimationFlip();
                 }
                 else if (direction.Length() == 0)
                 {
                     SwitchAnimation("Idle");
-                    // AnimationFlip();
                 }
                 else if (InputManager.IsLeftShiftDown())
                 {
-                    Debug.WriteLine("Sprint");
                     SwitchAnimation("Sprint");
                     AnimationFlip();
                 }
@@ -130,18 +114,11 @@ namespace DonkeyKong
                 return;
             }
 
-            // Horizontal walkability check (optional, depends on your design)
             if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
             {
                 destination = newDestination;
                 moving = true;
             }
-
-            //if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
-            //{
-            //    destination = newDestination;
-            //    moving = true;
-            //}
         }
         public void TakeDamage(int amount)
         {
@@ -150,15 +127,13 @@ namespace DonkeyKong
             Health -= amount;
             if(Health <= 0)
             {
-                IsAlive = false;
-                //  GameManager.RemoveGameObject(this);
-               // SwitchAnimation("Dying");
+                _isActive = false;
             }
             Debug.WriteLine(Health);
         }
         public override void OnCollision(GameObject gameObject)
         {
-            if (!IsAlive) return;
+            if (!IsActive()) return;
             if (gameObject is EnemyController)
             {
                 // var enemsy = (EnemyController)gameObject;
