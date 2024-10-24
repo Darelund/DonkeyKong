@@ -11,11 +11,11 @@ namespace DonkeyKong
 {
     public class UIManager
     {
-        private static List<UIElement> _MainMenuElements = new List<UIElement>();
-        private static List<UIElement> _PlayingElements = new List<UIElement>();
-        private static List<UIElement> _PauseElements = new List<UIElement>();
-        private static List<UIElement> _GameOverElements = new List<UIElement>();
-        private static List<UIElement> _VictoryElements = new List<UIElement>();
+        private static List<UIElement> _MainMenuElements;
+        private static List<UIElement> _PlayingElements;
+        private static List<UIElement> _PauseElements;
+        private static List<UIElement> _GameOverElements;
+        private static List<UIElement> _VictoryElements;
 
 
         //MainMenu
@@ -30,6 +30,12 @@ namespace DonkeyKong
 
         public static void LoadContent()
         {
+            _MainMenuElements = new List<UIElement>();
+            _PlayingElements = new List<UIElement>();
+            _PauseElements = new List<UIElement>();
+            _GameOverElements = new List<UIElement>();
+            _VictoryElements = new List<UIElement>();
+
             _MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture("MainMenu"), Vector2.Zero, Color.White, 1f, Vector2.Zero, 1f));
             _MainMenuElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2), GameManager.GameState.Playing, Vector2.Zero, "Play", 1f, 0.1f));
             _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture("DonkeyKongMainMenu1"), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 - 200), new Point(0, 0), new Point(92, 110), new Point(4, 0), Color.White, 1f, Vector2.Zero, 100));

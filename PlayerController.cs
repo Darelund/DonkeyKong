@@ -20,9 +20,7 @@ namespace DonkeyKong
         public float Health
         {
             get => _health;
-            private set => _health = value;
         }
-        public bool HasWon { get; set; } = false;
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
 
@@ -30,14 +28,17 @@ namespace DonkeyKong
         public static PlayerController Instance
         {
             get
-            {
-                return _instance;
+            {  if (_instance != null)
+                    return _instance;
+                else
+                    return null;
             }
         }
 
         public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
             _instance = this;
+            Debug.WriteLine("I have been created");
         }
         public override void Update(GameTime gameTime)
         {
@@ -60,6 +61,7 @@ namespace DonkeyKong
                 }
             }
                 HandleAnimation(gameTime);
+            Debug.WriteLine(Instance.Position);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {

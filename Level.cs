@@ -9,6 +9,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static DonkeyKong.GameFiles;
 
 namespace DonkeyKong
 {
@@ -18,11 +19,17 @@ namespace DonkeyKong
         protected Tile[,] _tiles;
         public bool LevelCompleted { get; set; } = false;
         public event Action<Tile> TileSteppedOnHandler;
+        private GameObjectFactory _factory;
+        public List<GameObject> GameObjectsInLevel = new();
+        public Level()
+        {
+            _factory = new GameObjectFactory();
+        }
 
 
         //public List<GameObject> GameObjects = new List<GameObject>();
 
-
+        
         /// <summary>
         /// Creates a 2D grid level based on the file you give it. In the file each character represents one tile. 
         /// So you give it a list of tuples where each tuple is its character, texture and if you can walk on it.
@@ -49,7 +56,43 @@ namespace DonkeyKong
                 }
             }
         }
+        public static List<(char TileName, Texture2D tileTexture, TileType Type, Color tileColor)> ReadTileDataFromFile(string fileName)
+        {
+            List<(char, Texture2D, TileType, Color)> tileData = new List<(char, Texture2D, TileType, Color)>();
+
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string[] line = reader.ReadLine().Split(' ');
+
+                    if (line.Length == 4)
+                    {
+                        char tileName = line[0][0];
+                        string textureName = line[1];
+                        TileType type = (TileType)Enum.Parse(typeof(TileType), line[2]);
+                        string colorName = line[3].Trim();
+                        Color color = colorName switch
+                        {
+                            "White" => Color.White,
+                            "Red" => Color.Red,
+                            "Brown" => Color.Brown,
+                            "Blue" => Color.Blue,
+                            "Green" => Color.Green,
+                            "DarkGreen" => Color.DarkGreen,
+                            _ => Color.White // Default color if not found
+                        };
+
+                        // Add the tile to the list, converting the texture name to a Texture2D object
+                        tileData.Add((tileName, ResourceManager.GetTexture(textureName), type, color));
+                    }
+                }
+            }
+
+            return tileData;
+        }
         public abstract bool CheckLevelCompletion();
+        public abstract void SetTarget();
         public void CreateGameObjects(string objectsFilePath)
         {
             List<string> fileLines = FileManager.ReadFromFile(objectsFilePath);
@@ -71,139 +114,16 @@ namespace DonkeyKong
                 }
 
                 // Create the appropriate game object based on the object type
-                GameObject newObject = CreateGameObjectFromType(objectType, objectData);
+                GameObject newObject = _factory.CreateGameObjectFromType(objectType, objectData);
 
                 if (newObject != null)
                 {
-                    GameManager.AddGameObject(newObject);
+                    GameObjectsInLevel.Add(newObject);
                 }
 
                 i++;  // Skip the blank line between object definitions
             }
         }
-
-        private GameObject CreateGameObjectFromType(string objectType, List<string> objectData)
-        {
-            // Create objects based on their type
-            switch (objectType)
-            {
-                case "EnemyController":
-                    Debug.WriteLine("Returning?");
-                    return CreateEnemyController(objectData);
-                case "PlayerController":
-                  //  return CreatePlayerController(objectData);
-                //case "PickUp":
-                //    return CreatePickUp(objectData);
-                default:
-                    Debug.WriteLine("Unknown object type: " + objectType);
-                    return null;
-            }
-        }
-        private EnemyController CreateEnemyController(List<string> data)
-        {
-            // Parse the data and initialize the object
-            // Assume data contains all the needed parameters in the expected order
-
-            // 1. Parse general properties (like sprite, position, color, etc.)
-            string sprite = data[0];  // Texture name or path
-            string[] positionParts = data[1].Split(',');
-            int xPos = int.Parse(positionParts[0].Trim());
-            int yPos = int.Parse(positionParts[1].Trim());
-            Vector2 position = new Vector2(xPos, yPos);
-
-            string colorName = data[2].Trim();
-            Color color = colorName switch
-            {
-                "white" => Color.White,
-                "red" => Color.Red,
-                "blue" => Color.Blue,
-                "green" => Color.Green,
-                _ => Color.White // Default color if not found
-            };
-
-            float rotation = float.Parse(data[3].Trim());  // Rotation
-            float size = float.Parse(data[4].Trim());      // Size/scale
-            float layerDepth = float.Parse(data[5].Trim());  // Layer depth
-
-            string[] originParts = data[6].Split(',');
-            xPos = int.Parse(originParts[0].Trim());
-            yPos = int.Parse(originParts[1].Trim());
-            Vector2 origin = new Vector2(xPos, yPos);
-            // 2. Parse animation clips (loop through the animation data in the input list)
-            var animationClips = new Dictionary<string, AnimationClip>();
-
-            // Example: WalkAnimation:5,86,18,18|23,86,18,18|41,86,18,18;4f
-            for (int i = 7; i < data.Count; i++)
-            {
-                string animationData = data[i];
-                if (!string.IsNullOrWhiteSpace(animationData))
-                {
-                    // Split each animation data (format: "Name:rect1|rect2|...;speed")
-                    string[] animationParts = animationData.Split(':');
-                    string animationName = animationParts[0].Trim();
-
-                    string[] rectsAndSpeed = animationParts[1].Split(';');
-                    string[] rectStrings = rectsAndSpeed[0].Split('|'); // Each rectangle info
-
-                    // Create an array of rectangles for the animation
-                    Rectangle[] frames = rectStrings.Select(rectStr =>
-                    {
-                        string[] rectComponents = rectStr.Split(',');
-                        int rectX = int.Parse(rectComponents[0].Trim());
-                        int rectY = int.Parse(rectComponents[1].Trim());
-                        int rectWidth = int.Parse(rectComponents[2].Trim());
-                        int rectHeight = int.Parse(rectComponents[3].Trim());
-
-                        return new Rectangle(rectX, rectY, rectWidth, rectHeight);
-                    }).ToArray();
-
-                    // Parse the speed of the animation
-                    float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
-
-                    // Add the parsed animation to the dictionary
-                    animationClips[animationName] = new AnimationClip(frames, animationSpeed);
-                }
-            }
-            // 3. Create and return the EnemyController object with the parsed data
-            return new EnemyController(
-                ResourceManager.GetTexture(sprite),  // Texture loading handled elsewhere
-                position,
-                color,
-                rotation,
-                size,
-                layerDepth,
-                origin,
-                animationClips  // Add the parsed animation clips
-            );
-        }
-
-        //private PlayerController CreatePlayerController(List<string> data)
-        //{
-        //    // Parse player-specific data
-        //    string sprite = data[0];
-        //    string[] positionParts = data[1].Split(',');
-        //    int xPos = int.Parse(positionParts[0].Trim());
-        //    int yPos = int.Parse(positionParts[1].Trim());
-
-        //    // Parse other properties from data...
-
-        //   // return new PlayerController(sprite, new Vector2(xPos, yPos), /* other params */);
-        //}
-
-        //private PickUp CreatePickUp(List<string> data)
-        //{
-        //    // Parse pick-up-specific data
-        //    string sprite = data[0];
-        //    string[] positionParts = data[1].Split(',');
-        //    int xPos = int.Parse(positionParts[0].Trim());
-        //    int yPos = int.Parse(positionParts[1].Trim());
-
-        //    // Parse other properties from data...
-
-        //    return new PickUp(sprite, new Vector2(xPos, yPos), /* other params */);
-        //}
-
-
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tile tile in _tiles)
@@ -211,8 +131,13 @@ namespace DonkeyKong
                 tile.Draw(spriteBatch);
             }
         }
+        public abstract void Update();
 
-
+        public void UnloadLevel()
+        {
+            _tiles = null;
+            GameObjectsInLevel.Clear();
+        }
         //Used to check if tiles exists and are of x type
         public bool IsTileWalkable(Vector2 vec)
         {

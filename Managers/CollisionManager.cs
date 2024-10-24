@@ -20,6 +20,7 @@ namespace DonkeyKong
                     if (_collidables[i].Collision.Intersects(_collidables[j].Collision))
                     {
                         _collidables[i].OnCollision(_collidables[j]);
+                        _collidables[j].OnCollision(_collidables[i]);
                     }
                 }
             }

@@ -22,8 +22,8 @@ namespace DonkeyKong
             Restart,
             Exit
         }
-        private static List<GameObject> _gameObjects = new List<GameObject>();
-        public static List<GameObject> GetGameObjects => _gameObjects;
+        public static List<GameObject> GameObjects { get; set; } = new List<GameObject>();
+        public static List<GameObject> GetGameObjects => GameObjects;
         private static List<FlashEffect> _flashEffects = new List<FlashEffect>();
 
         public static GameState CurrentGameState { get; private set; } = GameState.MainMenu;
@@ -37,16 +37,21 @@ namespace DonkeyKong
 
         public static event Action<Color, GameState> OnPlaying, OnMainMenu, OnGameOver, OnWin, OnPause;
 
-        public static void Initialize(GameWindow window, ContentManager content, GraphicsDevice device)
+        public static void SetUp(GameWindow window, ContentManager content, GraphicsDevice device)
         {
+
             Window = window;
             Content = content;
             Device = device;
             _sceneSwitcher = new SceneSwitcher(Window, Device);
+
         }
         public static void ContentLoad()
         {
             UIManager.LoadContent();
+            LevelManager.CreateLevels();
+            //Need to somehow hook this up onto a button, but I don't want to force all buttons to use it I want it to be modular so maybe an event that I can hook up for each button?
+            LevelManager.ActivateLevel(0, GameFiles.Levels.Level1);
         }
 
 
@@ -62,7 +67,7 @@ namespace DonkeyKong
                     InputManager.Update();
                     UIManager.Update(gameTime);
                     LevelManager.Update(gameTime);
-                    foreach (var gameObject in _gameObjects)
+                    foreach (var gameObject in GameObjects)
                     {
                       //  if(gameObject.IsActive())
                         gameObject.Update(gameTime);
@@ -80,6 +85,7 @@ namespace DonkeyKong
                                 OnWin?.Invoke(Color.Green, GameState.Victory);
                             }
                         }
+                     //   Debug.WriteLine(gameObject.GetType().Name);
                     }
                     for (int i = 0; i < _flashEffects.Count; i++)
                     {
@@ -97,7 +103,7 @@ namespace DonkeyKong
                     UIManager.Update(gameTime);
                     break;
                 case GameState.Victory:
-                    LevelManager.ChangeLevel(1);
+                    LevelManager.NextLevel();
                     break;
                 case GameState.Restart:
                     LevelManager.Restart();
@@ -122,7 +128,7 @@ namespace DonkeyKong
                     UIManager.Draw(spriteBatch);
                     ScoreManager.Draw(spriteBatch);
 
-                    foreach (var gameObject in _gameObjects)
+                    foreach (var gameObject in GameObjects)
                     {
                             bool isFlashing = false;
 
@@ -160,14 +166,14 @@ namespace DonkeyKong
             _sceneSwitcher.Draw(spriteBatch);
             spriteBatch.End();
         }
-        public static void AddGameObject(GameObject gameObject)
-        {
-            _gameObjects.Add(gameObject);
-        }
-        public static void RemoveGameObject(GameObject gameObject)
-        {
-            _gameObjects.Remove(gameObject);
-        }
+        //public static void AddGameObject(GameObject gameObject)
+        //{
+        //    _gameObjects.Add(gameObject);
+        //}
+        //public static void RemoveGameObject(GameObject gameObject)
+        //{
+        //    _gameObjects.Remove(gameObject);
+        //}
 
         public static void AddFlashEffect(FlashEffect flashEffect)
         {

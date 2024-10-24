@@ -11,20 +11,19 @@ namespace DonkeyKong
     {
         private int _startTargets = 10;
         private int _removedTargets;
-        private char _targetType;
+        private char _TARGETNAME = 'T';
 
-        public RemoveTargetLevel(char name)
+        public RemoveTargetLevel()
         {
-            _targetType = name;
             _removedTargets = 0;
 
             TileSteppedOnHandler += HandleTileSteppedOn;
         }
-        public void SetTargets()
+        public override void SetTarget()
         {
             foreach (var tile in _tiles)
             {
-                if (tile.Name == _targetType)
+                if (tile.Name == _TARGETNAME)
                 {
                     _startTargets++;
                     //  _targetPosition = tile.Pos;
@@ -33,7 +32,7 @@ namespace DonkeyKong
         }
         private void HandleTileSteppedOn(Tile tile)
         {
-            if(tile.Name == _targetType)
+            if(tile.Name == _TARGETNAME)
             {
                 _removedTargets++;
                 tile.SwitchTile(ResourceManager.GetTexture("empty"));
@@ -42,6 +41,11 @@ namespace DonkeyKong
         public override bool CheckLevelCompletion()
         {
             return _removedTargets >= _startTargets;
+        }
+
+        public override void Update()
+        {
+          //  throw new NotImplementedException();
         }
     }
 }

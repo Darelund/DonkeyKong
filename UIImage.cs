@@ -11,10 +11,11 @@ namespace DonkeyKong
     public class UIImage : StaticUIElement
     {
         private Texture2D _texture;
+        private int hearts;
         private Rectangle ImageSourceRect
         {
             get => new Rectangle(0, 200, 30, 30);
-    }
+        }
 
         public UIImage(Texture2D texture, Vector2 position, Color color, float size, Vector2 origin, float layerDepth = 0, float rotation = 0) : base(position, color, size, origin, layerDepth, rotation)
         {
@@ -22,13 +23,14 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            for (int i = 0; i < PlayerController.Instance.Health; i++)
+            for (int i = 0; i < hearts; i++)
             {
                 spriteBatch.Draw(_texture, Position + new Vector2((i * 50), 0), ImageSourceRect, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
             }
         }
         public override void Update(GameTime gameTime)
         {
+            hearts = (int)PlayerController.Instance.Health;
         }
     }
 }
