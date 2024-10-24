@@ -10,7 +10,7 @@ namespace DonkeyKong
 {
     internal class AnimatedSpriteUI : AnimatedUIElement
     {
-        public AnimatedSpriteUI(Texture2D texture, Vector2 position, Point currentFrame, Point frameSize, Point sheetSize, Color color, float size, int millisecondsPerFrame = 16, float layerDepth = 0, float rotation = 0) : base(texture, position, currentFrame, frameSize, sheetSize, color, size, millisecondsPerFrame, layerDepth, rotation)
+        public AnimatedSpriteUI(Texture2D texture, Vector2 position, Point currentFrame, Point frameSize, Point sheetSize, Color color, float size, Vector2 origin, int millisecondsPerFrame = 16, float layerDepth = 0, float rotation = 0) : base(texture, position, currentFrame, frameSize, sheetSize, color, size, origin, millisecondsPerFrame, layerDepth, rotation)
         {
         }
         public override void Update(GameTime gameTime)

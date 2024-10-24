@@ -15,7 +15,6 @@ namespace DonkeyKong
         PlayMode playMode = PlayMode.Play;
         float animTime = 0.0f;
         float speed;
-        bool CanLoop = false;
         public AnimationClip(Rectangle[] srcRects, float speed)
         {
             this.srcRects = srcRects;

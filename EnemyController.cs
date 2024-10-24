@@ -14,8 +14,15 @@ namespace DonkeyKong
         private Vector2 destination;
         private Vector2 direction;
         private bool moving = false;
+        private int _points = 50;
+        private float _health = 1;
+        public float Health
+        {
+            get => _health;
+            private set => _health = value;
+        }
 
-      
+
         public EnemyController(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, 0f, color, rotation, size, layerDepth, origin, animationClips)
         {
             Random ran = new Random();
@@ -90,13 +97,17 @@ namespace DonkeyKong
                 direction.X *= -1;
             }
         }
-        //private int GetMovement()
-        //{
-
-        //}
-        //public bool HasCollided(Rectangle rec)
-        //{
-        //    return Collision.Intersects(rec);
-        //}
+        public void TakeDamage(int amount)
+        {
+            //Maybe add thís back later
+            // if(!IsImmune)
+            _health -= amount;
+            if (_health <= 0)
+            {
+                _isActive = false;
+                int score = 50;
+                ScoreManager.UpdateScore(score);
+            }
+        }
     }
 }

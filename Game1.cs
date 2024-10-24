@@ -123,9 +123,6 @@ namespace DonkeyKong
             };
             GameManager.AddGameObject(new PlayerController(ResourceManager.GetTexture("mario-pauline-transparent"), new Vector2(320 + offsetBy17BecauseOfSprite, 360 + offsetBy17BecauseOfSprite), 100, Color.White, 0f, 3, 0f, new Vector2(8, 8), playerClips));
 
-            GameManager.AddGameObject(new EnemyController(ResourceManager.GetTexture("stuff_mod_transparent"), new Vector2(280, 280), Color.White, 0f, 2.5f, 0.5f, Vector2.Zero, enemyClips));
-            GameManager.AddGameObject(new EnemyController(ResourceManager.GetTexture("stuff_mod_transparent"), new Vector2(280, 280), Color.White, 0f, 2.5f, 0.5f, Vector2.Zero, enemyClips));
-            GameManager.AddGameObject(new EnemyController(ResourceManager.GetTexture("stuff_mod_transparent"), new Vector2(280, 280), Color.White, 0f, 2.5f, 0.5f, Vector2.Zero, enemyClips));
 
             GameManager.ContentLoad();
 

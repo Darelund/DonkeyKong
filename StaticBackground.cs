@@ -11,7 +11,7 @@ namespace DonkeyKong
     public class StaticBackground : StaticUIElement
     {
         private Texture2D _texture;
-        public StaticBackground(Texture2D texture, Vector2 position, Color color, float size, float layerDepth = 0, float rotation = 0) : base(position, color, size, layerDepth, rotation)
+        public StaticBackground(Texture2D texture, Vector2 position, Color color, float size, Vector2 origin, float layerDepth = 0, float rotation = 0) : base(position, color, size, origin, layerDepth, rotation)
         {
             _texture = texture;
         }

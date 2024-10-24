@@ -20,8 +20,8 @@ namespace DonkeyKong
         private int _millisecondsPerFrame;
         private float _timeSinceLastFrame = 0;
 
-        public AnimatedUIElement(Texture2D texture, Vector2 position, Point currentFrame, Point frameSize, Point sheetSize, Color color, float size, int millisecondsPerFrame = 16, float layerDepth = 0, float rotation = 0)
-            : base(position, color, size, layerDepth, rotation)
+        public AnimatedUIElement(Texture2D texture, Vector2 position, Point currentFrame, Point frameSize, Point sheetSize, Color color, float size, Vector2 origin, int millisecondsPerFrame = 16, float layerDepth = 0, float rotation = 0)
+            : base(position, color, size, origin, layerDepth, rotation)
         {
             _texture = texture;
             _millisecondsPerFrame = millisecondsPerFrame;

@@ -16,7 +16,12 @@ namespace DonkeyKong
         private float _extraspeed = 50;
         private float _speed => InputManager.IsLeftShiftDown() ? Speed + _extraspeed  : Speed;
         private bool moving = false;
-        public float Health { get; private set; } = 3;
+        private float _health = 3;
+        public float Health
+        {
+            get => _health;
+            private set => _health = value;
+        }
         public bool HasWon { get; set; } = false;
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
@@ -136,12 +141,12 @@ namespace DonkeyKong
         {
             //Maybe add thís back later
            // if(!IsImmune)
-            Health -= amount;
-            if(Health <= 0)
+            _health -= amount;
+            if(_health <= 0)
             {
                 _isActive = false;
             }
-            Debug.WriteLine(Health);
+            Debug.WriteLine(_health);
         }
         public override void OnCollision(GameObject gameObject)
         {

@@ -120,6 +120,7 @@ namespace DonkeyKong
                    
                     LevelManager.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
+                    ScoreManager.Draw(spriteBatch);
 
                     foreach (var gameObject in _gameObjects)
                     {

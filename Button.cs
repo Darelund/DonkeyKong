@@ -24,7 +24,6 @@ namespace DonkeyKong
         private bool _hasBeenPressed = false;
         private float _pressedTimer;
         private float _pressedDuration = 0.2f;
-        private Vector2 _origin;
         int centerOffset = 2;
         //Jag borde ha ändrat detta till ett event
         private GameManager.GameState _gameState;
@@ -40,14 +39,14 @@ namespace DonkeyKong
         }
 
 
-        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, GameManager.GameState gameState, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, layerDepth, rotation)
+        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, GameManager.GameState gameState, Vector2 origin, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, origin, layerDepth, rotation)
         {
             _font = font;
             _colors = colors;
             Position = pos;
             _text = text;
             Size = size;
-            _origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
+            Origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
             _gameState = gameState;
         }
 
@@ -82,7 +81,7 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawString(_font, _text, Position, CurrentColor, Rotation, _origin, Size, SpriteEffects.None, LayerDepth);
+            spriteBatch.DrawString(_font, _text, Position, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace DonkeyKong
 {
     public abstract class StaticUIElement : UIElement
     {
-        public StaticUIElement(Vector2 position, Color color, float size, float layerDepth = 0, float rotation = 0) : base(position, color, size, layerDepth, rotation)
+        public StaticUIElement(Vector2 position, Color color, float size, Vector2 origin, float layerDepth = 0, float rotation = 0) : base(position, color, size, origin, layerDepth, rotation)
         {
         }
         public override void Update(GameTime gameTime)

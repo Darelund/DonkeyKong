@@ -38,6 +38,7 @@ namespace DonkeyKong
             if (GetCurrentLevel.CheckLevelCompletion())
             {
                 GetCurrentLevel.LevelCompleted = true;
+
             }
         }
         public static void Draw(SpriteBatch spriteBatch)
