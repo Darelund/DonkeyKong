@@ -20,10 +20,10 @@ namespace DonkeyKong
             get
             {
                 Rectangle rec = _currentClip.GetCurrentSourceRectangle();
-                return new Rectangle((int)Position.X - (int)Origin.X * Size, (int)Position.Y - (int)Origin.Y * Size, rec.Width * Size, rec.Height * Size);
+                return new Rectangle((int)Position.X - (int)Origin.X * (int)Size, (int)Position.Y - (int)Origin.Y * (int)Size, rec.Width * (int)Size, rec.Height * (int)Size);
             }
         }
-        public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin)
+        public AnimatedGameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin)
         {
             _animationClips = animationClips;
             //Todo maybe make it possible to choose what animation to start at?

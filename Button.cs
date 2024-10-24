@@ -26,6 +26,8 @@ namespace DonkeyKong
         private float _pressedDuration = 0.2f;
         private Vector2 _origin;
         int centerOffset = 2;
+        //Jag borde ha ändrat detta till ett event
+        private GameManager.GameState _gameState;
 
         public Rectangle Collision
         {
@@ -38,7 +40,7 @@ namespace DonkeyKong
         }
 
 
-        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, layerDepth, rotation)
+        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, GameManager.GameState gameState, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, layerDepth, rotation)
         {
             _font = font;
             _colors = colors;
@@ -46,6 +48,7 @@ namespace DonkeyKong
             _text = text;
             Size = size;
             _origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
+            _gameState = gameState;
         }
 
 
@@ -58,7 +61,7 @@ namespace DonkeyKong
                 if (_pressedTimer <= 0)
                 {
                     _pressedTimer = 0; 
-                    GameManager.ChangeGameState(GameManager.GameState.Playing);
+                    GameManager.ChangeGameState(_gameState);
                 }
             }
             if (Collision.Intersects(InputManager.MouseOver()))

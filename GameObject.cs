@@ -15,14 +15,14 @@ namespace DonkeyKong
         protected float Speed;
         protected Color Color;
         protected float Rotation;
-        protected int Size;
+        protected float Size;
         protected float LayerDepth;
         protected Vector2 Origin;
         protected bool _isActive = true;
 
         public abstract Rectangle Collision { get; }
        
-        public GameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin) 
+        public GameObject(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin) 
         {
             Texture = texture;
             Position = position;

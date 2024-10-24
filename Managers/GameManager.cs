@@ -18,7 +18,9 @@ namespace DonkeyKong
             Playing,
             Pause,
             GameOver,
-            Victory
+            Victory,
+            Restart,
+            Exit
         }
         private static List<GameObject> _gameObjects = new List<GameObject>();
         public static List<GameObject> GetGameObjects => _gameObjects;
@@ -59,6 +61,7 @@ namespace DonkeyKong
                 case GameState.Playing:
                     InputManager.Update();
                     UIManager.Update(gameTime);
+                    LevelManager.Update(gameTime);
                     foreach (var gameObject in _gameObjects)
                     {
                       //  if(gameObject.IsActive())
@@ -69,16 +72,13 @@ namespace DonkeyKong
                             var player = gameObject as PlayerController;
                             if (player.Health <= 0)
                             {
-                                // Trigger the OnGameOver event with fade to black
                                 OnGameOver?.Invoke(Color.Black, GameState.GameOver);
                             }
 
-                            // Check for Victory (Player reaches the end or wins the game)
-                            //if (player.HasWon)
-                            //{
-                            //    // Trigger the OnWin event with fade to a gold color
-                            //    OnWin?.Invoke(true, Color.Gold, GameState.Victory);
-                            //}
+                            if (LevelManager.GetCurrentLevel.LevelCompleted)
+                            {
+                                OnWin?.Invoke(Color.Green, GameState.Victory);
+                            }
                         }
                     }
                     for (int i = 0; i < _flashEffects.Count; i++)
@@ -97,6 +97,12 @@ namespace DonkeyKong
                     UIManager.Update(gameTime);
                     break;
                 case GameState.Victory:
+                    LevelManager.ChangeLevel(1);
+                    break;
+                case GameState.Restart:
+                    LevelManager.Restart();
+                    break;
+                case GameState.Exit:
                     break;
             }
             _sceneSwitcher.Update(gameTime);
@@ -133,7 +139,7 @@ namespace DonkeyKong
                         if (isFlashing)
                         {
                             spriteBatch.End();
-                            spriteBatch.Begin(SpriteSortMode.BackToFront);
+                            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
                         }
                     }
                     break;
@@ -143,6 +149,11 @@ namespace DonkeyKong
                     UIManager.Draw(spriteBatch);
                     break;
                 case GameState.Victory:
+                    UIManager.Draw(spriteBatch);
+                    break;
+                case GameState.Restart:
+                    break;
+                case GameState.Exit:
                     break;
             }
             _sceneSwitcher.Draw(spriteBatch);
@@ -166,5 +177,6 @@ namespace DonkeyKong
             if(newGameState == CurrentGameState) return;
             CurrentGameState = newGameState;
         }
+       
     }
 }

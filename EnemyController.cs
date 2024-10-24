@@ -13,16 +13,24 @@ namespace DonkeyKong
     {
         private Vector2 destination;
         private Vector2 direction;
-        private float speed = 100.0f;
         private bool moving = false;
 
       
-        public EnemyController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
+        public EnemyController(Texture2D texture, Vector2 position, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, 0f, color, rotation, size, layerDepth, origin, animationClips)
         {
             Random ran = new Random();
-            int randomStartDirection = ran.Next(0, 2);
-            Debug.WriteLine(randomStartDirection);
-            direction.X = randomStartDirection == 1 ? -1 : 1;
+            int left = 0;
+            int right = 2;
+            int randomStartDirection = ran.Next(left, right);
+
+            int leftDirection = -1;
+            int rightDirection = 1;
+            direction.X = randomStartDirection == 1 ? rightDirection : leftDirection;
+
+            int minSpeed = 25;
+            int maxSpeed = 101;
+            int randomSpeed = ran.Next(minSpeed, maxSpeed);
+            Speed = randomSpeed;
            // CollisionManager.AddCollisionObject(this);
         }
         public override void Update(GameTime gameTime)
@@ -34,7 +42,7 @@ namespace DonkeyKong
             }
             else
             {
-                Position += direction * speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                Position += direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 HandleAnimation(direction, gameTime);
 
 
@@ -56,7 +64,7 @@ namespace DonkeyKong
             if (dir.Length() <= 0) return;
             else
             {
-                AnimationFlip(dir);
+                AnimationFlip(-dir);
             }
             base.Update(gameTime);
         }

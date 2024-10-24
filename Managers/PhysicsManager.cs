@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DonkeyKong
 {
-    public class PhysicsManager
+    public class PhysicsManager //Currently not using
     {
         public static Vector2 Velocity { get; set; }
         public static Vector2 Acceleration { get; set; }

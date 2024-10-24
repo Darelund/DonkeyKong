@@ -20,13 +20,15 @@ namespace DonkeyKong
         public static void LoadContent()
         {
             _MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture("MainMenu"), Vector2.Zero, Color.White, 1f, 1f));
-            _MainMenuElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2), "Play", 1f, 0.1f));
+            _MainMenuElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2), GameManager.GameState.Playing, "Play", 1f, 0.1f));
             _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture("DonkeyKongMainMenu1"), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 - 200), new Point(0, 0), new Point(92, 110), new Point(4, 0), Color.White, 1f, 100));
 
             _PlayingElements.Add(new StaticBackground(ResourceManager.GetTexture("Background1"), new Vector2(-200, 0), Color.White, 1, 1f));
 
             _GameOverElements.Add(new StaticBackground(ResourceManager.GetTexture("loose"), new Vector2(0, 0), Color.White, 1, 1f));
-            _GameOverElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.Red, Color.DarkRed), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 100), "Play Again?"));
+            _GameOverElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.Red, Color.DarkRed), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 100), GameManager.GameState.Restart, "Play Again?"));
+
+            _VictoryElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.Green, Color.Red, Color.DarkRed), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 100), GameManager.GameState.Victory, "Victory"));
         }
         public static void Update(GameTime gameTime)
         {
@@ -50,6 +52,10 @@ namespace DonkeyKong
                     break;
                 case GameManager.GameState.Victory:
                     break;
+                //case GameManager.GameState.Restart:
+                //    break;
+                //case GameManager.GameState.Exit:
+                //    break;
             }
         }
         public static void Draw(SpriteBatch spriteBatch)
@@ -77,7 +83,15 @@ namespace DonkeyKong
                     }
                     break;
                 case GameManager.GameState.Victory:
+                    foreach (UIElement element in _VictoryElements)
+                    {
+                        element.Draw(spriteBatch);
+                    }
                     break;
+                //case GameManager.GameState.Restart:
+                //    break;
+                //case GameManager.GameState.Exit:
+                //    break;
             }
         }
     }

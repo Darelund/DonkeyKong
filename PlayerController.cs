@@ -13,14 +13,26 @@ namespace DonkeyKong
     {
         private Vector2 destination;
         private Vector2 direction;
-        private float _speed => InputManager.IsLeftShiftDown() ? 150.0f : 100.0f;
+        private float _extraspeed = 50;
+        private float _speed => InputManager.IsLeftShiftDown() ? Speed + _extraspeed  : Speed;
         private bool moving = false;
         public float Health { get; private set; } = 3;
+        public bool HasWon { get; set; } = false;
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
 
-        public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, int size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
+        private static PlayerController _instance;
+        public static PlayerController Instance
         {
+            get
+            {
+                return _instance;
+            }
+        }
+
+        public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
+        {
+            _instance = this;
         }
         public override void Update(GameTime gameTime)
         {

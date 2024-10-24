@@ -12,16 +12,17 @@ using System.Windows.Forms;
 
 namespace DonkeyKong
 {
-    public class Level
+    public abstract class Level
     {
-        private Vector2 _startPosition;
-        private Tile[,] _tiles;
-
+        protected Vector2 _startPosition;
+        protected Tile[,] _tiles;
+        public bool LevelCompleted { get; set; } = false;
+        public event Action<Tile> TileSteppedOnHandler;
 
 
         //public List<GameObject> GameObjects = new List<GameObject>();
 
-      
+
         /// <summary>
         /// Creates a 2D grid level based on the file you give it. In the file each character represents one tile. 
         /// So you give it a list of tuples where each tuple is its character, texture and if you can walk on it.
@@ -48,6 +49,7 @@ namespace DonkeyKong
                 }
             }
         }
+        public abstract bool CheckLevelCompletion();
         public void CreateGameObjects(string objectsFilePath)
         {
             List<string> fileLines = FileManager.ReadFromFile(objectsFilePath);
@@ -178,23 +180,7 @@ namespace DonkeyKong
         //    return new PickUp(sprite, new Vector2(xPos, yPos), /* other params */);
         //}
 
-        //private void CreateLevelGameObjects(string objects, string types)
-        //{
-        //    //Hur läser man av många saker från samma fil?
-        //    List<string> result = ReadFromFile(objects);
-        //    List<string> GameObjectTypes = ReadFromFile(types);
-
-        //    for (int i = 0; i < result.Count; i++)
-        //    {
-        //        foreach (var type in GameObjectTypes)
-        //        {
-        //            if (result[i][0] == types[0])
-        //            {
-        //                GameObjects.Add()
-        //            }
-        //        }
-        //    }
-        //}
+       
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tile tile in _tiles)
@@ -202,11 +188,12 @@ namespace DonkeyKong
                 tile.Draw(spriteBatch);
             }
         }
+
+
+        //Used to check if tiles exists and are of x type
         public bool IsTileWalkable(Vector2 vec)
         {
-            int tileSize = 40;
-            vec -= _startPosition;
-            Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+            Point tilePos = GetTileAtPosition(vec);
 
             if (!TileExistsAtPosition(tilePos)) return false;
 
@@ -214,50 +201,32 @@ namespace DonkeyKong
         }
         public bool IsTileLadder(Vector2 vec, int dir)
         {
-            int tileSize = 40;
-            vec -= _startPosition;
-            Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
+            Point tilePos = GetTileAtPosition(vec);
 
             if (!TileExistsAtPosition(tilePos)) return false;
 
-            return /*_tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder)*/  _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.Ladder || _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.NonWalkable || _tiles[tilePos.X, tilePos.Y + (dir * -1)].Type == TileType.Ladder && _tiles[tilePos.X, tilePos.Y].Type == TileType.Walkable;
+            return _tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder ||  _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.Ladder || _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.NonWalkable || _tiles[tilePos.X, tilePos.Y + (dir * -1)].Type == TileType.Ladder && _tiles[tilePos.X, tilePos.Y].Type == TileType.Walkable;
         }
-
-       
-        //Maybe switch to this
-
-        //public bool DoesTileExistOfType(Vector2 vec, TileType type)
-        //{
-        //    int tileSize = 40;
-        //    vec -= _startPosition;
-        //    Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
-
-        //    if (!TileExistsAtPosition(tilePos)) return false;
-
-        //    return (_tiles[tilePos.X, tilePos.Y].Type == type);
-        //}
         public bool IsGrounded(Vector2 vec)
+        {
+            Point tilePos = GetTileAtPosition(vec);
+
+            tilePos.Y += 1;
+            TileExistsAtPosition(tilePos);
+
+            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable); // Assuming Empty is a walkable/ground type
+        }
+        private Point GetTileAtPosition(Vector2 vec)
         {
             int tileSize = 40;
             vec -= _startPosition;
-
-            // Calculate the current tile position of the player
-            Point tilePos = new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
-
-            // Move the tilePos down by 1 tile to check the block directly below the player
-            tilePos.Y += 1;
-
-            // Check if the new tile position is within bounds
-            TileExistsAtPosition(tilePos);
-
-            // Return true if the tile exists and is not empty (you can add custom logic for specific blocks here)
-            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable); // Assuming Empty is a walkable/ground type
+            return new Point((int)vec.X / tileSize, (int)vec.Y / tileSize);
         }
         private bool TileExistsAtPosition(Point tilePos)
         {
             if (tilePos.X < 0 || tilePos.X >= _tiles.GetLength(0)) return false;
             if (tilePos.Y < 0 || tilePos.Y >= _tiles.GetLength(1)) return false;
-
+            TileSteppedOnHandler?.Invoke(_tiles[tilePos.X, tilePos.Y]);
             return true;
         }
     }
