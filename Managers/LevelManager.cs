@@ -22,7 +22,7 @@ namespace DonkeyKong
 
        public static List<Level> Levels = new List<Level>();
         public static Level GetCurrentLevel => Levels[_levelIndex];
-        private static int _levelIndex = 0;
+        private static int _levelIndex = -1;
 
         public static void CreateLevels()
         {
@@ -97,7 +97,7 @@ namespace DonkeyKong
         public static void ActivateLevel(int levelIndex, LevelConfig levelConfig)
         {
             // Deactivate or unload the previous level's objects if needed
-            if (GetCurrentLevel != null)
+            if (_levelIndex >= 0 && GetCurrentLevel != null)
             {
                 GetCurrentLevel.UnloadLevel();
                 //GetCurrentLevel.UnloadGameObjects();
@@ -137,7 +137,6 @@ namespace DonkeyKong
         public static void NextLevel()
         {
             //Temporary solution
-            int zeroIndexing = 1;
             int newLevel = _levelIndex + 1;
             switch (newLevel)
             {

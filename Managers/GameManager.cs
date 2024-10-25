@@ -51,7 +51,6 @@ namespace DonkeyKong
             UIManager.LoadContent();
             LevelManager.CreateLevels();
             //Need to somehow hook this up onto a button, but I don't want to force all buttons to use it I want it to be modular so maybe an event that I can hook up for each button?
-            LevelManager.ActivateLevel(0, GameFiles.Levels.Level1);
         }
 
 
