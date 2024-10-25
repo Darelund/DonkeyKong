@@ -22,7 +22,7 @@ namespace DonkeyKong
         public TileType Type { get; }
         private Texture2D _texture;
         public Vector2 Pos { get; private set; }
-        public char Name { get; private set; }
+        public char Name { get; set; }
         private Color _color;
 
         public Tile(Vector2 pos, Texture2D texture, TileType type, Color color, char name)

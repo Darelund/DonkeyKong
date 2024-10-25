@@ -108,7 +108,7 @@ namespace DonkeyKong
             _levelIndex = levelIndex;
 
 
-            if (_levelIndex <= Levels.Count)
+            if (_levelIndex < Levels.Count)
             {
                 // Create the game objects and tiles for the new level
                 GetCurrentLevel.CreateLevel(levelConfig.LevelFile, levelConfig.StartPosition, levelConfig.TileData);

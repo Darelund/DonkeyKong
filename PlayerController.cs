@@ -106,7 +106,7 @@ namespace DonkeyKong
         }
         private void AnimationFlip()
         {
-            currentDirection = direction.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+            if (direction.X != 0) currentDirection = direction.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
         }
         public void ChangeDirection(Vector2 dir)
         {
@@ -117,7 +117,7 @@ namespace DonkeyKong
 
             if (!(LevelManager.GetCurrentLevel.IsGrounded(Position)) && !(LevelManager.GetCurrentLevel.IsTileLadder(newDestination, (int)direction.Y)))
             {
-                direction = new Vector2(0, 1);
+                direction = new Vector2(0, 2);
                 newDestination = Position + direction * tileSize;
                 destination = newDestination;
                 moving = true;

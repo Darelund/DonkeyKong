@@ -61,6 +61,7 @@ namespace DonkeyKong
                 {
                     _pressedTimer = 0; 
                     GameManager.ChangeGameState(_gameState);
+                    _hasBeenPressed = false;
                 }
             }
             if (Collision.Intersects(InputManager.MouseOver()))

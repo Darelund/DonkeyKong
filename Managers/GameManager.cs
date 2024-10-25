@@ -85,7 +85,6 @@ namespace DonkeyKong
                                 OnWin?.Invoke(Color.Green, GameState.Victory);
                             }
                         }
-                     //   Debug.WriteLine(gameObject.GetType().Name);
                     }
                     for (int i = 0; i < _flashEffects.Count; i++)
                     {

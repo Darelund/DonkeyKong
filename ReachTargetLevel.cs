@@ -36,5 +36,10 @@ namespace DonkeyKong
         {
             return Vector2.Distance(PlayerController.Instance.Position, _targetPosition) < _distanceFromTarget;
         }
+        public override void UnloadLevel()
+        {
+            LevelCompleted = false;
+            base.UnloadLevel();
+        }
     }
 }

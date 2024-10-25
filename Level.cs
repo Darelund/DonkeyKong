@@ -133,7 +133,7 @@ namespace DonkeyKong
         }
         public abstract void Update();
 
-        public void UnloadLevel()
+        public virtual void UnloadLevel()
         {
             _tiles = null;
             GameObjectsInLevel.Clear();

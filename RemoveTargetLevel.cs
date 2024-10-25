@@ -9,7 +9,7 @@ namespace DonkeyKong
 {
     public class RemoveTargetLevel : Level
     {
-        private int _startTargets = 10;
+        private int _startTargets = 0;
         private int _removedTargets;
         private char _TARGETNAME = 'T';
 
@@ -35,6 +35,7 @@ namespace DonkeyKong
             if(tile.Name == _TARGETNAME)
             {
                 _removedTargets++;
+                tile.Name = '_';
                 tile.SwitchTile(ResourceManager.GetTexture("empty"));
             }
         }
@@ -46,6 +47,11 @@ namespace DonkeyKong
         public override void Update()
         {
           //  throw new NotImplementedException();
+        }
+        public override void UnloadLevel()
+        {
+            LevelCompleted = false;
+            base.UnloadLevel();
         }
     }
 }
