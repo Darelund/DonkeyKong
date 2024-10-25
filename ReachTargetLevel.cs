@@ -29,7 +29,7 @@ namespace DonkeyKong
         }
         public override void Update()
         {
-            Debug.WriteLine(Vector2.Distance(PlayerController.Instance.Position, _targetPosition));
+            //Debug.WriteLine(Vector2.Distance(PlayerController.Instance.Position, _targetPosition));
             //Debug.WriteLine(PlayerController.Instance.Position);
         }
         public override bool CheckLevelCompletion()

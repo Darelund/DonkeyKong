@@ -114,7 +114,7 @@ namespace DonkeyKong
             float tileSize = 40.0f;
             Vector2 newDestination = Position + direction * tileSize;
 
-            if (!(LevelManager.GetCurrentLevel.IsGrounded(Position)) && !(LevelManager.GetCurrentLevel.IsTileLadder(newDestination, (int)direction.Y)))
+            if (!(LevelManager.GetCurrentLevel.IsGrounded(Position)) && !(LevelManager.GetCurrentLevel.IsTileLadder(Position, (int)direction.Y)))
             {
                 direction = new Vector2(0, 2);
                 newDestination = Position + direction * tileSize;

@@ -152,8 +152,9 @@ namespace DonkeyKong
             Point tilePos = GetTileAtPosition(vec);
 
             if (!TileExistsAtPosition(tilePos)) return false;
+            Debug.WriteLine($"X: {tilePos.X} Y: {tilePos.Y}");
 
-            return _tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder ||  _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.Ladder || _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.NonWalkable || _tiles[tilePos.X, tilePos.Y + (dir * -1)].Type == TileType.Ladder && _tiles[tilePos.X, tilePos.Y].Type == TileType.Walkable;
+            return _tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder || _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.Ladder && _tiles[tilePos.X, tilePos.Y].Type == TileType.Walkable;
         }
         public bool IsGrounded(Vector2 vec)
         {
@@ -162,7 +163,7 @@ namespace DonkeyKong
             tilePos.Y += 1;
             TileExistsAtPosition(tilePos);
 
-            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable); // Assuming Empty is a walkable/ground type
+            return (_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         }
         private Point GetTileAtPosition(Vector2 vec)
         {
