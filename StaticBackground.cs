@@ -21,7 +21,7 @@ namespace DonkeyKong
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, null, CurrentColor, Rotation, Vector2.Zero, Size, SpriteEffects.None, LayerDepth);
+            spriteBatch.Draw(_texture, Position, null, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
         }
     }
 }

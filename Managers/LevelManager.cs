@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -11,6 +12,7 @@ namespace DonkeyKong
 {
     public enum LevelType
     {
+        ShowOffLevel,
         ReachTarget,
         RemoveTarget
     }
@@ -26,6 +28,7 @@ namespace DonkeyKong
 
         public static void CreateLevels()
         {
+            AddLevel(LevelType.ShowOffLevel);
             AddLevel(LevelType.ReachTarget);
             AddLevel(LevelType.ReachTarget);
             AddLevel(LevelType.RemoveTarget);
@@ -60,6 +63,9 @@ namespace DonkeyKong
             Level newLevel = null;
             switch (type)
             {
+                case LevelType.ShowOffLevel:
+                    newLevel = new ShowOffLevel();
+                    break;
                 case LevelType.ReachTarget:
                     newLevel = new ReachTargetLevel();
                     break;
@@ -94,7 +100,7 @@ namespace DonkeyKong
         //    Levels.Add(newLevel);
         //}
         //Where should I call this for Level 1?
-        public static void ActivateLevel(int levelIndex, LevelConfig levelConfig)
+        private static void ActivateLevel(int levelIndex, LevelConfig levelConfig, bool runLevel)
         {
             // Deactivate or unload the previous level's objects if needed
             if (_levelIndex >= 0 && GetCurrentLevel != null)
@@ -116,41 +122,42 @@ namespace DonkeyKong
                 GetCurrentLevel.SetTarget();
                 GameManager.GameObjects.AddRange(GetCurrentLevel.GameObjectsInLevel);
 
+                if(runLevel)
+                {
                 GameManager.ChangeGameState(GameManager.GameState.Playing);
+                    Debug.WriteLine("Activated a level and now running it");
+                }
                 // SetUpLevel();
             }
         }
-        public static void SpecificLevel(int newLevel)
+        public static void SpecificLevel(int newLevel, bool runLevel)
         {
-            //Temporary solution
-            int zeroIndexing = 1;
-            switch (newLevel)
-            {
-                case 1: ActivateLevel(1 - zeroIndexing, GameFiles.Levels.Level1); break;
-                case 2: ActivateLevel(2 - zeroIndexing, GameFiles.Levels.Level2); break;
-                case 3: ActivateLevel(3 - zeroIndexing, GameFiles.Levels.Level3); break;
-                case 4: ActivateLevel(4 - zeroIndexing, GameFiles.Levels.Level4); break;
-                case 5: ActivateLevel(5 - zeroIndexing, GameFiles.Levels.Level5); break;
-                default: ActivateLevel(1 - zeroIndexing, GameFiles.Levels.Level1); break;
-            }
+            GetLevel(newLevel, runLevel);
         }
-        public static void NextLevel()
+        public static void NextLevel(bool runLevel)
+        {
+            int newLevel = _levelIndex + 1;
+            GetLevel(newLevel, runLevel);
+        }
+        private static void GetLevel(int newLevel, bool runLevel)
         {
             //Temporary solution
-            int newLevel = _levelIndex + 1;
+            //Should remove zero indexing
+            //And what is this switch mess? Should fix when I care
             switch (newLevel)
             {
-                case 0: ActivateLevel(0, GameFiles.Levels.Level1); break;
-                case 1: ActivateLevel(1, GameFiles.Levels.Level2); break;
-                case 2: ActivateLevel(2, GameFiles.Levels.Level3); break;
-                case 3: ActivateLevel(3, GameFiles.Levels.Level4); break;
-                case 4: ActivateLevel(4, GameFiles.Levels.Level5); break;
-                default: ActivateLevel(5, GameFiles.Levels.Level1); break;
+                case 0: ActivateLevel(newLevel, GameFiles.Levels.ShowOffLevel, runLevel); break;
+                case 1: ActivateLevel(newLevel, GameFiles.Levels.Level1, runLevel); break;
+                case 2: ActivateLevel(newLevel, GameFiles.Levels.Level2, runLevel); break;
+                case 3: ActivateLevel(newLevel, GameFiles.Levels.Level3, runLevel); break;
+                case 4: ActivateLevel(newLevel, GameFiles.Levels.Level4, runLevel); break;
+                case 5: ActivateLevel(newLevel, GameFiles.Levels.Level5, runLevel); break;
+                default: ActivateLevel(newLevel, GameFiles.Levels.Level1, runLevel); break;
             }
         }
         public static void Restart()
         {
-            ActivateLevel(0, GameFiles.Levels.Level1);
+            ActivateLevel(0, GameFiles.Levels.Level1, true);
            // SetUpLevel();
         }
     }

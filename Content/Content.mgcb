@@ -86,6 +86,18 @@
 /processorParam:TextureFormat=Color
 /build:Textures/bridgeRight.png
 
+#begin Textures/DonkeyKongMainMenu1_transparent.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/DonkeyKongMainMenu1_transparent.png
+
 #begin Textures/DonkeyKongMainMenu1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -97,6 +109,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/DonkeyKongMainMenu1.png
+
+#begin Textures/DonkeyKongMainMenu2_transparent.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/DonkeyKongMainMenu2_transparent.png
 
 #begin Textures/DonkeyKongMainMenu2.png
 /importer:TextureImporter
@@ -181,6 +205,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Textures/loose.png
+
+#begin Textures/MainMenu_transparent.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/MainMenu_transparent.png
 
 #begin Textures/MainMenu.png
 /importer:TextureImporter

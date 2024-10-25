@@ -44,12 +44,12 @@ namespace DonkeyKong
             Content = content;
             Device = device;
             _sceneSwitcher = new SceneSwitcher(Window, Device);
-
         }
         public static void ContentLoad()
         {
             UIManager.LoadContent();
             LevelManager.CreateLevels();
+            LevelManager.SpecificLevel(0, false);
             //Need to somehow hook this up onto a button, but I don't want to force all buttons to use it I want it to be modular so maybe an event that I can hook up for each button?
         }
 
@@ -60,7 +60,28 @@ namespace DonkeyKong
             {
                 case GameState.MainMenu:
                     InputManager.Update();
+                    LevelManager.Update(gameTime);
                     UIManager.Update(gameTime);
+                    //LevelManager.NextLevel(true);
+                    foreach (var gameObject in GameObjects)
+                    {
+                        //  if(gameObject.IsActive())
+                        gameObject.Update(gameTime);
+
+                        if (gameObject is PlayerController)
+                        {
+                            var player = gameObject as PlayerController;
+                            if (player.Health <= 0)
+                            {
+                                OnGameOver?.Invoke(Color.Black, GameState.GameOver);
+                            }
+
+                            if (LevelManager.GetCurrentLevel.LevelCompleted)
+                            {
+                                OnWin?.Invoke(Color.Green, GameState.Victory);
+                            }
+                        }
+                    }
                     break;
                 case GameState.Playing:
                     InputManager.Update();
@@ -101,7 +122,7 @@ namespace DonkeyKong
                     UIManager.Update(gameTime);
                     break;
                 case GameState.Victory:
-                    LevelManager.NextLevel();
+                    LevelManager.NextLevel(true);
                     break;
                 case GameState.Restart:
                     LevelManager.Restart();
@@ -117,8 +138,29 @@ namespace DonkeyKong
             switch (CurrentGameState)
             {
                 case GameState.MainMenu:
-                   // LevelManager.Draw(spriteBatch);
+                    LevelManager.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
+                    foreach (var gameObject in GameObjects)
+                    {
+                        bool isFlashing = false;
+
+                        foreach (var effect in _flashEffects)
+                        {
+                            if (effect.IsActiveOnObject(gameObject))
+                            {
+                                effect.ApplyDrawEffect(spriteBatch);
+                                isFlashing = true;
+                                break;
+                            }
+                        }
+                        gameObject.Draw(spriteBatch);
+
+                        if (isFlashing)
+                        {
+                            spriteBatch.End();
+                            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
+                        }
+                    }
                     break;
                 case GameState.Playing:
                    

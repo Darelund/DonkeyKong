@@ -22,7 +22,6 @@ namespace DonkeyKong
         public static void LoadResources(ContentManager content, string textures, string soundEffects, string musics, string spriteFonts, string effects)
         {
             var text = textures.Split(',');
-            Debug.WriteLine(text[0].Trim());
             foreach (string tex in textures.Split(','))
             {
                 if (tex == "") continue;

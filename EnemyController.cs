@@ -34,9 +34,9 @@ namespace DonkeyKong
             int rightDirection = 1;
             direction.X = randomStartDirection == 1 ? rightDirection : leftDirection;
 
-            int minSpeed = 25;
-            int maxSpeed = 101;
-            int randomSpeed = ran.Next(minSpeed, maxSpeed);
+            List<int> speeds = new List<int> { 25, 50, 75, 100, 125, 150 };
+
+            int randomSpeed = speeds[ran.Next(0, speeds.Count)];
             Speed = randomSpeed;
            // CollisionManager.AddCollisionObject(this);
         }

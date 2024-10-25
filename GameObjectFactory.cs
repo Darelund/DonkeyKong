@@ -16,7 +16,7 @@ namespace DonkeyKong
             switch (objectType)
             {
                 case "EnemyController":
-                    Debug.WriteLine("Returning?");
+                    Debug.WriteLine("An enemy is created(Factory)");
                     return CreateEnemyController(objectData);
                 case "PlayerController":
                     return CreatePlayerController(objectData);

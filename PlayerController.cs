@@ -38,7 +38,7 @@ namespace DonkeyKong
         public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
             _instance = this;
-            Debug.WriteLine("I have been created");
+            Debug.WriteLine("Creating one player");
         }
         public override void Update(GameTime gameTime)
         {
@@ -61,7 +61,6 @@ namespace DonkeyKong
                 }
             }
                 HandleAnimation(gameTime);
-            Debug.WriteLine(Instance.Position);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -158,7 +157,7 @@ namespace DonkeyKong
                 // var enemsy = (EnemyController)gameObject;
                 if (!IsImmune)
                 {
-                    Debug.WriteLine("I get called");
+                    Debug.WriteLine("Taking damage");
                     var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 2f, this, Color.White);
                     GameManager.AddFlashEffect(flash);
                     IsImmune = true;

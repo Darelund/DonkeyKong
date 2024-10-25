@@ -27,7 +27,8 @@ namespace DonkeyKong
                 {
                     string line = sR.ReadLine();
                     result.Add(line);
-                    Debug.WriteLine(line);
+                   // Debug.WriteLine(line);
+                   //Created things in the output
                 }
             }
             return result;

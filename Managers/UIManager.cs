@@ -36,9 +36,11 @@ namespace DonkeyKong
             _GameOverElements = new List<UIElement>();
             _VictoryElements = new List<UIElement>();
 
-            _MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture("MainMenu"), Vector2.Zero, Color.White, 1f, Vector2.Zero, 1f));
+            _MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture("MainMenu_transparent"), new Vector2(GameManager.Window.ClientBounds.Width / 2, 200), Color.White, 0.9f, new Vector2(ResourceManager.GetTexture("MainMenu_transparent").Width /2, ResourceManager.GetTexture("MainMenu_transparent").Height /2), 0.2f));
+            _MainMenuElements.Add(new StaticBackground(ResourceManager.GetTexture("MainMenu_transparent"), new Vector2(GameManager.Window.ClientBounds.Width / 2, 200), Color.LightBlue, 0.95f, new Vector2(ResourceManager.GetTexture("MainMenu_transparent").Width / 2, ResourceManager.GetTexture("MainMenu_transparent").Height / 2), 0.2f));
             _MainMenuElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2), GameManager.GameState.Victory, Vector2.Zero, "Play", 1f, 0.1f));
-            _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture("DonkeyKongMainMenu1"), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 - 200), new Point(0, 0), new Point(92, 110), new Point(4, 0), Color.White, 1f, Vector2.Zero, 100));
+            _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture("DonkeyKongMainMenu1_transparent"), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 - 350), new Point(0, 0), new Point(92, 110), new Point(4, 0), Color.White, 1f, Vector2.Zero, 100));
+            _MainMenuElements.Add(new AnimatedSpriteUI(ResourceManager.GetTexture("DonkeyKongMainMenu2_transparent"), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 165, GameManager.Window.ClientBounds.Height / 2 - 365), new Point(0, 0), new Point(80, 110), new Point(4, 0), Color.White, 1f, Vector2.Zero, 150));
 
             _PlayingElements.Add(new StaticBackground(ResourceManager.GetTexture("Background1"), new Vector2(-200, 0), Color.White, 1, Vector2.Zero, 1f));
             _PlayingElements.Add(new UIText(ResourceManager.GetSpriteFont("GameText"), "Lifes: ", new Vector2(50, 0), Color.White, 0.8f, Vector2.Zero, 0.9f));
