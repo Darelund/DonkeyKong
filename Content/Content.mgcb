@@ -26,6 +26,36 @@
 /processorParam:TextureFormat=Compressed
 /build:Fonts/GameText.spritefont
 
+#begin Music/BackgroundMusic.wav
+/importer:WavImporter
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Music/BackgroundMusic.wav
+
+#begin SoundEffect/CoinPickupSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffect/CoinPickupSound.wav
+
+#begin SoundEffect/DeathSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffect/DeathSound.wav
+
+#begin SoundEffect/FlameDamage.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffect/FlameDamage.wav
+
+#begin SoundEffect/HardPop.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:SoundEffect/HardPop.wav
+
 #begin Textures/Background1.jpg
 /importer:TextureImporter
 /processor:TextureProcessor

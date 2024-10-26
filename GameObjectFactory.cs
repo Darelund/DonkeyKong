@@ -178,17 +178,77 @@ namespace DonkeyKong
         }
 
 
-        //private PickUp CreatePickUp(List<string> data)
-        //{
-        //    // Parse pick-up-specific data
-        //    string sprite = data[0];
-        //    string[] positionParts = data[1].Split(',');
-        //    int xPos = int.Parse(positionParts[0].Trim());
-        //    int yPos = int.Parse(positionParts[1].Trim());
+        private Pickup CreatePickUp(List<string> data)
+        {
+            // 1. Parse general properties (like sprite, position, color, etc.)
+            string sprite = data[0];  // Texture name or path
+            string[] positionParts = data[1].Split(',');
+            int xPos = int.Parse(positionParts[0].Trim());
+            int yPos = int.Parse(positionParts[1].Trim());
+            Vector2 position = new Vector2(xPos, yPos);
 
-        //    // Parse other properties from data...
+            float speed = float.Parse(data[2]);
+            string colorName = data[3].Trim();
+            Color color = colorName switch
+            {
+                "white" => Color.White,
+                "red" => Color.Red,
+                "blue" => Color.Blue,
+                "green" => Color.Green,
+                _ => Color.White // Default color if not found
+            };
 
-        //    return new PickUp(sprite, new Vector2(xPos, yPos), /* other params */);
-        //}
+            float rotation = float.Parse(data[4].Trim());
+            float size = float.Parse(data[5].Trim());
+            float layerDepth = float.Parse(data[6].Trim());
+
+            string[] originParts = data[7].Split(',');
+            xPos = int.Parse(originParts[0].Trim());
+            yPos = int.Parse(originParts[1].Trim());
+            Vector2 origin = new Vector2(xPos, yPos);
+
+            // 2. Parse animation clips
+            var animationClips = new Dictionary<string, AnimationClip>();
+            for (int i = 8; i < data.Count; i++)
+            {
+                string animationData = data[i];
+                if (!string.IsNullOrWhiteSpace(animationData))
+                {
+                    string[] animationParts = animationData.Split(':');
+                    string animationName = animationParts[0].Trim();
+
+                    string[] rectsAndSpeed = animationParts[1].Split(';'); // Outside the bounds of the array
+                    string[] rectStrings = rectsAndSpeed[0].Split('|');
+
+                    Rectangle[] frames = rectStrings.Select(rectStr =>
+                    {
+                        string[] rectComponents = rectStr.Split(',');
+                        int rectX = int.Parse(rectComponents[0].Trim());
+                        int rectY = int.Parse(rectComponents[1].Trim());
+                        int rectWidth = int.Parse(rectComponents[2].Trim());
+                        int rectHeight = int.Parse(rectComponents[3].Trim());
+
+                        return new Rectangle(rectX, rectY, rectWidth, rectHeight);
+                    }).ToArray();
+
+                    float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
+
+                    animationClips[animationName] = new AnimationClip(frames, animationSpeed);
+                }
+            }
+
+            // 3. Create and return the PlayerController object with the parsed data
+            return new Pickup(
+                ResourceManager.GetTexture(sprite),  // Texture loading
+                position,
+                100,  // Assuming speed is always 100 for player, can be parsed too
+                color,
+                rotation,
+                size,
+                layerDepth,
+                origin,
+                animationClips  // Pass the parsed animations
+            );
+        }
     }
 }

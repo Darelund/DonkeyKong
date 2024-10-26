@@ -41,6 +41,7 @@ namespace DonkeyKong
         }
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
+        //private bool _jumping = false;
 
         private static PlayerController _instance;
         public static PlayerController Instance
@@ -104,7 +105,7 @@ namespace DonkeyKong
                         _attacking = false;
                     }
                 }
-                else if (direction.Length() == 0)
+               else if (direction.Length() == 0)
                 {
                     SwitchAnimation("Idle");
                 }
@@ -164,19 +165,16 @@ namespace DonkeyKong
                 newDestination = Position + direction * tileSize;
                 destination = newDestination;
                 moving = true;
-                return;
             }
-            if (direction.Y != 0)
+            else if (direction.Y != 0)
             {
                 if(LevelManager.GetCurrentLevel.IsTileLadder(newDestination))
                 {
                     destination = newDestination;
                     moving = true;
                 }
-                return;
             }
-
-            if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
+            else if (LevelManager.GetCurrentLevel.IsTileWalkable(newDestination))
             {
                 destination = newDestination;
                 moving = true;
@@ -190,6 +188,7 @@ namespace DonkeyKong
             if(_health <= 0)
             {
                 _isActive = false;
+                AudioManager.PlaySoundEffect("DeathSound");
             }
             Debug.WriteLine(_health);
         }
@@ -202,6 +201,8 @@ namespace DonkeyKong
                 if (!IsImmune)
                 {
                     Debug.WriteLine("Taking damage");
+                    float volume = 0.5f;
+                    AudioManager.PlaySoundEffect("FlameDamage", volume);
                     var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 2f, this, Color.White);
                     GameManager.AddFlashEffect(flash);
                     IsImmune = true;

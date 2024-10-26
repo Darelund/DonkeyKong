@@ -46,8 +46,6 @@ namespace DonkeyKong
         {
             return new Rectangle(mouseState.X, mouseState.Y, 1, 1);
         }
-
-            
-
+        public static bool SpacePressed() => keyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space);
     }
 }

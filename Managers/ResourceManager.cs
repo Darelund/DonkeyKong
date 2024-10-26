@@ -32,14 +32,14 @@ namespace DonkeyKong
             foreach (string soundEffect in soundEffects.Split(','))
             {
                 if (soundEffect == "") continue;
-                SoundEffect sF = content.Load<SoundEffect>(soundEffect.Trim());
+                SoundEffect sF = content.Load<SoundEffect>($"SoundEffect/{soundEffect.Trim()}");
                 sF.Name = soundEffect.Trim();
                 SoundEffects.Add(sF);
             }
             foreach (string music in musics.Split(','))
             {
                 if (music == "") continue;
-                Song m = content.Load<Song>(music.Trim());
+                Song m = content.Load<Song>($"Music/{music.Trim()}");
                 Music.Add(m);
             }
             foreach (string spriteFont in spriteFonts.Split(','))
