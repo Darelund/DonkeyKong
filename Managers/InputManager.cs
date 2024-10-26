@@ -47,5 +47,12 @@ namespace DonkeyKong
             return new Rectangle(mouseState.X, mouseState.Y, 1, 1);
         }
         public static bool SpacePressed() => keyboardState.IsKeyDown(Keys.Space) && previousKeyboardState.IsKeyUp(Keys.Space);
+
+        public static bool DebugButton() => keyboardState.IsKeyDown(Keys.U) && previousKeyboardState.IsKeyUp(Keys.U);
+
+        public static bool WearButton() => keyboardState.IsKeyDown(Keys.Q) && previousKeyboardState.IsKeyUp(Keys.Q);
+        public static bool ConsumeButton() => keyboardState.IsKeyDown(Keys.C) && previousKeyboardState.IsKeyUp(Keys.C);
+        public static bool UseButton() => keyboardState.IsKeyDown(Keys.E) && previousKeyboardState.IsKeyUp(Keys.E);
+
     }
 }

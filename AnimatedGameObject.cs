@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,7 @@ namespace DonkeyKong
             _animationClips = animationClips;
             //Todo maybe make it possible to choose what animation to start at?
             _currentClip = _animationClips[_animationClips.Keys.First()];
+         //   Debug.WriteLine();
         }
 
         public override void Update(GameTime gameTime)

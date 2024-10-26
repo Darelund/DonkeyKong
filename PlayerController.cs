@@ -43,6 +43,35 @@ namespace DonkeyKong
         private bool _attacking = false;
         //private bool _jumping = false;
 
+        public Inventory Inventory { get; set; } = new Inventory();
+
+
+        private Vector2 WearPosition
+        {
+            //I might need to adjust the box to make the collision more fun for the player
+            get
+            {
+                return new Vector2((int)Position.X, (int)Position.Y - (int)Origin.Y * (int)Size);
+            }
+        }
+        private Vector2 ConsumePosition
+        {
+            //I might need to adjust the box to make the collision more fun for the player
+            get
+            {
+                return new Vector2((int)Position.X, (int)Position.Y - (int)Origin.Y * (int)Size);
+            }
+        }
+        private Vector2 WeaponPosition
+        {
+            //I might need to adjust the box to make the collision more fun for the player
+            get
+            {
+                return new Vector2((int)Position.X, (int)Position.Y - (int)Origin.Y * (int)Size);
+            }
+        }
+
+        private List<Vector2> positions;
         private static PlayerController _instance;
         public static PlayerController Instance
         {
@@ -61,7 +90,11 @@ namespace DonkeyKong
         }
         public override void Update(GameTime gameTime)
         {
-           if(IsActive())
+            Inventory.Update(gameTime, WearPosition);
+
+
+
+           if (IsActive())
             {
                 if (!moving)
                 {
@@ -80,9 +113,24 @@ namespace DonkeyKong
                 }
             }
                 HandleAnimation(gameTime);
+
+            if(InputManager.DebugButton())
+            {
+                foreach (var item in Inventory.Items)
+                {
+                    Debug.WriteLine($"Type: {item.Type}");
+                }
+            }
+           
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
+            Inventory.Draw(spriteBatch);
+            //if (_activeItem != null)
+            //{
+            //    _activeItem.Position = WearPosition;
+            //    _activeItem.Draw(spriteBatch);
+            //}
             base.Draw(spriteBatch);
         }
         private void HandleAnimation(GameTime gameTime)
@@ -122,7 +170,6 @@ namespace DonkeyKong
                 else if (LevelManager.GetCurrentLevel.IsTileLadder(Position) && LevelManager.GetCurrentLevel.IsTileLadder(Position - new Vector2(0, 40)))
                 {
                     SwitchAnimation("Climb");
-                    Debug.WriteLine("CLIMB");
                     if(_currentClip.HasLoopedOnce())
                     {
                         FlipClimbing();

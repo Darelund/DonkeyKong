@@ -1,0 +1,78 @@
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DonkeyKong
+{
+    public enum ItemType
+    {
+        Wearable,
+        Consumable,
+        Weapon
+    }
+    public enum ItemState
+    {
+        pickupState,
+        usingState
+    }
+    public class Item : AnimatedGameObject
+    {
+        public ItemType Type { get; }
+        public ItemState state { get; private set; } = ItemState.pickupState;
+        private float _lifeTimeDuration = 5f;
+        private float _remainingTimeLeft = 0;
+
+        private int _minScore;
+        private int _maxScore;
+
+        public event Action OnExpired;
+
+        private PlayerController _playerInventory;
+        public Item(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips, ItemType type, int minScore, int maxScore) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
+        {
+            Type = type;
+            _minScore = minScore;
+            _maxScore = maxScore;
+
+            _remainingTimeLeft = _lifeTimeDuration;
+        }
+        public override void OnCollision(GameObject gameObject)
+        {
+            //Maybe add it back to a pool and respawn it
+            if(gameObject is PlayerController)
+            {
+                Random random = new Random();
+                var randomScore = random.Next(_minScore, _maxScore);
+
+                _playerInventory = (PlayerController)gameObject;
+                _playerInventory.Inventory.Items.Add(this);
+                state = ItemState.usingState;
+                ScoreManager.UpdateScore(randomScore);
+                int resetRotation = 0;
+                Rotation = 0;
+            }
+            GameManager.GameObjects.Remove(this);
+        }
+        public override void Update(GameTime gameTime)
+        {
+            if(state == ItemState.pickupState)
+            Rotation += (float)gameTime.ElapsedGameTime.TotalSeconds;
+            else
+            {
+                _remainingTimeLeft -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (_remainingTimeLeft <= 0)
+                {
+                    _playerInventory.Inventory.Items.Remove(this);
+                    Debug.WriteLine("Item expired");
+                    OnExpired?.Invoke();
+                }
+            }
+            base.Update(gameTime);
+        }
+    }
+}
