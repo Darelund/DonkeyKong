@@ -147,12 +147,12 @@ namespace DonkeyKong
 
             return !(_tiles[tilePos.X, tilePos.Y].Type == TileType.NonWalkable);
         }
-        public bool IsTileLadder(Vector2 vec, int dir)
+        public bool IsTileLadder(Vector2 vec)
         {
             Point tilePos = GetTileAtPosition(vec);
 
             if (!TileExistsAtPosition(tilePos)) return false;
-            Debug.WriteLine($"X: {tilePos.X} Y: {tilePos.Y}");
+          //  Debug.WriteLine($"X: {tilePos.X} Y: {tilePos.Y}");
 
             return _tiles[tilePos.X, tilePos.Y].Type == TileType.Ladder || _tiles[tilePos.X, tilePos.Y + 1].Type == TileType.Ladder && _tiles[tilePos.X, tilePos.Y].Type == TileType.Walkable;
         }

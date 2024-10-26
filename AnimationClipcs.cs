@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,10 @@ namespace DonkeyKong
                 return true;
             }
             return false;
+        }
+        public void Mirror()
+        {
+          //  SpriteEffects.
         }
         private void Rewind()
         {

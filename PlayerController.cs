@@ -13,8 +13,26 @@ namespace DonkeyKong
     {
         private Vector2 destination;
         private Vector2 direction;
-        private float _extraspeed = 50;
-        private float _speed => InputManager.IsLeftShiftDown() ? Speed + _extraspeed  : Speed;
+        private float _sprintSpeed = 50;
+        private float fallSpeed = 50f;
+        protected override float Speed
+        {
+            get
+            {
+                if (InputManager.IsLeftShiftDown() && LevelManager.GetCurrentLevel.IsGrounded(Position))
+                {
+                    return normalSpeed + _sprintSpeed;
+                }
+                else if (!LevelManager.GetCurrentLevel.IsGrounded(Position) && !LevelManager.GetCurrentLevel.IsTileLadder(Position))
+                {
+                    return normalSpeed + fallSpeed;
+                }
+                else
+                {
+                    return normalSpeed;
+                }
+            }
+        }
         private bool moving = false;
         private float _health = 3;
         public float Health
@@ -50,7 +68,7 @@ namespace DonkeyKong
                 }
                 else
                 {
-                    Position += direction * _speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    Position += direction * Speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
                     if (Vector2.Distance(Position, destination) < 1)
@@ -90,22 +108,48 @@ namespace DonkeyKong
                 {
                     SwitchAnimation("Idle");
                 }
+                else if (direction.X != 0)
+                {
+                    SwitchAnimation("Walk");
+                    AnimationFlip();
+                }
                 else if (InputManager.IsLeftShiftDown())
                 {
                     SwitchAnimation("Sprint");
                     AnimationFlip();
                 }
-                else if (direction.Length() != 0)
+                else if (LevelManager.GetCurrentLevel.IsTileLadder(Position) && LevelManager.GetCurrentLevel.IsTileLadder(Position - new Vector2(0, 40)))
                 {
-                    SwitchAnimation("Walk");
-                    AnimationFlip();
+                    SwitchAnimation("Climb");
+                    Debug.WriteLine("CLIMB");
+                    if(_currentClip.HasLoopedOnce())
+                    {
+                        FlipClimbing();
+                    }
+                }
+                else if(IsTopOfLadderReached())
+                {
+                    SwitchAnimation("Idle");
+                }
+                else
+                {
+                    SwitchAnimation("Idle");
                 }
             }
             base.Update(gameTime);
         }
+        private bool IsTopOfLadderReached()
+        {
+            return LevelManager.GetCurrentLevel.IsTileWalkable(Position) && LevelManager.GetCurrentLevel.IsTileLadder(Position - new Vector2(0, 40));
+        }
         private void AnimationFlip()
         {
             if (direction.X != 0) currentDirection = direction.X > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        }
+        private void FlipClimbing()
+        {
+
+            currentDirection = currentDirection == SpriteEffects.None ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
         }
         public void ChangeDirection(Vector2 dir)
         {
@@ -114,9 +158,9 @@ namespace DonkeyKong
             float tileSize = 40.0f;
             Vector2 newDestination = Position + direction * tileSize;
 
-            if (!(LevelManager.GetCurrentLevel.IsGrounded(Position)) && !(LevelManager.GetCurrentLevel.IsTileLadder(Position, (int)direction.Y)))
+            if (!(LevelManager.GetCurrentLevel.IsGrounded(Position)) && !(LevelManager.GetCurrentLevel.IsTileLadder(Position)))
             {
-                direction = new Vector2(0, 2);
+                direction = new Vector2(0, 1);
                 newDestination = Position + direction * tileSize;
                 destination = newDestination;
                 moving = true;
@@ -124,7 +168,7 @@ namespace DonkeyKong
             }
             if (direction.Y != 0)
             {
-                if(LevelManager.GetCurrentLevel.IsTileLadder(newDestination, (int)direction.Y))
+                if(LevelManager.GetCurrentLevel.IsTileLadder(newDestination))
                 {
                     destination = newDestination;
                     moving = true;

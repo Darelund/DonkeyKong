@@ -33,7 +33,7 @@ namespace DonkeyKong
             // Check if the player is on the ground or climbing
             IsOnGround = LevelManager.GetCurrentLevel.IsGrounded(pos);
             if(direction.Y != 0)
-            IsClimbing = LevelManager.GetCurrentLevel.IsTileLadder(pos + direction * 40, (int)direction.Y);
+            IsClimbing = LevelManager.GetCurrentLevel.IsTileLadder(pos + direction * 40);
 
             // Apply gravity if not climbing and not grounded
             if (IsClimbing)

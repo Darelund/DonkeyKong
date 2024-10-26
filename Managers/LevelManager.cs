@@ -32,6 +32,7 @@ namespace DonkeyKong
             AddLevel(LevelType.ReachTarget);
             AddLevel(LevelType.ReachTarget);
             AddLevel(LevelType.RemoveTarget);
+            AddLevel(LevelType.RemoveTarget);
             //  AddLevel(GameFiles.Levels.LEVEL2, LevelType.ReachTarget, GameFiles.Levels.LEVEL2StartPosition, Level.ReadTileDataFromFile(GameFiles.LevelType.REACHTARGETLEVELS), GameFiles.GameObjects.LEVEL2OBJ);
             //  AddLevel(GameFiles.Levels.LEVEL3, LevelType.RemoveTarget,GameFiles.Levels.LEVEL3StartPosition, Level.ReadTileDataFromFile(GameFiles.LevelType.REMOVETARGETLEVELS), GameFiles.GameObjects.LEVEL3OBJ);
         }
@@ -157,7 +158,7 @@ namespace DonkeyKong
         }
         public static void Restart()
         {
-            ActivateLevel(0, GameFiles.Levels.Level1, true);
+            ActivateLevel(1, GameFiles.Levels.Level1, true);
            // SetUpLevel();
         }
     }

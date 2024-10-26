@@ -12,7 +12,8 @@ namespace DonkeyKong
     {
         protected Texture2D Texture;
         public Vector2 Position { get; set; }
-        protected float Speed;
+        protected float normalSpeed;
+        protected virtual float Speed { get => normalSpeed; set => normalSpeed = value; }
         protected Color Color;
         protected float Rotation;
         protected float Size;
