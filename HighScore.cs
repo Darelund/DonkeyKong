@@ -46,6 +46,7 @@ namespace DonkeyKong
                 int level = int.Parse(scoreLine[2]);
                 _highScores.Add(new Score(name, points, level));
             }
+            Debug.Write("");
         }
         private static void SaveScores()
         {
@@ -99,7 +100,7 @@ namespace DonkeyKong
                     int lowestHighScore = 0;
                     for (int i = 0; i < _highScores.Count; i++)
                     {
-                        if(_highScores.Count < lowestPointCount)
+                        if(_highScores[i].Points < lowestPointCount)
                         {
                             lowestPointCount = _highScores[i].Points;
                             lowestHighScore = i;

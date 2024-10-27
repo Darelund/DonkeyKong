@@ -14,7 +14,8 @@ namespace DonkeyKong
     {
         ShowOffLevel,
         ReachTarget,
-        RemoveTarget
+        RemoveTarget,
+        FallingPlatform
     }
     public class LevelManager
     {
@@ -33,6 +34,7 @@ namespace DonkeyKong
             AddLevel(LevelType.ReachTarget);
             AddLevel(LevelType.RemoveTarget);
             AddLevel(LevelType.RemoveTarget);
+            AddLevel(LevelType.FallingPlatform);
             //  AddLevel(GameFiles.Levels.LEVEL2, LevelType.ReachTarget, GameFiles.Levels.LEVEL2StartPosition, Level.ReadTileDataFromFile(GameFiles.LevelType.REACHTARGETLEVELS), GameFiles.GameObjects.LEVEL2OBJ);
             //  AddLevel(GameFiles.Levels.LEVEL3, LevelType.RemoveTarget,GameFiles.Levels.LEVEL3StartPosition, Level.ReadTileDataFromFile(GameFiles.LevelType.REMOVETARGETLEVELS), GameFiles.GameObjects.LEVEL3OBJ);
         }
@@ -48,7 +50,7 @@ namespace DonkeyKong
                 GetCurrentLevel.LevelCompleted = true;
 
             }
-            GetCurrentLevel.Update();
+            GetCurrentLevel.Update(gameTime);
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
@@ -72,6 +74,9 @@ namespace DonkeyKong
                     break;
                 case LevelType.RemoveTarget:
                     newLevel = new RemoveTargetLevel();
+                    break;
+                case LevelType.FallingPlatform:
+                    newLevel = new FallingPlatformsLevelcs();
                     break;
             }
             // newLevel.CreateLevelGameObjects("Content/GameObjectsInLevel1.txt");
@@ -103,6 +108,11 @@ namespace DonkeyKong
         //Where should I call this for Level 1?
         private static void ActivateLevel(int levelIndex, LevelConfig levelConfig, bool runLevel)
         {
+            int showOffLevel = 0;
+            if (LevelIndex > showOffLevel)
+            {
+                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelIndex);
+            }
             // Deactivate or unload the previous level's objects if needed
             if (LevelIndex >= 0 && GetCurrentLevel != null)
             {
@@ -120,7 +130,6 @@ namespace DonkeyKong
                 // Create the game objects and tiles for the new level
                 GetCurrentLevel.CreateLevel(levelConfig.LevelFile, levelConfig.StartPosition, levelConfig.TileData);
                 GetCurrentLevel.CreateGameObjects(levelConfig.GameObjectsFile);
-                int showOffLevel = 0;
                 if(LevelIndex != showOffLevel)
                 {
                     GetCurrentLevel.CreateGameObjects(GameFiles.Character.CHARACTER);

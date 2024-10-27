@@ -22,7 +22,7 @@ namespace DonkeyKong
                 new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 100, GameManager.Window.ClientBounds.Height / 2), Vector2.Zero, 1, SelectCharacter, "Select", 1f, 0.1f),
                 new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2 + 100, GameManager.Window.ClientBounds.Height / 2), Vector2.Zero, 2, SelectCharacter, "Select", 1f, 0.1f)
             };
-            _textInputManager = new TextInputManager("Enter your name", new Vector2(GameManager.Window.ClientBounds.Width / 2 - 150, GameManager.Window.ClientBounds.Height / 2 - 100), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 150, GameManager.Window.ClientBounds.Height / 2));
+            _textInputManager = new TextInputManager("Enter your name", new Vector2(GameManager.Window.ClientBounds.Width / 2 - 200, GameManager.Window.ClientBounds.Height / 2 - 100), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 150, GameManager.Window.ClientBounds.Height / 2));
         }
         public static void Update(GameTime gameTime)
         {

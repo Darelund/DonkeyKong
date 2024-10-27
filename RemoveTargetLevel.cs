@@ -44,7 +44,7 @@ namespace DonkeyKong
             return _removedTargets >= _startTargets;
         }
 
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
           //  throw new NotImplementedException();
         }

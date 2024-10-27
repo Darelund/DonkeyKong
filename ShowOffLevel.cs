@@ -19,7 +19,7 @@ namespace DonkeyKong
         {
            
         }
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             //debug.writeline(vector2.distance(playercontroller.instance.position, _targetposition));
             //debug.writeline(playercontroller.instance.position);

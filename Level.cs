@@ -124,14 +124,14 @@ namespace DonkeyKong
                 i++;  // Skip the blank line between object definitions
             }
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tile tile in _tiles)
             {
                 tile.Draw(spriteBatch);
             }
         }
-        public abstract void Update();
+        public abstract void Update(GameTime gameTime);
 
         public virtual void UnloadLevel()
         {

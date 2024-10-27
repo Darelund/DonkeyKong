@@ -48,7 +48,7 @@ namespace DonkeyKong
 
 
             _GameOverElements.Add(new StaticBackground(ResourceManager.GetTexture("loose"), new Vector2(0, 0), Color.White, 1, Vector2.Zero, 1f));
-            _GameOverElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.Red, Color.DarkRed), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 300), Vector2.Zero, GameManager.GameState.Playing, GameManager.ChangeGameState, "Play Again?"));
+            _GameOverElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.Red, Color.DarkRed), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 300), Vector2.Zero, GameManager.GameState.Restart, GameManager.ChangeGameState, "Play Again?"));
 
             _VictoryElements.Add(new Button(ResourceManager.GetSpriteFont("GameText"), (Color.Green, Color.Red, Color.DarkRed), new Vector2(GameManager.Window.ClientBounds.Width / 2, GameManager.Window.ClientBounds.Height / 2 + 100), Vector2.Zero, GameManager.GameState.Victory, GameManager.ChangeGameState, "Victory"));
         }

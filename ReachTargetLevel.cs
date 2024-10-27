@@ -27,7 +27,7 @@ namespace DonkeyKong
                 }
             }
         }
-        public override void Update()
+        public override void Update(GameTime gameTime)
         {
             //Debug.WriteLine(Vector2.Distance(PlayerController.Instance.Position, _targetPosition));
             //Debug.WriteLine(PlayerController.Instance.Position);

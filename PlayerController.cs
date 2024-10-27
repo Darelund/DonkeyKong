@@ -34,7 +34,7 @@ namespace DonkeyKong
             }
         }
         private bool moving = false;
-        private float _health = 3;
+        private float _health = 30;
         public float Health
         {
             get => _health;
@@ -215,6 +215,7 @@ namespace DonkeyKong
                 _isActive = false;
                 HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
                 AudioManager.PlaySoundEffect("DeathSound");
+                ScoreManager.ResetScore();
             }
             Debug.WriteLine(_health);
         }

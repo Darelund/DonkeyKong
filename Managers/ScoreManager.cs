@@ -19,5 +19,9 @@ namespace DonkeyKong
             Debug.WriteLine(points);
             OnScoreChanged?.Invoke();
         }
+        public static void ResetScore()
+        {
+            //PlayerScore = 0;
+        }
     }
 }
