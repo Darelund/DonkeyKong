@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,11 @@ namespace DonkeyKong
         public override void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.DrawString(_font, _text, Position, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
+        }
+        public void Draw(SpriteBatch spriteBatch, Vector2? offset = null)
+        {
+            var drawPos = offset ?? Position;
+            spriteBatch.DrawString(_font, _text, drawPos, CurrentColor, Rotation, Origin, Size, SpriteEffects.None, LayerDepth);
         }
         public override void Update(GameTime gameTime)
         {

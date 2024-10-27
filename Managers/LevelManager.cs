@@ -23,8 +23,8 @@ namespace DonkeyKong
         //If I made this into a state machine and then had a class for each level
 
        public static List<Level> Levels = new List<Level>();
-        public static Level GetCurrentLevel => Levels[_levelIndex];
-        private static int _levelIndex = -1;
+        public static Level GetCurrentLevel => Levels[LevelIndex];
+        public static int LevelIndex { get; private set; } = -1;
 
         public static void CreateLevels()
         {
@@ -104,7 +104,7 @@ namespace DonkeyKong
         private static void ActivateLevel(int levelIndex, LevelConfig levelConfig, bool runLevel)
         {
             // Deactivate or unload the previous level's objects if needed
-            if (_levelIndex >= 0 && GetCurrentLevel != null)
+            if (LevelIndex >= 0 && GetCurrentLevel != null)
             {
                 GetCurrentLevel.UnloadLevel();
                 //GetCurrentLevel.UnloadGameObjects();
@@ -112,16 +112,16 @@ namespace DonkeyKong
             }
 
             // Get the new level
-            _levelIndex = levelIndex;
+            LevelIndex = levelIndex;
             //Debug.WriteLine(_levelIndex);
 
-            if (_levelIndex < Levels.Count)
+            if (LevelIndex < Levels.Count)
             {
                 // Create the game objects and tiles for the new level
                 GetCurrentLevel.CreateLevel(levelConfig.LevelFile, levelConfig.StartPosition, levelConfig.TileData);
                 GetCurrentLevel.CreateGameObjects(levelConfig.GameObjectsFile);
                 int showOffLevel = 0;
-                if(_levelIndex != showOffLevel)
+                if(LevelIndex != showOffLevel)
                 {
                     GetCurrentLevel.CreateGameObjects(GameFiles.Character.CHARACTER);
                 }
@@ -142,7 +142,7 @@ namespace DonkeyKong
         }
         public static void NextLevel(bool runLevel)
         {
-            int newLevel = _levelIndex + 1;
+            int newLevel = LevelIndex + 1;
             GetLevel(newLevel, runLevel);
         }
         private static void GetLevel(int newLevel, bool runLevel)

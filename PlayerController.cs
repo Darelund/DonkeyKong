@@ -14,7 +14,7 @@ namespace DonkeyKong
         private Vector2 destination;
         public Vector2 direction { get; private set; }
         private float _sprintSpeed = 50;
-        private float fallSpeed = 50f;
+        private float _fallSpeed = 50f;
         protected override float Speed
         {
             get
@@ -25,7 +25,7 @@ namespace DonkeyKong
                 }
                 else if (!LevelManager.GetCurrentLevel.IsGrounded(Position) && !LevelManager.GetCurrentLevel.IsTileLadder(Position))
                 {
-                    return normalSpeed + fallSpeed;
+                    return normalSpeed + _fallSpeed;
                 }
                 else
                 {
@@ -213,6 +213,7 @@ namespace DonkeyKong
             if(_health <= 0)
             {
                 _isActive = false;
+                HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
                 AudioManager.PlaySoundEffect("DeathSound");
             }
             Debug.WriteLine(_health);

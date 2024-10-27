@@ -11,7 +11,7 @@ namespace DonkeyKong
     public class CharacterSelector
     {
         private static List<UIElement> _SelectCharacterElements;
-
+        private static TextInputManager _textInputManager;
         static CharacterSelector()
         {
             _SelectCharacterElements = new List<UIElement>
@@ -22,26 +22,45 @@ namespace DonkeyKong
                 new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 100, GameManager.Window.ClientBounds.Height / 2), Vector2.Zero, 1, SelectCharacter, "Select", 1f, 0.1f),
                 new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2 + 100, GameManager.Window.ClientBounds.Height / 2), Vector2.Zero, 2, SelectCharacter, "Select", 1f, 0.1f)
             };
-
+            _textInputManager = new TextInputManager("Enter your name", new Vector2(GameManager.Window.ClientBounds.Width / 2 - 150, GameManager.Window.ClientBounds.Height / 2 - 100), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 150, GameManager.Window.ClientBounds.Height / 2));
         }
         public static void Update(GameTime gameTime)
         {
-            foreach (UIElement element in _SelectCharacterElements)
+            if(!_textInputManager.IsInputComplete)
             {
-                element.Update(gameTime);
+                _textInputManager.Update();
+            }
+            else
+            {
+                foreach (UIElement element in _SelectCharacterElements)
+                {
+                    element.Update(gameTime);
+                }
+
             }
         }
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (UIElement element in _SelectCharacterElements)
+            if (!_textInputManager.IsInputComplete)
             {
-                element.Draw(spriteBatch);
+                _textInputManager.Draw(spriteBatch);
+            }
+            else
+            {
+                foreach (UIElement element in _SelectCharacterElements)
+                {
+                    element.Draw(spriteBatch);
+                }
             }
         }
 
         public static void SelectCharacter(object selectedOption)
         {
-            if(selectedOption is int selection)
+            int startScore = 0;
+            int startLevel = 0;
+            HighScore.UpdateScore(_textInputManager.InputText, startScore, startLevel);
+            GameManager.Name = _textInputManager.InputText;
+            if (selectedOption is int selection)
             {
                 switch (selection)
                 {

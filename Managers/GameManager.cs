@@ -32,7 +32,7 @@ namespace DonkeyKong
         public static GameWindow Window;
         public static ContentManager Content;
         public static GraphicsDevice Device;
-
+        public static string Name { get; set; }
         private static SceneSwitcher _sceneSwitcher;
 
 
@@ -52,6 +52,7 @@ namespace DonkeyKong
             AudioManager.LoadContent();
             LevelManager.CreateLevels();
             LevelManager.SpecificLevel(0, false);
+            HighScore.LoadScores();
             //Need to somehow hook this up onto a button, but I don't want to force all buttons to use it I want it to be modular so maybe an event that I can hook up for each button?
         }
 
@@ -64,25 +65,9 @@ namespace DonkeyKong
                     InputManager.Update();
                     LevelManager.Update(gameTime);
                     UIManager.Update(gameTime);
-                    //LevelManager.NextLevel(true);
                     foreach (var gameObject in GameObjects)
                     {
-                        //  if(gameObject.IsActive())
                         gameObject.Update(gameTime);
-
-                        //if (gameObject is PlayerController)
-                        //{
-                        //    var player = gameObject as PlayerController;
-                        //    if (player.Health <= 0)
-                        //    {
-                        //        OnGameOver?.Invoke(Color.Black, GameState.GameOver);
-                        //    }
-
-                        //    if (LevelManager.GetCurrentLevel.LevelCompleted)
-                        //    {
-                        //        OnWin?.Invoke(Color.Green, GameState.Victory);
-                        //    }
-                        //}
                     }
                     break;
                 case GameState.SelectCharacter:
@@ -95,7 +80,6 @@ namespace DonkeyKong
                     LevelManager.Update(gameTime);
                     foreach (var gameObject in GameObjects)
                     {
-                      //  if(gameObject.IsActive())
                         gameObject.Update(gameTime);
 
                         if (gameObject is PlayerController)
@@ -148,24 +132,7 @@ namespace DonkeyKong
                     UIManager.Draw(spriteBatch);
                     foreach (var gameObject in GameObjects)
                     {
-                        //bool isFlashing = false;
-
-                        //foreach (var effect in _flashEffects)
-                        //{
-                        //    if (effect.IsActiveOnObject(gameObject))
-                        //    {
-                        //        effect.ApplyDrawEffect(spriteBatch);
-                        //        isFlashing = true;
-                        //        break;
-                        //    }
-                        //}
                         gameObject.Draw(spriteBatch);
-
-                        //if (isFlashing)
-                        //{
-                        //    spriteBatch.End();
-                        //    spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
-                        //}
                     }
                     break;
                 case GameState.SelectCharacter:
@@ -202,6 +169,7 @@ namespace DonkeyKong
                     break;
                 case GameState.GameOver:
                     UIManager.Draw(spriteBatch);
+                    HighScore.DisplayScores(spriteBatch);
                     break;
                 case GameState.Victory:
                     UIManager.Draw(spriteBatch);

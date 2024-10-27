@@ -13,6 +13,8 @@ namespace DonkeyKong
         private static KeyboardState keyboardState, previousKeyboardState = Keyboard.GetState();
         private static MouseState mouseState, previousMouseState = Mouse.GetState();
 
+        public static KeyboardState CurrentKeyboard => keyboardState;
+        public static KeyboardState PreviousKeyboard => previousKeyboardState;
         public static void Update()
         {
             previousMouseState = mouseState;
