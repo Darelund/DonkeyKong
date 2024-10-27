@@ -128,6 +128,30 @@
 /processorParam:TextureFormat=Color
 /build:Textures/Consumable.png
 
+#begin Textures/DK_mod_mario_transparent.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/DK_mod_mario_transparent.png
+
+#begin Textures/DK_mod_mario.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Textures/DK_mod_mario.png
+
 #begin Textures/DonkeyKongMainMenu1_transparent.png
 /importer:TextureImporter
 /processor:TextureProcessor

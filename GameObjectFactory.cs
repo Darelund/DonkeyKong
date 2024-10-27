@@ -10,9 +10,11 @@ namespace DonkeyKong
 {
     public class GameObjectFactory
     {
+        //SOOOOOOOOOOO MUCH repeated/duplicate CODE
+        //This class is a mess, and I know that there is so much I need to change. Like all of these objects are almost the same and I parse them in almost the same way. So I should be able to
+        //Add much of this together, but I am to lazy so here it is
         public GameObject CreateGameObjectFromType(string objectType, List<string> objectData)
         {
-            // Create objects based on their type
             switch (objectType)
             {
                 case "EnemyController":
@@ -22,6 +24,9 @@ namespace DonkeyKong
                     return CreatePlayerController(objectData);
                 case "PickUp":
                     return CreatePickUp(objectData);
+                case "DonkeyKong":
+                    Debug.WriteLine("Donkey Kong is created(Factory)");
+                    return CreateDonkeyKong(objectData);
                 default:
                     Debug.WriteLine("Unknown object type: " + objectType);
                     return null;
@@ -29,11 +34,8 @@ namespace DonkeyKong
         }
         private EnemyController CreateEnemyController(List<string> data)
         {
-            // Parse the data and initialize the object
-            // Assume data contains all the needed parameters in the expected order
 
-            // 1. Parse general properties (like sprite, position, color, etc.)
-            string sprite = data[0];  // Texture name or path
+            string sprite = data[0];  // Texture
             string[] positionParts = data[1].Split(',');
             int xPos = int.Parse(positionParts[0].Trim());
             int yPos = int.Parse(positionParts[1].Trim());
@@ -46,21 +48,20 @@ namespace DonkeyKong
                 "red" => Color.Red,
                 "blue" => Color.Blue,
                 "green" => Color.Green,
-                _ => Color.White // Default color if not found
+                _ => Color.White
             };
             
-            float rotation = float.Parse(data[3].Trim());  // Rotation
-            float size = float.Parse(data[4].Trim());      // Size/scale
-            float layerDepth = float.Parse(data[5].Trim());  // Layer depth
+            float rotation = float.Parse(data[3].Trim());
+            float size = float.Parse(data[4].Trim());
+            float layerDepth = float.Parse(data[5].Trim());
 
             string[] originParts = data[6].Split(',');
             xPos = int.Parse(originParts[0].Trim());
             yPos = int.Parse(originParts[1].Trim());
             Vector2 origin = new Vector2(xPos, yPos);
-            // 2. Parse animation clips (loop through the animation data in the input list)
+
             var animationClips = new Dictionary<string, AnimationClip>();
 
-            // Example: WalkAnimation:5,86,18,18|23,86,18,18|41,86,18,18;4f
             for (int i = 7; i < data.Count; i++)
             {
                 string animationData = data[i];
@@ -92,22 +93,20 @@ namespace DonkeyKong
                     animationClips[animationName] = new AnimationClip(frames, animationSpeed);
                 }
             }
-            // 3. Create and return the EnemyController object with the parsed data
             return new EnemyController(
-                ResourceManager.GetTexture(sprite),  // Texture loading handled elsewhere
+                ResourceManager.GetTexture(sprite),
                 position,
                 color,
                 rotation,
                 size,
                 layerDepth,
                 origin,
-                animationClips  // Add the parsed animation clips
+                animationClips
             );
         }
         private PlayerController CreatePlayerController(List<string> data)
         {
-            // 1. Parse general properties (like sprite, position, color, etc.)
-            string sprite = data[0];  // Texture name or path
+            string sprite = data[0];
             string[] positionParts = data[1].Split(',');
             float xPos = float.Parse(positionParts[0].Trim());
             float yPos = float.Parse(positionParts[1].Trim());
@@ -121,7 +120,7 @@ namespace DonkeyKong
                 "red" => Color.Red,
                 "blue" => Color.Blue,
                 "green" => Color.Green,
-                _ => Color.White // Default color if not found
+                _ => Color.White
             };
 
             float rotation = float.Parse(data[4].Trim());
@@ -133,7 +132,6 @@ namespace DonkeyKong
             yPos = float.Parse(originParts[1].Trim());
             Vector2 origin = new Vector2(xPos, yPos);
 
-            // 2. Parse animation clips
             var animationClips = new Dictionary<string, AnimationClip>();
             for (int i = 8; i < data.Count; i++)
             {
@@ -143,7 +141,7 @@ namespace DonkeyKong
                     string[] animationParts = animationData.Split(':');
                     string animationName = animationParts[0].Trim();
 
-                    string[] rectsAndSpeed = animationParts[1].Split(';'); // Outside the bounds of the array
+                    string[] rectsAndSpeed = animationParts[1].Split(';');
                     string[] rectStrings = rectsAndSpeed[0].Split('|');
 
                     Rectangle[] frames = rectStrings.Select(rectStr =>
@@ -163,9 +161,8 @@ namespace DonkeyKong
                 }
             }
 
-            // 3. Create and return the PlayerController object with the parsed data
             return new PlayerController(
-                ResourceManager.GetTexture(sprite),  // Texture loading
+                ResourceManager.GetTexture(sprite),
                 position,
                 speed,
                 color,
@@ -173,15 +170,14 @@ namespace DonkeyKong
                 size,
                 layerDepth,
                 origin,
-                animationClips  // Pass the parsed animations
+                animationClips
             );
         }
 
 
         private Item CreatePickUp(List<string> data)
         {
-            // 1. Parse general properties (like sprite, position, color, etc.)
-            string sprite = data[0];  // Texture name or path
+            string sprite = data[0];
             string[] positionParts = data[1].Split(',');
             float xPos = float.Parse(positionParts[0].Trim());
             float yPos = float.Parse(positionParts[1].Trim());
@@ -195,7 +191,7 @@ namespace DonkeyKong
                 "red" => Color.Red,
                 "blue" => Color.Blue,
                 "green" => Color.Green,
-                _ => Color.White // Default color if not found
+                _ => Color.White
             };
 
             float rotation = float.Parse(data[4].Trim());
@@ -207,7 +203,6 @@ namespace DonkeyKong
             yPos = float.Parse(originParts[1].Trim());
             Vector2 origin = new Vector2(xPos, yPos);
 
-            // 2. Parse animation clips
             int numberOfAnimatedClips = 0;
             for (int i = 8; i < data.Count; i++)
             {
@@ -230,7 +225,7 @@ namespace DonkeyKong
                     string[] animationParts = animationData.Split(':');
                     string animationName = animationParts[0].Trim();
 
-                    string[] rectsAndSpeed = animationParts[1].Split(';'); // Outside the bounds of the array
+                    string[] rectsAndSpeed = animationParts[1].Split(';');
                     string[] rectStrings = rectsAndSpeed[0].Split('|');
 
                     Rectangle[] frames = rectStrings.Select(rectStr =>
@@ -261,9 +256,8 @@ namespace DonkeyKong
             int minScore = int.Parse(data[10].Trim());
             int maxScore = int.Parse(data[11].Trim());
 
-            // 3. Create and return the PlayerController object with the parsed data
             return new Item(
-                ResourceManager.GetTexture(sprite),  // Texture loading
+                ResourceManager.GetTexture(sprite),
                 position,
                 speed,
                 color,
@@ -271,10 +265,91 @@ namespace DonkeyKong
                 size,
                 layerDepth,
                 origin,
-                animationClips,  // Pass the parsed animations
+                animationClips,
                 type,
                 minScore,
                 maxScore
+            );
+        }
+        private DonkeyKong CreateDonkeyKong(List<string> data)
+        {
+            string sprite = data[0];
+            string[] positionParts = data[1].Split(',');
+            float xPos = float.Parse(positionParts[0].Trim());
+            float yPos = float.Parse(positionParts[1].Trim());
+            Vector2 position = new Vector2(xPos, yPos);
+
+            float speed = float.Parse(data[2]);
+            string colorName = data[3].Trim();
+            Color color = colorName switch
+            {
+                "white" => Color.White,
+                "red" => Color.Red,
+                "blue" => Color.Blue,
+                "green" => Color.Green,
+                _ => Color.White
+            };
+
+            float rotation = float.Parse(data[4].Trim());
+            float size = float.Parse(data[5].Trim());
+            float layerDepth = float.Parse(data[6].Trim());
+
+            string[] originParts = data[7].Split(',');
+            xPos = float.Parse(originParts[0].Trim());
+            yPos = float.Parse(originParts[1].Trim());
+            Vector2 origin = new Vector2(xPos, yPos);
+
+            int numberOfAnimatedClips = 0;
+            for (int i = 8; i < data.Count; i++)
+            {
+                if (data[i].Contains(':'))
+                {
+                    numberOfAnimatedClips++;
+                    Debug.WriteLine(numberOfAnimatedClips);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            var animationClips = new Dictionary<string, AnimationClip>();
+            for (int i = 8; i < 8 + numberOfAnimatedClips; i++)
+            {
+                string animationData = data[i];
+                if (!string.IsNullOrWhiteSpace(animationData))
+                {
+                    string[] animationParts = animationData.Split(':');
+                    string animationName = animationParts[0].Trim();
+
+                    string[] rectsAndSpeed = animationParts[1].Split(';');
+                    string[] rectStrings = rectsAndSpeed[0].Split('|');
+
+                    Rectangle[] frames = rectStrings.Select(rectStr =>
+                    {
+                        string[] rectComponents = rectStr.Split(',');
+                        int rectX = int.Parse(rectComponents[0].Trim());
+                        int rectY = int.Parse(rectComponents[1].Trim());
+                        int rectWidth = int.Parse(rectComponents[2].Trim());
+                        int rectHeight = int.Parse(rectComponents[3].Trim());
+
+                        return new Rectangle(rectX, rectY, rectWidth, rectHeight);
+                    }).ToArray();
+
+                    float animationSpeed = float.Parse(rectsAndSpeed[1].Trim());
+
+                    animationClips[animationName] = new AnimationClip(frames, animationSpeed);
+                }
+            }
+            return new DonkeyKong(
+                ResourceManager.GetTexture(sprite),
+                position,
+                speed,
+                color,
+                rotation,
+                size,
+                layerDepth,
+                origin,
+                animationClips
             );
         }
     }
