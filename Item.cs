@@ -30,9 +30,8 @@ namespace DonkeyKong
         private int _minScore;
         private int _maxScore;
 
-        public event Action OnExpired;
+        public event Action<Item> OnExpired;
 
-        private PlayerController _playerInventory;
         public Item(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips, ItemType type, int minScore, int maxScore) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
             Type = type;
@@ -49,8 +48,8 @@ namespace DonkeyKong
                 Random random = new Random();
                 var randomScore = random.Next(_minScore, _maxScore);
 
-                _playerInventory = (PlayerController)gameObject;
-                _playerInventory.Inventory.Items.Add(this);
+                PlayerController playerInventory = (PlayerController)gameObject;
+                playerInventory.Inventory.Items.Add(this);
                 state = ItemState.usingState;
                 ScoreManager.UpdateScore(randomScore);
                 int resetRotation = 0;
@@ -67,12 +66,26 @@ namespace DonkeyKong
                 _remainingTimeLeft -= (float)gameTime.ElapsedGameTime.TotalSeconds;
                 if (_remainingTimeLeft <= 0)
                 {
-                    _playerInventory.Inventory.Items.Remove(this);
                     Debug.WriteLine("Item expired");
-                    OnExpired?.Invoke();
+                    OnExpired?.Invoke(this);
                 }
+                ItemEffect();
             }
             base.Update(gameTime);
+        }
+        //I should break this up into different classes so I have Weapon, Consumable and Wearable classes that derive/inherit from/this class but yeah Will do if I have time(It feels like a lot of work)
+        private void ItemEffect()
+        {
+            switch (Type)
+            {
+                case ItemType.Wearable:
+                    break;
+                case ItemType.Consumable:
+                    Rotation = -1.57f;
+                    break;
+                case ItemType.Weapon:
+                    break;
+            }
         }
     }
 }

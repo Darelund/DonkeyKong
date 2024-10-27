@@ -10,7 +10,7 @@ namespace DonkeyKong
 {
     public abstract class UIElement
     {
-        protected Vector2 Position;
+        public Vector2 Position { get; set; }
         protected Color CurrentColor;
         protected float Size;
         protected float LayerDepth;

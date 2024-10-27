@@ -11,20 +11,13 @@ namespace DonkeyKong
 {
     public class ScoreManager
     {
-        private static int _playerScore = 0;
-        public static UIText text = new UIText(ResourceManager.GetSpriteFont("GameText"), $"Points: {_playerScore:000.0000}", new Vector2(350, 0), Color.White, 0.8f, Vector2.Zero, 0.9f);
+        public static int PlayerScore{ get; private set; } = 0;
+        public static event Action OnScoreChanged;
         public static void UpdateScore(int points)
         {
-            _playerScore += points;
+            PlayerScore += points;
             Debug.WriteLine(points);
-            text.UpdateText($"Points: {_playerScore}");
-        }
-        public static void Draw(SpriteBatch spriteBatch)
-        {
-            text.Draw(spriteBatch);
-        }
-        public void Update(GameTime gameTime)
-        {
+            OnScoreChanged?.Invoke();
         }
     }
 }

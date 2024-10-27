@@ -15,6 +15,7 @@ namespace DonkeyKong
         public enum GameState
         {
             MainMenu,
+            SelectCharacter,
             Playing,
             Pause,
             GameOver,
@@ -69,20 +70,24 @@ namespace DonkeyKong
                         //  if(gameObject.IsActive())
                         gameObject.Update(gameTime);
 
-                        if (gameObject is PlayerController)
-                        {
-                            var player = gameObject as PlayerController;
-                            if (player.Health <= 0)
-                            {
-                                OnGameOver?.Invoke(Color.Black, GameState.GameOver);
-                            }
+                        //if (gameObject is PlayerController)
+                        //{
+                        //    var player = gameObject as PlayerController;
+                        //    if (player.Health <= 0)
+                        //    {
+                        //        OnGameOver?.Invoke(Color.Black, GameState.GameOver);
+                        //    }
 
-                            if (LevelManager.GetCurrentLevel.LevelCompleted)
-                            {
-                                OnWin?.Invoke(Color.Green, GameState.Victory);
-                            }
-                        }
+                        //    if (LevelManager.GetCurrentLevel.LevelCompleted)
+                        //    {
+                        //        OnWin?.Invoke(Color.Green, GameState.Victory);
+                        //    }
+                        //}
                     }
+                    break;
+                case GameState.SelectCharacter:
+                    InputManager.Update();
+                    CharacterSelector.Update(gameTime);
                     break;
                 case GameState.Playing:
                     InputManager.Update();
@@ -143,31 +148,33 @@ namespace DonkeyKong
                     UIManager.Draw(spriteBatch);
                     foreach (var gameObject in GameObjects)
                     {
-                        bool isFlashing = false;
+                        //bool isFlashing = false;
 
-                        foreach (var effect in _flashEffects)
-                        {
-                            if (effect.IsActiveOnObject(gameObject))
-                            {
-                                effect.ApplyDrawEffect(spriteBatch);
-                                isFlashing = true;
-                                break;
-                            }
-                        }
+                        //foreach (var effect in _flashEffects)
+                        //{
+                        //    if (effect.IsActiveOnObject(gameObject))
+                        //    {
+                        //        effect.ApplyDrawEffect(spriteBatch);
+                        //        isFlashing = true;
+                        //        break;
+                        //    }
+                        //}
                         gameObject.Draw(spriteBatch);
 
-                        if (isFlashing)
-                        {
-                            spriteBatch.End();
-                            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
-                        }
+                        //if (isFlashing)
+                        //{
+                        //    spriteBatch.End();
+                        //    spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointWrap);
+                        //}
                     }
+                    break;
+                case GameState.SelectCharacter:
+                    CharacterSelector.Draw(spriteBatch);
                     break;
                 case GameState.Playing:
                    
                     LevelManager.Draw(spriteBatch);
                     UIManager.Draw(spriteBatch);
-                    ScoreManager.Draw(spriteBatch);
 
                     foreach (var gameObject in GameObjects)
                     {
@@ -220,11 +227,13 @@ namespace DonkeyKong
         {
             _flashEffects.Add(flashEffect);
         }
-        public static void ChangeGameState(GameState newGameState )
+        public static void ChangeGameState(object passedState)
         {
-            if(newGameState == CurrentGameState) return;
-            CurrentGameState = newGameState;
+            if (passedState is GameState newState)
+            {
+                if (newState == CurrentGameState) return;
+                CurrentGameState = newState;
+            }
         }
-       
     }
 }

@@ -12,7 +12,7 @@ namespace DonkeyKong
     public class PlayerController : AnimatedGameObject
     {
         private Vector2 destination;
-        private Vector2 direction;
+        public Vector2 direction { get; private set; }
         private float _sprintSpeed = 50;
         private float fallSpeed = 50f;
         protected override float Speed
@@ -43,33 +43,10 @@ namespace DonkeyKong
         private bool _attacking = false;
         //private bool _jumping = false;
 
-        public Inventory Inventory { get; set; } = new Inventory();
+        public Inventory Inventory { get; set; }
 
 
-        private Vector2 WearPosition
-        {
-            //I might need to adjust the box to make the collision more fun for the player
-            get
-            {
-                return new Vector2((int)Position.X, (int)Position.Y - (int)Origin.Y * (int)Size);
-            }
-        }
-        private Vector2 ConsumePosition
-        {
-            //I might need to adjust the box to make the collision more fun for the player
-            get
-            {
-                return new Vector2((int)Position.X, (int)Position.Y - (int)Origin.Y * (int)Size);
-            }
-        }
-        private Vector2 WeaponPosition
-        {
-            //I might need to adjust the box to make the collision more fun for the player
-            get
-            {
-                return new Vector2((int)Position.X, (int)Position.Y - (int)Origin.Y * (int)Size);
-            }
-        }
+      
 
         private List<Vector2> positions;
         private static PlayerController _instance;
@@ -87,10 +64,11 @@ namespace DonkeyKong
         {
             _instance = this;
             Debug.WriteLine("Creating one player");
+            Inventory = new Inventory(this);
         }
         public override void Update(GameTime gameTime)
         {
-            Inventory.Update(gameTime, WearPosition);
+            Inventory.Update(gameTime);
 
 
 

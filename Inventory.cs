@@ -17,51 +17,27 @@ namespace DonkeyKong
     {
         public List<Item> Items { get; set; }
         private Dictionary<int, Slot> Slots;
-        public Inventory()
+        private PlayerController _player;
+        public Inventory(PlayerController player)
         {
             Items = new List<Item>();
             Slots = new Dictionary<int, Slot>()
             {
-                { 1, new Slot(ItemType.Wearable) },
-                { 2, new Slot(ItemType.Consumable) },
-                { 3, new Slot(ItemType.Weapon) },
+                { 1, new Slot(ItemType.Wearable, this) },
+                { 2, new Slot(ItemType.Consumable, this) },
+                { 3, new Slot(ItemType.Weapon, this) },
             };
+            _player = player;
         }
 
-        public void Update(GameTime gameTime, Vector2 pos)
+        public void Update(GameTime gameTime)
         {
-            foreach (var slot in Slots)
+            for (int i = 0; i < Items.Count; i++)
             {
-                switch (slot.Value.Type)
-                {
-                    case ItemType.Wearable:
-                        slot.Value.Position = pos;
-                     //   Debug.WriteLine(($"Slot pos: {slot.Value.Position}"));
-                        break;
-                    case ItemType.Consumable:
-                        slot.Value.Position = pos;
-                        break;
-                    case ItemType.Weapon:
-                        slot.Value.Position = pos;
-                        break;
-                }
-              //  slot.Value.ItemSlot.Update(gameTime);
+                Items[i].currentDirection = _player.currentDirection;
+                Items[i].Position = GetSlotPosition(Items[i].Type);
+                Items[i].Update(gameTime);
             }
-            for (var i = 1; i <= Slots.Keys.Count; i++)
-            {
-               if(Slots.TryGetValue(i, out Slot slot))
-                {
-                    if(slot.ItemSlot != null)
-                    {
-                        slot.ItemSlot.Position = slot.Position;
-                        slot.ItemSlot.Update(gameTime);
-                       // Debug.WriteLine(($"Item pos: {slot.ItemSlot.Position}"));
-                    }
-                }
-
-            }
-
-
             if (InputManager.WearButton())
             {
                 foreach (var item in Items)
@@ -69,7 +45,7 @@ namespace DonkeyKong
                     if (item.Type == ItemType.Wearable && Slots[1].ItemSlot == null)
                     {
                         Slots[1].ItemSlot = item;
-                        Slots[1].ItemSlot.Position = Slots[1].Position;
+                       // Slots[1].ItemSlot.Position = Slots[1].Position;
                         item.OnExpired += Slots[1].ClearSlot;
                         Debug.WriteLine($"Trying to wear: {item.Type}");
                     }
@@ -114,20 +90,33 @@ namespace DonkeyKong
                 }
             }
         }
-
+        private Vector2 GetSlotPosition(ItemType type)
+        {
+          
+            return type switch
+            {
+                ItemType.Wearable => new Vector2((int)_player.Position.X, (int)_player.Position.Y - (int)_player.Origin.Y * (int)_player.Size),
+                ItemType.Consumable => new Vector2(((int)_player.Position.X + 25), (int)_player.Position.Y - (int)_player.Origin.Y * (int)_player.Size / 2 + 10),
+                ItemType.Weapon => Vector2.Zero,
+                _ => new Vector2((int)_player.Position.X, (int)_player.Position.Y)
+            };
+        }
         public class Slot
         {
             public Item ItemSlot;
             public ItemType Type { get; }
-            public Vector2 Position { get; set; }
+           // public Vector2 Position { get; set; }
+            private Inventory _inventory;
 
-            public Slot(ItemType type)
+            public Slot(ItemType type, Inventory inventory)
             {
                 Type = type;
+                _inventory = inventory;
             }
-            public void ClearSlot()
+            public void ClearSlot(Item item)
             {
                 ItemSlot = null;
+                _inventory.Items.Remove(item);
             }
         }
     }

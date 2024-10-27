@@ -12,11 +12,12 @@ namespace DonkeyKong
     {
         private SpriteFont _font;
         public string _text;
-
+        int centerOffset = 2;
         public UIText(SpriteFont font, string text, Vector2 position, Color color, float size, Vector2 origin, float layerDepth = 0, float rotation = 0) : base(position, color, size, origin, layerDepth, rotation)
         {
             _font = font;
             _text = text;
+            Origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
         }
         public override void Draw(SpriteBatch spriteBatch)
         {

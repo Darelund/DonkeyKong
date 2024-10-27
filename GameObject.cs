@@ -15,10 +15,10 @@ namespace DonkeyKong
         protected float normalSpeed;
         protected virtual float Speed { get => normalSpeed; set => normalSpeed = value; }
         protected Color Color;
-        protected float Rotation;
-        protected float Size;
+        public float Rotation { get; protected set; }
+        public float Size { get; protected set; }
         protected float LayerDepth;
-        protected Vector2 Origin;
+        public Vector2 Origin { get; protected set; }
         protected bool _isActive = true;
 
         public abstract Rectangle Collision { get; }

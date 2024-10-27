@@ -113,13 +113,18 @@ namespace DonkeyKong
 
             // Get the new level
             _levelIndex = levelIndex;
-
+            //Debug.WriteLine(_levelIndex);
 
             if (_levelIndex < Levels.Count)
             {
                 // Create the game objects and tiles for the new level
                 GetCurrentLevel.CreateLevel(levelConfig.LevelFile, levelConfig.StartPosition, levelConfig.TileData);
                 GetCurrentLevel.CreateGameObjects(levelConfig.GameObjectsFile);
+                int showOffLevel = 0;
+                if(_levelIndex != showOffLevel)
+                {
+                    GetCurrentLevel.CreateGameObjects(GameFiles.Character.CHARACTER);
+                }
                 GetCurrentLevel.SetTarget();
                 GameManager.GameObjects.AddRange(GetCurrentLevel.GameObjectsInLevel);
 

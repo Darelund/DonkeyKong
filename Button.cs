@@ -26,7 +26,10 @@ namespace DonkeyKong
         private float _pressedDuration = 0.2f;
         int centerOffset = 2;
         //Jag borde ha ändrat detta till ett event
-        private GameManager.GameState _gameState;
+        //private GameManager.GameState _gameState;
+
+        public event Action<object> OnPressed;
+        private object _clickParameter;
 
         public Rectangle Collision
         {
@@ -39,7 +42,7 @@ namespace DonkeyKong
         }
 
 
-        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, GameManager.GameState gameState, Vector2 origin, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, origin, layerDepth, rotation)
+        public Button(SpriteFont font, (Color defaultColor, Color hoverColor, Color pressedColor) colors, Vector2 pos, Vector2 origin, object clickParameter, Action<object> onPressed = null, string text = "PlaceHolder", float size = 1f, float layerDepth = 0, float rotation = 0) : base(pos, colors.defaultColor, size, origin, layerDepth, rotation)
         {
             _font = font;
             _colors = colors;
@@ -47,7 +50,9 @@ namespace DonkeyKong
             _text = text;
             Size = size;
             Origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
-            _gameState = gameState;
+           // _gameState = gameState;
+           OnPressed = onPressed;
+            _clickParameter = clickParameter;
         }
 
 
@@ -60,7 +65,8 @@ namespace DonkeyKong
                 if (_pressedTimer <= 0)
                 {
                     _pressedTimer = 0; 
-                    GameManager.ChangeGameState(_gameState);
+                   // GameManager.ChangeGameState(_gameState);
+                   OnPressed?.Invoke(_clickParameter);
                     _hasBeenPressed = false;
                 }
             }

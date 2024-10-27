@@ -14,7 +14,7 @@ namespace DonkeyKong
         protected Dictionary<string, AnimationClip> _animationClips;
         protected AnimationClip _currentClip;
         private float _deltaTime;
-        protected SpriteEffects currentDirection;
+        public SpriteEffects currentDirection { get; set; }
         public override Rectangle Collision
         {
             //I might need to adjust the box to make the collision more fun for the player

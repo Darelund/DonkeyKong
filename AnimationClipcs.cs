@@ -45,6 +45,10 @@ namespace DonkeyKong
             }
             return false;
         }
+        //public bool HaveChangedAnimationRect()
+        //{
+
+        //}
         public void Mirror()
         {
           //  SpriteEffects.

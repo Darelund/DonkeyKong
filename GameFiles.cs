@@ -14,11 +14,11 @@ namespace DonkeyKong
         public static class Levels
         {
             public static readonly LevelConfig ShowOffLevel = new LevelConfig("Content/ShowOffLevel.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.SHOWOFFLEVEL), "Content/GameObjectsShowOffLevel.txt");
-            public static readonly LevelConfig Level1 = new LevelConfig("Content/Level1.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REACHTARGETLEVELS), "Content/GameObjectsLevel1.txt");
-            public static readonly LevelConfig Level2 = new LevelConfig("Content/Level2.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REACHTARGETLEVELS), "Content/GameObjectsLevel2.txt");
-            public static readonly LevelConfig Level3 = new LevelConfig("Content/Level3.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel3.txt");
-            public static readonly LevelConfig Level4 = new LevelConfig("Content/Level4.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel4.txt");
-            public static readonly LevelConfig Level5 = new LevelConfig("Content/Level5.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel5.txt");
+            public static readonly LevelConfig Level1 = new LevelConfig("Content/Level1Map.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REACHTARGETLEVELS), "Content/GameObjectsLevel1.txt");
+            public static readonly LevelConfig Level2 = new LevelConfig("Content/Level2Map.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REACHTARGETLEVELS), "Content/GameObjectsLevel2.txt");
+            public static readonly LevelConfig Level3 = new LevelConfig("Content/Level3Map.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel3.txt");
+            public static readonly LevelConfig Level4 = new LevelConfig("Content/Level4Map.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel4.txt");
+            public static readonly LevelConfig Level5 = new LevelConfig("Content/Level5Map.txt", new Vector2(120, 120), Level.ReadTileDataFromFile(LevelType.REMOVETARGETLEVELS), "Content/GameObjectsLevel5.txt");
         }
         public static class LevelType
         {
@@ -26,6 +26,11 @@ namespace DonkeyKong
             public const string SHOWOFFLEVEL = "Content/ShowOffLevelConfig.txt";
             public const string REACHTARGETLEVELS = "Content/ReachTargetLevelConfig.txt";
             public const string REMOVETARGETLEVELS = "Content/RemoveTargetLevelConfig.txt";
+        }
+        public static class Character
+        {
+            //Create Level tiles
+            public static string CHARACTER = "Content/MarioCharacter.txt";
         }
         public static class Config
         {
