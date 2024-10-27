@@ -1,14 +1,11 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SharpDX.XAudio2;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Security.Policy;
 using System.Text;
-using System.Threading.Tasks;
 using static DonkeyKong.Inventory;
 
 namespace DonkeyKong
@@ -32,47 +29,61 @@ namespace DonkeyKong
 
         public void Update(GameTime gameTime)
         {
+            //To keep hidden/active items at the right position
             for (int i = 0; i < Items.Count; i++)
             {
                 Items[i].currentDirection = _player.currentDirection;
                 Items[i].Position = GetSlotPosition(Items[i].Type);
-                Items[i].Update(gameTime);
+            }
+            //Display active items
+            for (var i = 1; i <= Slots.Keys.Count; i++)
+            {
+                if (Slots.TryGetValue(i, out Slot slot))
+                {
+                    if (slot.ItemSlot != null)
+                    {
+                        slot.ItemSlot.Update(gameTime);
+                    }
+                }
             }
             if (InputManager.WearButton())
             {
+                int slotOne = 1;
                 foreach (var item in Items)
                 {
-                    if (item.Type == ItemType.Wearable && Slots[1].ItemSlot == null)
+                    if (item.Type == ItemType.Wearable && Slots[slotOne].ItemSlot == null)
                     {
-                        Slots[1].ItemSlot = item;
+                        Slots[slotOne].ItemSlot = item;
                        // Slots[1].ItemSlot.Position = Slots[1].Position;
-                        item.OnExpired += Slots[1].ClearSlot;
+                        item.OnExpired += Slots[slotOne].ClearSlot;
                         Debug.WriteLine($"Trying to wear: {item.Type}");
                     }
                 }
             }
             if (InputManager.ConsumeButton())
             {
+               int slotTwo = 2;
                 foreach (var item in Items)
                 {
-                    if (item.Type == ItemType.Consumable && Slots[2].ItemSlot == null)
+                    if (item.Type == ItemType.Consumable && Slots[slotTwo].ItemSlot == null)
                     {
-                        Slots[2].ItemSlot = item;
-                        item.OnExpired += Slots[2].ClearSlot;
-                    }
+                        Slots[slotTwo].ItemSlot = item;
+                        item.OnExpired += Slots[slotTwo].ClearSlot;
                     Debug.WriteLine($"Type: {item.Type}");
+                    }
                 }
             }
             if (InputManager.UseButton())
             {
+               int slotThree = 3;
                 foreach (var item in Items)
                 {
-                    if (item.Type == ItemType.Weapon && Slots[3].ItemSlot == null)
+                    if (item.Type == ItemType.Weapon && Slots[slotThree].ItemSlot == null)
                     {
-                        Slots[3].ItemSlot = item;
-                        item.OnExpired += Slots[2].ClearSlot;
-                    }
+                        Slots[slotThree].ItemSlot = item;
+                        item.OnExpired += Slots[slotThree].ClearSlot;
                     Debug.WriteLine($"Type: {item.Type}");
+                    }
                 }
             }
         }
@@ -92,11 +103,12 @@ namespace DonkeyKong
         }
         private Vector2 GetSlotPosition(ItemType type)
         {
-          
+            int consumFírstOffset = 2;
+            Vector2 consumableSecondOffset = new Vector2 (25, 10);
             return type switch
             {
                 ItemType.Wearable => new Vector2((int)_player.Position.X, (int)_player.Position.Y - (int)_player.Origin.Y * (int)_player.Size),
-                ItemType.Consumable => new Vector2(((int)_player.Position.X + 25), (int)_player.Position.Y - (int)_player.Origin.Y * (int)_player.Size / 2 + 10),
+                ItemType.Consumable => new Vector2(((int)_player.Position.X + consumableSecondOffset.X), (int)_player.Position.Y - (int)_player.Origin.Y * (int)_player.Size / consumFírstOffset + consumableSecondOffset.Y),
                 ItemType.Weapon => Vector2.Zero,
                 _ => new Vector2((int)_player.Position.X, (int)_player.Position.Y)
             };
@@ -117,6 +129,7 @@ namespace DonkeyKong
             {
                 ItemSlot = null;
                 _inventory.Items.Remove(item);
+                Debug.WriteLine(_inventory.Items.Count);
             }
         }
     }
