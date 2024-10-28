@@ -37,6 +37,7 @@ namespace DonkeyKong
                 _removedTargets++;
                 tile.Name = '_';
                 tile.SwitchTile(ResourceManager.GetTexture("empty"));
+                AudioManager.PlaySoundEffect("HardPop");
             }
         }
         public override bool CheckLevelCompletion()

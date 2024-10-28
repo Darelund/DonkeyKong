@@ -53,7 +53,8 @@ namespace DonkeyKong
                 state = ItemState.usingState;
                 ScoreManager.UpdateScore(randomScore);
                 int resetRotation = 0;
-                Rotation = 0;
+                Rotation = resetRotation;
+                AudioManager.PlaySoundEffect("CoinPickupSound");
             }
             GameManager.GameObjects.Remove(this);
         }
