@@ -43,8 +43,8 @@ namespace DonkeyKong
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
         //private bool _jumping = false;
-        private const string _attackAnim = "Die";
-        private const string _dieAnim = "Attack";
+        private const string _attackAnim = "Attack";
+        private const string _dieAnim = "Die";
         private const string _idleAnim = "Idle";
         private const string _walkAnim = "Walk";
         private const string _sprintAnim = "Sprint";
@@ -217,7 +217,8 @@ namespace DonkeyKong
             {
                 _isActive = false;
                 HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelManager.LevelIndex);
-                AudioManager.PlaySoundEffect("DeathSound");
+                string deathSound = "DeathSound";
+                AudioManager.PlaySoundEffect(deathSound);
                 ScoreManager.ResetScore();
             }
             Debug.WriteLine(_health);
@@ -232,8 +233,11 @@ namespace DonkeyKong
                 {
                     Debug.WriteLine("Taking damage");
                     float volume = 0.5f;
-                    AudioManager.PlaySoundEffect("FlameDamage", volume);
-                    var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), 2f, this, Color.White);
+                    string damageSound = "FlameDamage";
+                    AudioManager.PlaySoundEffect(damageSound, volume);
+                    float flashTime = 2f;
+                    Color flashColor = Color.White;
+                    var flash = new FlashEffect(ResourceManager.GetEffect("FlashEffect"), flashTime, this, flashColor);
                     GameManager.AddFlashEffect(flash);
                     IsImmune = true;
                     flash.OnFlashing += ImmuneHandler;

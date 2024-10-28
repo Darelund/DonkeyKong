@@ -78,6 +78,7 @@ namespace DonkeyKong
         
         private static void ActivateLevel(int levelIndex, LevelConfig levelConfig, bool runLevel)
         {
+            if (levelIndex > Levels.Count) return;
             int showOffLevel = 0;
             if (LevelIndex > showOffLevel)
             {
@@ -112,7 +113,7 @@ namespace DonkeyKong
 
                 if(runLevel)
                 {
-                GameManager.ChangeGameState(GameManager.GameState.Playing);
+                    GameManager.ChangeGameState(GameManager.GameState.Playing);
                     Debug.WriteLine("Activated a level and now running it");
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using SharpDX.Direct2D1.Effects;
 using System;
@@ -20,7 +21,8 @@ namespace DonkeyKong
         private List<Tile> _CopyOffallingPlatforms = new List<Tile>(); // Tiles that will fall
         private const char _FALLINGPLATFORMSName = 'F';
         private bool _platformsFalling = false;
-
+        private float falltimer = 0;
+        private float fallTime = 7;
         public FallingPlatformsLevelcs()
         {
             _removedTargets = 0;
@@ -71,9 +73,7 @@ namespace DonkeyKong
         }
         public override bool CheckLevelCompletion()
         {
-            // return _removedTargets >= _startTargets;
-            return false;
-            // return _platformsFalling && _fallingPlatforms.All(p => p.Position.Y >= GameManager.Window.ClientBounds.Height);
+            return falltimer > fallTime;
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
@@ -98,6 +98,10 @@ namespace DonkeyKong
                 {
                     tile.Update(gameTime);
                 }
+            }
+            if (_platformsFalling)
+            {
+                falltimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
             }
         }
         public override void UnloadLevel()
