@@ -53,7 +53,6 @@ namespace DonkeyKong
             HighScore.LoadScores();
             LevelManager.CreateLevels();
             LevelManager.SpecificLevel(0, false);
-            //Need to somehow hook this up onto a button, but I don't want to force all buttons to use it I want it to be modular so maybe an event that I can hook up for each button?
         }
 
 

@@ -19,6 +19,7 @@ namespace DonkeyKong
                 new UIText(ResourceManager.GetSpriteFont("GameText"), "Select a character", new Vector2(GameManager.Window.ClientBounds.Width / 2, 50), Color.White, 0.8f, Vector2.Zero, 0.9f),
                 new UIImage(ResourceManager.GetTexture("mario-pauline-transparent"), new Vector2(330, 240), Color.White, 6, Vector2.Zero, new Rectangle(256, 1, 16, 16), 0.9f),
                 new UIImage(ResourceManager.GetTexture("mario-pauline-transparent"), new Vector2(530, 240), Color.White, 6, Vector2.Zero, new Rectangle(256, 18, 16, 16), 0.9f),
+
                 new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2 - 100, GameManager.Window.ClientBounds.Height / 2), Vector2.Zero, 1, SelectCharacter, "Select", 1f, 0.1f),
                 new Button(ResourceManager.GetSpriteFont("GameText"), (Color.White, Color.LightBlue, Color.DarkBlue), new Vector2(GameManager.Window.ClientBounds.Width / 2 + 100, GameManager.Window.ClientBounds.Height / 2), Vector2.Zero, 2, SelectCharacter, "Select", 1f, 0.1f)
             };

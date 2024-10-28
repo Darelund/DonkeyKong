@@ -15,6 +15,7 @@ namespace DonkeyKong
         public Vector2 direction { get; private set; }
         private float _sprintSpeed = 50;
         private float _fallSpeed = 50f;
+
         protected override float Speed
         {
             get

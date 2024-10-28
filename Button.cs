@@ -25,8 +25,6 @@ namespace DonkeyKong
         private float _pressedTimer;
         private float _pressedDuration = 0.2f;
         int centerOffset = 2;
-        //Jag borde ha ändrat detta till ett event
-        //private GameManager.GameState _gameState;
 
         public event Action<object> OnPressed;
         private object _clickParameter;
@@ -50,7 +48,6 @@ namespace DonkeyKong
             _text = text;
             Size = size;
             Origin = new Vector2((int)(_font.MeasureString(_text).X * Size) / centerOffset, (int)(_font.MeasureString(_text).Y * Size) / centerOffset);
-           // _gameState = gameState;
            OnPressed = onPressed;
             _clickParameter = clickParameter;
         }
@@ -65,7 +62,6 @@ namespace DonkeyKong
                 if (_pressedTimer <= 0)
                 {
                     _pressedTimer = 0; 
-                   // GameManager.ChangeGameState(_gameState);
                    OnPressed?.Invoke(_clickParameter);
                     _hasBeenPressed = false;
                 }
