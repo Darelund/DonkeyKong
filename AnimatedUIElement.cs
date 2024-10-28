@@ -54,7 +54,7 @@ namespace DonkeyKong
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, Position, new Rectangle(_currentFrame.X * _frameSize.X, _currentFrame.Y * _frameSize.Y, _frameSize.X, _frameSize.Y), CurrentColor, 0f, Vector2.Zero, Size, SpriteEffects.None, LayerDepth);
+            spriteBatch.Draw(_texture, Position, new Rectangle(_currentFrame.X * _frameSize.X, _currentFrame.Y * _frameSize.Y, _frameSize.X, _frameSize.Y), CurrentColor, 0f, Origin, Size, SpriteEffects.None, LayerDepth);
         }
     }
 }

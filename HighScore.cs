@@ -85,18 +85,12 @@ namespace DonkeyKong
             {
                 existingScore.UpdatePoints(points);
                 existingScore.UpdateLevel(level);
-                //// Update score and level if the new score is higher
-                //if (points > existingScore.Points)
-                //{
-                //    _highScores.Remove(existingScore);
-                //    _highScores.Add(new Score(name, points, level));
-                //}
             }
             else
             {
                 if(_highScores.Count >= 5)
                 {
-                    int lowestPointCount = 0;
+                    int lowestPointCount = 999999;
                     int lowestHighScore = 0;
                     for (int i = 0; i < _highScores.Count; i++)
                     {
@@ -115,7 +109,7 @@ namespace DonkeyKong
                 }
             }
 
-            SaveScores(); // Save changes to file immediately
+            SaveScores();
         }
         public class Score
         {

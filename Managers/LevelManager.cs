@@ -35,14 +35,8 @@ namespace DonkeyKong
             AddLevel(LevelType.RemoveTarget);
             AddLevel(LevelType.RemoveTarget);
             AddLevel(LevelType.FallingPlatform);
-            //  AddLevel(GameFiles.Levels.LEVEL2, LevelType.ReachTarget, GameFiles.Levels.LEVEL2StartPosition, Level.ReadTileDataFromFile(GameFiles.LevelType.REACHTARGETLEVELS), GameFiles.GameObjects.LEVEL2OBJ);
-            //  AddLevel(GameFiles.Levels.LEVEL3, LevelType.RemoveTarget,GameFiles.Levels.LEVEL3StartPosition, Level.ReadTileDataFromFile(GameFiles.LevelType.REMOVETARGETLEVELS), GameFiles.GameObjects.LEVEL3OBJ);
         }
-        //public static void SetUpLevel()
-        //{
-        //    GameManager.GameObjects.Clear();
-        //    GameManager.GameObjects.AddRange(GetCurrentLevel.GameObjectsInLevel);
-        //}
+       
         public static void Update(GameTime gameTime)
         {
             if (GetCurrentLevel.CheckLevelCompletion())
@@ -79,33 +73,9 @@ namespace DonkeyKong
                     newLevel = new FallingPlatformsLevelcs();
                     break;
             }
-            // newLevel.CreateLevelGameObjects("Content/GameObjectsInLevel1.txt");
             Levels.Add(newLevel);
         }
-        //public static void AddLevel(string file, LevelType type, Vector2 startPosition, List<(char TileName, Texture2D tileTexture, TileType type, Color tileColor)> tileTexture, string fileOfLevelObjects)
-        //{
-        //    Level newLevel = null;
-        //    switch (type)
-        //    {
-        //        case LevelType.ReachTarget:
-        //            newLevel = new ReachTargetLevel('F');
-        //            newLevel.CreateLevel(file, startPosition, tileTexture);
-        //            newLevel.CreateGameObjects(fileOfLevelObjects);
-        //            var l1 = newLevel as ReachTargetLevel;
-        //            l1.SetTarget();
-        //            break;
-        //        case LevelType.RemoveTarget:
-        //            newLevel = new RemoveTargetLevel('T');
-        //            newLevel.CreateLevel(file, startPosition, tileTexture);
-        //            newLevel.CreateGameObjects(GameFiles.GameObjects.LEVEL1OBJ);
-        //            var t1 = newLevel as RemoveTargetLevel;
-        //            t1.SetTargets();
-        //            break;
-        //    }
-        //    // newLevel.CreateLevelGameObjects("Content/GameObjectsInLevel1.txt");
-        //    Levels.Add(newLevel);
-        //}
-        //Where should I call this for Level 1?
+        
         private static void ActivateLevel(int levelIndex, LevelConfig levelConfig, bool runLevel)
         {
             int showOffLevel = 0;
@@ -113,21 +83,16 @@ namespace DonkeyKong
             {
                 HighScore.UpdateScore(GameManager.Name, ScoreManager.PlayerScore, LevelIndex);
             }
-            // Deactivate or unload the previous level's objects if needed
             if (LevelIndex >= 0 && GetCurrentLevel != null)
             {
                 GetCurrentLevel.UnloadLevel();
-                //GetCurrentLevel.UnloadGameObjects();
                 GameManager.GameObjects.Clear();
             }
 
-            // Get the new level
             LevelIndex = levelIndex;
-            //Debug.WriteLine(_levelIndex);
 
             if (LevelIndex < Levels.Count)
             {
-                // Create the game objects and tiles for the new level
                 GetCurrentLevel.CreateLevel(levelConfig.LevelFile, levelConfig.LevelStartPosition, levelConfig.TileData);
                 GetCurrentLevel.CreateGameObjects(levelConfig.GameObjectsFile);
                 if(LevelIndex != showOffLevel)
@@ -150,7 +115,6 @@ namespace DonkeyKong
                 GameManager.ChangeGameState(GameManager.GameState.Playing);
                     Debug.WriteLine("Activated a level and now running it");
                 }
-                // SetUpLevel();
             }
         }
         public static void SpecificLevel(int newLevel, bool runLevel)
@@ -181,7 +145,6 @@ namespace DonkeyKong
         public static void Restart()
         {
             ActivateLevel(1, GameFiles.Levels.Level1, true);
-           // SetUpLevel();
         }
     }
 }

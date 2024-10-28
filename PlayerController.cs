@@ -34,7 +34,7 @@ namespace DonkeyKong
             }
         }
         private bool moving = false;
-        private float _health = 30;
+        private float _health = 3;
         public float Health
         {
             get => _health;
@@ -42,6 +42,14 @@ namespace DonkeyKong
         public bool IsImmune { get; private set; } = false;
         private bool _attacking = false;
         //private bool _jumping = false;
+        private const string _attackAnim = "Die";
+        private const string _dieAnim = "Attack";
+        private const string _idleAnim = "Idle";
+        private const string _walkAnim = "Walk";
+        private const string _sprintAnim = "Sprint";
+        private const string _climbAnim = "Climb";
+
+
 
         public Inventory Inventory { get; set; }
 
@@ -63,7 +71,6 @@ namespace DonkeyKong
         public PlayerController(Texture2D texture, Vector2 position, float speed, Color color, float rotation, float size, float layerDepth, Vector2 origin, Dictionary<string, AnimationClip> animationClips) : base(texture, position, speed, color, rotation, size, layerDepth, origin, animationClips)
         {
             _instance = this;
-            Debug.WriteLine("Creating one player");
             Inventory = new Inventory(this);
         }
         public override void Update(GameTime gameTime)
@@ -104,25 +111,20 @@ namespace DonkeyKong
         public override void Draw(SpriteBatch spriteBatch)
         {
             Inventory.Draw(spriteBatch);
-            //if (_activeItem != null)
-            //{
-            //    _activeItem.Position = WearPosition;
-            //    _activeItem.Draw(spriteBatch);
-            //}
             base.Draw(spriteBatch);
         }
         private void HandleAnimation(GameTime gameTime)
         {
             if (!IsActive())
             {
-                SwitchAnimation("Die");
+                SwitchAnimation(_dieAnim);
             }
             else
             {
                 if(InputManager.LeftClick() && !_attacking)
                 {
                     _attacking = true;
-                    SwitchAnimation("Attack");
+                    SwitchAnimation(_attackAnim);
                 }
                 if (_attacking)
                 {
@@ -133,21 +135,21 @@ namespace DonkeyKong
                 }
                else if (direction.Length() == 0)
                 {
-                    SwitchAnimation("Idle");
+                    SwitchAnimation(_idleAnim);
                 }
                 else if (direction.X != 0)
                 {
-                    SwitchAnimation("Walk");
+                    SwitchAnimation(_walkAnim);
                     AnimationFlip();
                 }
                 else if (InputManager.IsLeftShiftDown())
                 {
-                    SwitchAnimation("Sprint");
+                    SwitchAnimation(_sprintAnim);
                     AnimationFlip();
                 }
                 else if (LevelManager.GetCurrentLevel.IsTileLadder(Position) && LevelManager.GetCurrentLevel.IsTileLadder(Position - new Vector2(0, 40)))
                 {
-                    SwitchAnimation("Climb");
+                    SwitchAnimation(_climbAnim);
                     if(_currentClip.HasLoopedOnce())
                     {
                         FlipClimbing();
@@ -155,11 +157,11 @@ namespace DonkeyKong
                 }
                 else if(IsTopOfLadderReached())
                 {
-                    SwitchAnimation("Idle");
+                    SwitchAnimation(_idleAnim);
                 }
                 else
                 {
-                    SwitchAnimation("Idle");
+                    SwitchAnimation(_idleAnim);
                 }
             }
             base.Update(gameTime);
