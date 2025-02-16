@@ -1,0 +1,6 @@
+B bridge NonWalkable White
+L largebridge NonWalkable White
+b bridgeLadder Ladder White
+l ladder Ladder White
+- empty Walkable White
+T FlagPole Walkable White

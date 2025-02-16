@@ -1,0 +1,7 @@
+B bridge NonWalkable Brown
+L largebridge NonWalkable Brown
+b bridgeLadder Ladder DarkGreen
+l ladder Ladder DarkGreen
+- empty Walkable White
+F bridge NonWalkable Brown
+T sprint Walkable Black
